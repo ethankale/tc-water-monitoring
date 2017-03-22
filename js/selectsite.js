@@ -30,6 +30,7 @@ function selectSite(data, g_id) {
     var site = data.filter(function(d) { return(d.G_ID == g_id) })[0];
     d3.select("#selected-station").property('value', g_id);
     sitemap.panTo([site.LAT, site.LON]);
+    plotSite(dailyData, g_id);
 }
 
 

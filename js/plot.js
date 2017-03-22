@@ -40,6 +40,11 @@ function plotSite(data, g_id) {
     
     if (data.length >= 0) {
       
+      // Wipe out the old graph
+      d3.select("g.x-axis").remove();
+      d3.select("g.y-axis").remove();
+      d3.select("path").remove();
+      
       data = data.filter(function(d) { return(d.G_ID == g_id) });
       data.sort(function(a,b) { return a.day-b.day});
       
@@ -49,11 +54,13 @@ function plotSite(data, g_id) {
       g.append("g")
           .attr("transform", "translate(0," + height + ")")
           .call(d3.axisBottom(x))
+          .attr("class", "x-axis")
         .select(".domain")
           .remove();
 
       g.append("g")
           .call(d3.axisLeft(y))
+          .attr("class", "y-axis")
         .append("text")
           .attr("fill", "#000")
           .attr("transform", "rotate(-90)")
@@ -70,8 +77,8 @@ function plotSite(data, g_id) {
           .attr("stroke-linecap", "round")
           .attr("stroke-width", 1.5)
           .attr("d", line);
-    }
-}
+    };
+};
 
 
 

@@ -36,7 +36,7 @@ function loadSites() {
         .enter()
         .append('option')
           .attr('value', function(d) { return d.G_ID})
-          .text(function(d) {return d.SITE_CODE + ": " + d.SITE_NAME});
+          .text(function(d) {return d.SITE_CODE + ": " + d.SITE_NAME + " (" + d.type + ")"});
       
       sitelist = data;
       

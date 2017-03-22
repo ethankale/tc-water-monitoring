@@ -17,17 +17,13 @@ var svg = d3.select("svg")
     height = +svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var x = d3.scaleTime()
-    .rangeRound([0, width]);
+var x = d3.scaleTime();
 
-var y = d3.scaleLinear()
-    .rangeRound([height, 0]);
+var y = d3.scaleLinear();
 
 var line = d3.line()
     .x(function(d) { return x(d.day); })
     .y(function(d) { return y(d.val); });
-
-
 
 
 function plotSite(data, g_id) {
@@ -45,19 +41,27 @@ function plotSite(data, g_id) {
       d3.select("g.y-axis").remove();
       d3.select("path").remove();
       
+      
+      // Only show data for the site we've selected; also sort by day.
       data = data.filter(function(d) { return(d.G_ID == g_id) });
       data.sort(function(a,b) { return a.day-b.day});
+      
+      // Set up the range; important that it be inside the function for resizing
+      x.rangeRound([0, width]);
+      y.rangeRound([height, 0]);
       
       x.domain(d3.extent(data, function(d) { return d.day; }));
       y.domain(d3.extent(data, function(d) { return d.val; }));
 
+      // Add the x-axis to the plot.  Us a class to identify it later.
       g.append("g")
           .attr("transform", "translate(0," + height + ")")
           .call(d3.axisBottom(x))
           .attr("class", "x-axis")
         .select(".domain")
           .remove();
-
+    
+      // Add the y-axis to the graph.  Includes some labeling text.
       g.append("g")
           .call(d3.axisLeft(y))
           .attr("class", "y-axis")
@@ -69,6 +73,7 @@ function plotSite(data, g_id) {
           .attr("text-anchor", "end")
           .text("Value");
 
+      // Add the actual data (line) to the graph.
       g.append("path")
           .datum(data)
           .attr("fill", "none")
@@ -101,4 +106,21 @@ function loadDailyData() {
 };
 
 
+// Keep the graph the same size as the map
+function resize() {
+    
+    svg.attr('width', sitemap.getSize().x)
+        .attr('height', sitemap.getSize().y);
+    
+    width = +svg.attr("width") - margin.left - margin.right;
+    height = +svg.attr("height") - margin.top - margin.bottom;
+    
+    g_id = d3.select("#selected-station").property('value');
+    plotSite(dailyData, g_id);
+    
+}
+
+d3.select(window).on('resize', resize);
+
+// Load up data when we launch the page
 loadDailyData();

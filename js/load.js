@@ -1,14 +1,10 @@
 
-// Show locations of sites, make them selectable, and show
-//   details for selected sites.
+// Build the map from the list of sites.
 
-var parseDate = d3.timeParse("%Y-%m-%d %H:%M:%S");
 var displayDateFormat = d3.timeFormat("%Y-%m-%d");
 
 var sitelist = {};
-var dailyData = {};
 
-// Get the base map up and running, before loading data async
 var sitemap = L.map('mapid').setView([47.04, -122.9], 10);
 
 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -33,7 +29,7 @@ function alertStatus(days) {
 }
 
 // Load the data from the CSV file into memory
-function loadData() {
+function loadSites() {
     
     d3.csv("./data/station_list.csv", function(d) {
       d.id = +d.G_ID;
@@ -78,7 +74,6 @@ function updateMapSites(data) {
     });
     
     selectSite(data, data[0].G_ID);
-    
 };
 
 // The user selected a different site in the selectbox
@@ -99,21 +94,8 @@ function onMarkerClick(e) {
     selectSite(sitelist, e.target.g_id);
 }
 
-// Import the daily monitoring data
-function loadDailyData() {
-    
-    d3.csv("./data/daily_data.csv", function(d) {
-      d.val = +d.val;
-      
-      return d;
-    }, function(error, data) {
-        dailyData = data;
-        console.log(dailyData.length);
-    });
-};
+loadSites();
 
-loadData();
-loadDailyData();
 
 
 

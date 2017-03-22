@@ -1,0 +1,70 @@
+﻿G_ID,site,latest_sample,type,last_val
+965,10a - Eaton Creek @ Yelm Hwy,2016-10-24 17:00:00.000,Flow,1.14
+1100,10b - Lake St. Clair,2017-03-17 08:00:00.000,Flow,71.87
+1101,14a - Spurgeon Creek,NULL,Flow,NULL
+969,17a - Chambers Creek @ Rich Rd.,NULL,Flow,NULL
+1102,17b - Chambers Ditch @ Wilderness Dr,NULL,Flow,NULL
+970,18a - Woodland Creek @ Pleasant Glade Rd.,NULL,Flow,NULL
+1051,18b - Long Lake Level,2017-03-15 20:00:00.000,Flow,3.18
+974,20a - Woodard Creek @ 36th Ave.,2016-10-25 16:30:00.000,Flow,1.27
+979,24a - McLane Creek @ Delphi Rd.,NULL,Flow,NULL
+981,32b - Green Cove Creek @ Butler Cove FS,NULL,Flow,NULL
+985,44a - Black Lake Ditch @ Belmore Rd,NULL,Flow,NULL
+987,45b - Black River @ 128th Ave.,NULL,Flow,NULL
+1055,52a - Salmon Creek @ Littlerock Rd.,NULL,Flow,NULL
+991,55a - Scatter Creek @ James Rd.,2016-02-16 19:30:00.000,Flow,3.50
+1006,ET1 - 8538 9th Way SE,NULL,Flow,NULL
+1035,TWOF-1 - Tanglewilde Outfall @ Martin Way,NULL,Flow,NULL
+996,05u - Yelm WRF_Rain,2017-03-09 08:00:00.000,Rain,0.00
+966,10u - Meridian Rd_Rain,2017-03-09 08:00:00.000,Rain,0.01
+1049,11u - NOAA Olympia Airport,2017-03-01 09:00:00.000,Rain,0.00
+1054,11w - Rainier Transfer Station,2017-03-08 22:15:00.000,Rain,0.03
+968,13u - Lake Lawrence_Rain,2017-03-08 23:00:00.000,Rain,0.02
+971,18u - Lacey Fire Dist. 3 Fire Station_Rain,2017-03-09 19:45:00.000,Rain,0.02
+972,18w - WARC TC_Rain,2017-03-09 19:15:00.000,Rain,0.01
+975,20u - Southbay Firestation_Rain ,2017-03-09 18:30:00.000,Rain,0.02
+978,23u - Percival Creek, Bldg 4_Rain,2017-03-08 15:15:00.000,Rain,0.01
+980,27u - Boston Harbor_Rain,2017-03-09 18:00:00.000,Rain,0.02
+984,33w - Griffin FS_Rain ,2017-03-08 17:45:00.000,Rain,0.00
+988,45u - Littlerock_Rain,2017-03-08 19:15:00.000,Rain,0.00
+1045,45w - Rochester Drop Box_Rain,2017-03-08 20:00:00.000,Rain,0.00
+992,55u - Tenino_Rain,2017-03-08 21:30:00.000,Rain,0.01
+993,59u - Bloody Run USGS_Rain,2017-03-13 15:45:00.000,Rain,0.01
+997,60u - Bucoda USGS_Rain,2017-03-13 15:45:00.000,Rain,0.01
+998,65u - Grand Mound_Rain,2017-01-09 23:00:00.000,Rain,0.01
+999,69u - Summit Lake_Rain,2017-03-08 18:00:00.000,Rain,0.00
+1000,ABS362 - 5143 Windermere Dr SE,2017-03-06 08:00:00.000,Well,177.79
+1001,DP1 - 5013 Donnelly Dr SE,2017-03-06 22:30:00.000,Well,181.94
+1002,DP2 - 3986 Woodlawn Dr SE,2017-03-01 08:00:00.000,Well,184.35
+1003,DP3 - 5535 Donnelly Dr SE,2017-03-01 08:00:00.000,Well,180.39
+1004,ECY1 - 5143 Windermere Dr SE,2017-03-01 08:00:00.000,Well,177.79
+1005,ECY2 - 5535 Donnelly Dr SE,2017-03-01 08:00:00.000,Well,179.20
+1006,ET1 - 8538 9th Way SE,2017-03-01 08:00:00.000,Well,199.71
+1012,HFB-01 - 628 Hidden Forest Dr SE,2017-03-01 08:00:00.000,Well,195.48
+1013,HFB-02 - 524 Hidden Forest Dr SE,2017-03-01 08:00:00.000,Well,196.41
+1014,HFB-03 - 8836 6th Way SE,2017-03-01 08:00:00.000,Well,197.14
+1015,LRS11a - 9605 Tilley Rd S,2017-03-01 08:00:00.000,Well,190.50
+1016,LRS12 - 9411 SW Kimmie St,2017-03-01 08:00:00.000,Well,188.97
+1017,LRS1a - 6841 Foster Dr SW,2017-03-10 08:00:00.000,Well,181.62
+1018,LRS7a - 3804 93rd Ave SW,2017-03-01 08:00:00.000,Well,175.45
+1019,LRS8 - 8943 Walter Ct SW,2017-03-01 08:00:00.000,Well,186.42
+1020,LRS9 - 2729 93rd Ave SW (Lathrop),2017-03-01 08:00:00.000,Well,185.20
+1021,MW1 - 10415 Littlerock Rd SW,2017-03-01 08:00:00.000,Well,155.39
+1022,MW2 - 10415 Littlerock Rd SW,2017-03-01 08:00:00.000,Well,155.54
+1023,MW3 - 3623 104TH Ave SW (Jones),2017-03-01 08:00:00.000,Well,183.48
+1024,MW5 - 800 93rd Ave SE,2017-03-01 08:00:00.000,Well,186.48
+1046,SLB-1 - Scott Lake, Trevue Ave SW & Scott Creek Dr SW,2017-03-01 08:00:00.000,Well,189.70
+1047,SLB-2 - Scott Lake,  11746 Scott Creek Dr SW,2017-03-10 08:00:00.000,Well,191.01
+1025,TWB1 - Huskey Way SE & Carpenter Rd SE,2017-03-01 08:00:00.000,Well,114.00
+1026,TWB10 - Choker Ct & Bobcat Dr SE,2017-03-01 08:00:00.000,Well,190.17
+1027,TWB11 - 315 Ranger Dr SE,2017-03-07 14:15:00.000,Well,184.00
+1028,TWB2 - 6731 Kinwood St SE,2017-03-01 08:00:00.000,Well,151.76
+1029,TWB3 - 7309 Husky Way SE,2017-03-01 08:00:00.000,Well,174.09
+1030,TWB4 - 7653 Husky Way SE,2017-03-01 08:00:00.000,Well,179.47
+1031,TWB5 - 404 Choker St SE,2017-03-01 08:00:00.000,Well,187.59
+1032,TWB6 - Husky Way SE & Wildcat St SE,2017-03-01 08:00:00.000,Well,167.48
+1033,TWB7 - 454 Cougar St SE,2017-03-01 08:00:00.000,Well,187.85
+1034,TWB8 - 455 Bulldog St SE,2017-03-01 08:00:00.000,Well,188.63
+
+(66 row(s) affected)
+

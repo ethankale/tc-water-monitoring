@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>TC Water Monitoring</title>
+
+<link rel="stylesheet" href="./bin/bootstrap/css/bootstrap.min.css"><!--v3.3.7-->
+<link rel="stylesheet" href="./bin/leaflet/leaflet.css"><!--v1.0.2-->
+<link rel="stylesheet" href="./css/graphs.css" >
+
+</head>
+
+<body>
+
+    <div class="container">
+      
+        <div class='col-md-10'>
+          <h1>Thurston Water Monitoring Dashboard</h1>
+          <select class="form-control input-lg" id="selected-station"></select>
+          <hr />
+          
+          <div class="col-md-5">
+            <div id="mapid"></div>
+          </div>
+          
+          <div class="col-md-5">
+          </div>
+        
+        </div>
+    </div>
+    
+    <!-- Include these after the SVG tag -->
+    <script src="./bin/d3/d3.min.js"></script><!--v4.7.3-->
+    <script src="./bin/leaflet/leaflet.js"></script>
+    <script src="./js/load.js"></script>
+    <script src="./js/plot.js"></script>
+    <!--<script src="./js/bootstrap.min.js"></script>-->
+    
+</body>
+
+
+
+</html>

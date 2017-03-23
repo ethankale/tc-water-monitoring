@@ -15,7 +15,7 @@ var dailyData = {};
 var svg = d3.select("svg")
     .attr('width', sitemap.getSize().x)
     .attr('height', sitemap.getSize().y),
-    margin = {top: 20, right: 20, bottom: 30, left: 50},
+    margin = {top: 20, right: 10, bottom: 30, left: 50},
     width = +svg.attr("width") - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -25,21 +25,47 @@ var x_scales = {};
 var y = d3.scaleLinear();
 
 var thisYear;
+var years = [];
+
+// Color the most recent year differently from the other years.
+//   May replace this with a function that allows users to select
+//   a water year to highlight.
+
+bgcolor = "#d9d9d9";
+maincolor = "#525252";
+selectcolor = "red";
 
 function color(years, year) {
     c = "";
     if (+year == +_.max(years)) {
-        c = "#525252";
+        c = maincolor;
     } else {
-        c = "#cccccc";
+        c = bgcolor;
     };
     
     return c;
 };
 
+// Function for building the SVG line from the data
 var line = d3.line()
     .x(function(d) { return x_scales[thisYear](d.day); })
     .y(function(d) { return y(d.val); });
+
+// Function for handling mouse events; highlight the line when you hover over it
+function handleMouseOver(d, i) {
+    currentLine = d3.select(this)
+                    .attr("stroke-width", 4)
+                    .attr("stroke", selectcolor);
+    // Use the line below if you want the select line to always appear on top.
+    // http://stackoverflow.com/questions/14167863/how-can-i-bring-a-circle-to-the-front-with-d3
+    //this.parentNode.appendChild(this);
+};
+
+function handleMouseOut(d, i) {
+    d3.select(this)
+        .attr("stroke-width", 1.5)
+        .attr("stroke", color(years, d.year));
+};
 
 // Helper function that takes a date object and calculates the water year
 function calcWaterYear(dt) {
@@ -69,28 +95,47 @@ function plotSite(data, g_id) {
     if (data.length >= 0) {
       
       // Wipe out the old graph
+      // In the future we can replace this with the standard enter/update/exit pattern,
+      //   which will open the door to using transitions, but this is quick & easy
       d3.select("g.x-axis").remove();
       d3.select("g.y-axis").remove();
       svg.selectAll('path.valueLine').remove();
       
       // Only show data for the site we've selected; also sort by day.
       data = _.filter(data, {"G_ID" : g_id});
-      //data = _.sortBy(data, ["day"]);
-      data_wy = _.groupBy(data, 'wy');
+      var data_wy = _.groupBy(data, 'wy');
       
       years = _.keys(data_wy);
-      data_plot = [];
+      var data_plot = [];
       
-      // Create separate x scales for each water year.  They need to have the
-      //   same range, but the domain will be different; that allows different
-      //   dates to map to the same x coordinate, which is what we want.
+      // Get some info about the site we're working with
+      site = sitelist.filter(function(d) {return d.G_ID == g_id})[0];
+      type = site.type;
+      
+      // Different data sets for each water year.
       years.forEach(function(d, i) {
           data_plot.push({
               year: d,
               points: _.sortBy(data_wy[d], ["day"])
-          })
+          });
       });
       
+      // Calculate a cumulative total if this is a rain site
+      if (type == "Rain" & !(site.cumCalculated == "Y")) {
+          data_plot.forEach(function(d) {
+              var cumulative = 0;
+              d.points.forEach(function(p) {
+                  p.oldval = p.val;
+                  p.val = cumulative + p.oldval;
+                  cumulative = p.val;
+              });
+          });
+          site.cumCalculated = "Y";
+      };
+      
+      // Create separate x scales for each water year.  They need to have the
+      //   same range, but the domain will be different; that allows different
+      //   dates to map to the same x coordinate, which is what we want.
       years.forEach(function(d) {
           x_scales["scale" + d] = d3.scaleTime()
             .domain([new Date(d-1, 10, 1), new Date(d, 9, 30)])
@@ -104,11 +149,12 @@ function plotSite(data, g_id) {
       //x.domain(d3.extent(data, function(d) { return d.day; }));
       y.domain(d3.extent(data, function(d) { return d.val; }));
 
-      // Add the x-axis to the plot.  Us a class to identify it later.
+      // Add the x-axis to the plot.  Use a class to identify it later.
       g.append("g")
-          .attr("transform", "translate(0," + height + ")")
-          .call(d3.axisBottom(x_scales['scale' + _.max(years)]))
           .attr("class", "x-axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(d3.axisBottom(x_scales['scale' + _.max(years)])
+            .tickFormat(d3.timeFormat("%b")))
         .select(".domain")
           .remove();
     
@@ -120,9 +166,9 @@ function plotSite(data, g_id) {
           .attr("fill", "#000")
           .attr("transform", "rotate(-90)")
           .attr("y", 6)
-          .attr("dy", "0.71em")
+          .attr("dy", "0.8em")
           .attr("text-anchor", "end")
-          .text("Value");
+          .text(type == "Rain" ? "Rainfall (inches)" : "Water Level (feet)");
       
       // Add multiple lines to the graph; one for each water year
       g.selectAll('valueLine')
@@ -138,7 +184,8 @@ function plotSite(data, g_id) {
           .attr("stroke-linecap", "round")
           .attr("stroke-width", 1.5)
           .attr("fill", "none")
-      
+          .on("mouseover", handleMouseOver)
+          .on("mouseout", handleMouseOut);
     };
 };
 

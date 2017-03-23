@@ -25,7 +25,23 @@ var line = d3.line()
     .x(function(d) { return x(d.day); })
     .y(function(d) { return y(d.val); });
 
+// Helper function that takes a date object and calculates the water year
+function calcWaterYear(dt) {
+    var year = dt.getFullYear();
+    var month = dt.getMonth();
+    
+    var wy = year;
+    
+    // Months are zero-indexed in js, so this is greater than
+    //  or equal to October
+    if (month >= 9) {
+        wy = year + 1;
+    };
+    
+    return(wy);
+}
 
+// Plot the daily data
 function plotSite(data, g_id) {
     // This is an async problem.  Really, we should be working with the
     //   async nature of d3.csv and embedding things in callbacks.  However,
@@ -43,8 +59,8 @@ function plotSite(data, g_id) {
       
       
       // Only show data for the site we've selected; also sort by day.
-      data = data.filter(function(d) { return(d.G_ID == g_id) });
-      data.sort(function(a,b) { return a.day-b.day});
+      data = _.filter(data, {"G_ID" : g_id});
+      data = _.sortBy(data, ["day"]);
       
       // Set up the range; important that it be inside the function for resizing
       x.rangeRound([0, width]);
@@ -93,6 +109,7 @@ function loadDailyData() {
     d3.csv("./data/daily_data.csv", function(d) {
       d.val = +d.val;
       d.day = parseDate(d.day.split(".")[0]);
+      d.wy = calcWaterYear(d.day);
       
       return d;
     }, function(error, data) {

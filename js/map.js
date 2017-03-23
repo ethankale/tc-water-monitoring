@@ -19,17 +19,30 @@ L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 var CircleIcon = L.Icon.extend({
     options: {
         shadowUrl: './img/marker/shadow_circle.png',
-        iconSize:     [30, 30],
-        shadowSize:   [30, 30],
-        iconAnchor:   [15, 15],
-        shadowAnchor: [12, 12],
-        popupAnchor:  [30, 30]
+        iconSize:     [15, 15],
+        shadowSize:   [15, 15],
+        iconAnchor:   [7.5, 7.5],
+        shadowAnchor: [5, 5],
+        popupAnchor:  [15, 15]
     }
 });
 
 var greenIcon = new CircleIcon({iconUrl: './img/marker/green_circle.png'}),
     purpleIcon = new CircleIcon({iconUrl: './img/marker/purple_circle.png'}),
     orangeIcon = new CircleIcon({iconUrl: './img/marker/orange_circle.png'});
+
+// The highlight icon will be different - slightly larger
+var highlightIcon = L.icon({
+    iconUrl: './img/marker/highlight_circle.png',
+    
+    iconSize:       [10, 10],
+    shadowSize:     [10, 10],
+    iconAnchor:     [5, 5],
+    shadowAnchor:   [10, 10],
+    popupAnchor:    [10, 10]
+})
+
+var highlightMarker = L.marker({icon: highlightIcon});
 
 function iconType(type) {
     var icon = {};

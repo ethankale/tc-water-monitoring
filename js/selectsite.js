@@ -29,7 +29,13 @@ function onMarkerClick(e) {
 function selectSite(data, g_id) {
     var site = data.filter(function(d) { return(d.G_ID == g_id) })[0];
     d3.select("#selected-station").property('value', g_id);
+    
+    // Map manipulation
     sitemap.panTo([site.LAT, site.LON]);
+    highlightMarker.setLatLng([site.LAT, site.LON]);
+    highlightMarker.setIcon(highlightIcon);
+    highlightMarker.addTo(sitemap);
+    
     plotSite(dailyData, g_id);
 }
 

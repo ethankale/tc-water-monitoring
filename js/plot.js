@@ -10,15 +10,15 @@
 
 var parseDate = d3.timeParse("%Y-%m-%d %H:%M:%S");
 
-var dailyData = {};
-
 var svg = d3.select("svg")
-    .attr('width', sitemap.getSize().x)
-    .attr('height', sitemap.getSize().y),
+    .attr("width", document.getElementById("mapid").offsetWidth)
+    .attr("height", document.getElementById("mapid").offsetHeight),
     margin = {top: 20, right: 10, bottom: 30, left: 50},
     width = +svg.attr("width") - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    bisectDate = d3.bisector(function(d) { return d.date; }).left;
+
+var g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 //var x = d3.scaleTime();
 var x_scales = {};
@@ -35,9 +35,11 @@ bgcolor = "#d9d9d9";
 maincolor = "#525252";
 selectcolor = "red";
 
-function color(years, year) {
+function color(year) {
     c = "";
-    if (+year == +_.max(years)) {
+    currentWY = calcWaterYear(new Date());
+    
+    if (+year == currentWY) {
         c = maincolor;
     } else {
         c = bgcolor;
@@ -64,7 +66,7 @@ function handleMouseOver(d, i) {
 function handleMouseOut(d, i) {
     d3.select(this)
         .attr("stroke-width", 1.5)
-        .attr("stroke", color(years, d.year));
+        .attr("stroke", color(d.year));
 };
 
 // Helper function that takes a date object and calculates the water year
@@ -87,10 +89,10 @@ function calcWaterYear(dt) {
 function plotSite(data, g_id) {
     // This is an async problem.  Really, we should be working with the
     //   async nature of d3.csv and embedding things in callbacks.  However,
-    //   leaflet and d3 don't seem to play nice together. Hence, this.
+    //   leaflet and d3 don"t seem to play nice together. Hence, this.
     //
     // It will cause an attempt to plot a site to fail (silently, for now)
-    //   if the data aren't yet loaded.
+    //   if the data aren"t yet loaded.
     
     if (data.length >= 0) {
       
@@ -99,16 +101,16 @@ function plotSite(data, g_id) {
       //   which will open the door to using transitions, but this is quick & easy
       d3.select("g.x-axis").remove();
       d3.select("g.y-axis").remove();
-      svg.selectAll('path.valueLine').remove();
+      svg.selectAll("path.valueLine").remove();
       
-      // Only show data for the site we've selected; also sort by day.
+      // Only show data for the site we"ve selected; also sort by day.
       data = _.filter(data, {"G_ID" : g_id});
-      var data_wy = _.groupBy(data, 'wy');
+      var data_wy = _.groupBy(data, "wy");
       
       years = _.keys(data_wy);
       var data_plot = [];
       
-      // Get some info about the site we're working with
+      // Get some info about the site we"re working with
       site = sitelist.filter(function(d) {return d.G_ID == g_id})[0];
       type = site.type;
       
@@ -153,7 +155,7 @@ function plotSite(data, g_id) {
       g.append("g")
           .attr("class", "x-axis")
           .attr("transform", "translate(0," + height + ")")
-          .call(d3.axisBottom(x_scales['scale' + _.max(years)])
+          .call(d3.axisBottom(x_scales["scale" + _.max(years)])
             .tickFormat(d3.timeFormat("%b")))
         .select(".domain")
           .remove();
@@ -171,14 +173,14 @@ function plotSite(data, g_id) {
           .text(type == "Rain" ? "Rainfall (inches)" : "Water Level (feet)");
       
       // Add multiple lines to the graph; one for each water year
-      g.selectAll('valueLine')
+      g.selectAll("valueLine")
         .data(data_plot)
         .enter()
-        .append('path')
-          .attr('class', 'valueLine')
-          .attr('stroke', function(d,i) { return color(years, d.year)})
+        .append("path")
+          .attr("class", "valueLine")
+          .attr("stroke", function(d,i) { return color(d.year)})
           .attr("d", function(d) {
-              thisYear = 'scale' + d.year;
+              thisYear = "scale" + d.year;
               return line(d.points)})
           .attr("stroke-linejoin", "round")
           .attr("stroke-linecap", "round")
@@ -186,12 +188,13 @@ function plotSite(data, g_id) {
           .attr("fill", "none")
           .on("mouseover", handleMouseOver)
           .on("mouseout", handleMouseOut);
+        
+      
     };
 };
 
-
-
 // Import the daily monitoring data
+//   Runs just once, when the page loads
 function loadDailyData() {
     
     d3.csv("./data/daily_data.csv", function(d) {
@@ -202,30 +205,32 @@ function loadDailyData() {
       return d;
     }, function(error, data) {
         dailyData = data;
-        console.log(dailyData.length);
         
-        g_id = d3.select("#selected-station").property('value');
-        plotSite(data, g_id);
+        g_id = d3.select("#selected-station").property("value");
+        //plotSite(data, g_id);
+        
+        setSVGSize();
+        selectSite(sitelist, g_id);
         
     });
 };
 
 
 // Keep the graph the same size as the map
-function resize() {
-    
-    svg.attr('width', sitemap.getSize().x)
-        .attr('height', sitemap.getSize().y);
+function setSVGSize() {
+    svg.attr("width", sitemap.getSize().x)
+        .attr("height", sitemap.getSize().y);
     
     width = +svg.attr("width") - margin.left - margin.right;
     height = +svg.attr("height") - margin.top - margin.bottom;
-    
-    g_id = d3.select("#selected-station").property('value');
-    plotSite(dailyData, g_id);
-    
 }
 
-d3.select(window).on('resize', resize);
+function resize() {
+    setSVGSize();
+    g_id = d3.select("#selected-station").property("value");
+    plotSite(dailyData, g_id);
+}
 
-// Load up data when we launch the page
-loadDailyData();
+d3.select(window).on("resize", resize);
+
+

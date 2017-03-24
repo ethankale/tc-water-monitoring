@@ -4,8 +4,6 @@
 
 var displayDateFormat = d3.timeFormat("%Y-%m-%d");
 
-var sitelist = {};
-
 var sitemap = L.map('mapid').setView([47.04, -122.9], 10);
 
 // For now, we'll use OSM.  In the future it might behoove us to make our own
@@ -103,10 +101,11 @@ function updateMapSites(data) {
         };
     });
     
-    selectSite(data, data[0].G_ID);
+    // Load up data when we launch the page
+    loadDailyData();
+    
+    
 };
-
-
 
 loadSites();
 

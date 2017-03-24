@@ -4,11 +4,11 @@
 
 var displayDateFormat = d3.timeFormat("%Y-%m-%d");
 
-var sitemap = L.map('mapid').setView([47.04, -122.9], 10);
+var sitemap = L.map("mapid").setView([47.04, -122.9], 10);
 
-// For now, we'll use OSM.  In the future it might behoove us to make our own
+// For now, we"ll use OSM.  In the future it might behoove us to make our own
 //  tile layer, maybe using NAIP, hillshade, streets, NHD?
-L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
     maxZoom: 18,
 }).addTo(sitemap);
@@ -16,7 +16,7 @@ L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // Custom icons to differentiate between well, rain, and discharge monitoring.
 var CircleIcon = L.Icon.extend({
     options: {
-        shadowUrl: './img/marker/shadow_circle.png',
+        shadowUrl: "./img/marker/shadow_circle.png",
         iconSize:     [15, 15],
         shadowSize:   [15, 15],
         iconAnchor:   [7.5, 7.5],
@@ -25,13 +25,13 @@ var CircleIcon = L.Icon.extend({
     }
 });
 
-var greenIcon = new CircleIcon({iconUrl: './img/marker/green_circle.png'}),
-    purpleIcon = new CircleIcon({iconUrl: './img/marker/purple_circle.png'}),
-    orangeIcon = new CircleIcon({iconUrl: './img/marker/orange_circle.png'});
+var greenIcon = new CircleIcon({iconUrl: "./img/marker/green_circle.png"}),
+    purpleIcon = new CircleIcon({iconUrl: "./img/marker/purple_circle.png"}),
+    orangeIcon = new CircleIcon({iconUrl: "./img/marker/orange_circle.png"});
 
 // The highlight icon will be different - slightly larger
 var highlightIcon = L.icon({
-    iconUrl: './img/marker/highlight_circle.png',
+    iconUrl: "./img/marker/highlight_circle.png",
     
     iconSize:       [10, 10],
     shadowSize:     [10, 10],
@@ -68,16 +68,16 @@ function loadSites() {
     }, function(error, data) {
       if (error) throw error;
       
-      data = data.filter(function(d) {return d.STATUS == 'Active'})
+      data = data.filter(function(d) {return d.STATUS == "Active"})
       
       // Create the list of sites in the selectbox
-      var select = d3.select('#selected-station')
-          .on('change', selectChange)
-        .selectAll('option')
+      var select = d3.select("#selected-station")
+          .on("change", selectChange)
+        .selectAll("option")
         .data(data)
         .enter()
-        .append('option')
-          .attr('value', function(d) { return d.G_ID})
+        .append("option")
+          .attr("value", function(d) { return d.G_ID})
           .text(function(d) {return d.SITE_CODE + ": " + d.SITE_NAME + " (" + d.type + ")"});
       
       sitelist = data;
@@ -95,7 +95,7 @@ function updateMapSites(data) {
             
             var marker = L.marker([d.LAT, d.LON], {icon: iconType(d.type)});
             marker.g_id = d.G_ID;
-            marker.on('click', onMarkerClick);
+            marker.on("click", onMarkerClick);
             
             marker.addTo(sitemap);
         };

@@ -18,13 +18,13 @@
    - Update the graph for the new data
 */
 
-// Global variables.  I know, I'm a terrible person.
+// Global variables.  I know, I"m a terrible person.
 var sitelist = {};
 var dailyData = {};
 
 // The user selected a different site in the selectbox
 function selectChange() {
-    g_id = d3.select("#selected-station").property('value');
+    g_id = d3.select("#selected-station").property("value");
     selectSite(sitelist, g_id);
 }
 
@@ -35,8 +35,8 @@ function onMarkerClick(e) {
 
 // What happens when a user selects a site from the map or the list
 function selectSite(data, g_id) {
-    var site = data.filter(function(d) { return(d.G_ID == g_id) })[0];
-    d3.select("#selected-station").property('value', g_id);
+    var site = data.filter(function(d) { return (d.G_ID === g_id); })[0];
+    d3.select("#selected-station").property("value", g_id);
     
     // Map manipulation
     sitemap.panTo([site.LAT, site.LON]);
@@ -57,10 +57,10 @@ function selectSite(data, g_id) {
 function updateStatsRow(data) {
     
     // Calculate statistics
-    var prettyDate = d3.timeFormat("%b %e, %Y")
-    var yearOnlyFormat = d3.timeFormat("%Y")
+    var prettyDate = d3.timeFormat("%b %e, %Y");
+    var yearOnlyFormat = d3.timeFormat("%Y");
     
-    var site = sitelist.filter(function(d) { return(d.G_ID == data[0]["G_ID"]) })[0];
+    var site = sitelist.filter(function (d) { return (d.G_ID === data[0].G_ID); })[0];
     
     var maxMeasure = _.maxBy(data, "val");
     var mostRecent = _.maxBy(data, "day");
@@ -76,10 +76,10 @@ function updateStatsRow(data) {
     var maxThisYearVal;
     var maxThisYearDay;
     
-    if (maxYear == currWY) {
+    if (maxYear === currWY) {
         var maxThisYear = {};
         
-        if (site.type == "Rain") {
+        if (site.type === "Rain") {
             maxThisYear = _.maxBy(data_thisyear, "oldval");
             maxThisYearVal = maxThisYear.oldval.toFixed(2);
         } else {
@@ -98,7 +98,7 @@ function updateStatsRow(data) {
     //console.log(maxThisYearVal);
     //console.log(maxThisYearDay);
     
-    // Tailor the context of the stats to the type of station we're looking at
+    // Tailor the context of the stats to the type of station we"re looking at
     var recentContext1 = "Most Recent";
     var recentContext2 = "";
     
@@ -115,11 +115,11 @@ function updateStatsRow(data) {
         
         max_overallContext1 = "Wettest Year";
         max_overallDate = yearOnlyFormat(maxMeasure.day);
-    };
+    }
     
     // Using the calculated stats & context, update the text
-    d3.select(".quick-stats.recent").html("<small>" + recentContext1 + "</small><br />" + 
-        mostRecent.val.toFixed(2) + 
+    d3.select(".quick-stats.recent").html("<small>" + recentContext1 + "</small><br />" +
+        mostRecent.val.toFixed(2) +
         " <br /><small>" + recentContext2 + prettyDate(mostRecent.day) + "</small>");
     
     d3.select(".quick-stats.count").html("<small>Years Measured</small><br />" +
@@ -129,11 +129,9 @@ function updateStatsRow(data) {
         maxThisYearVal +
         "<br /><small>" + maxThisYearDay + "</small>");
         
-    d3.select(".quick-stats.max-overall").html("<small>" + max_overallContext1 +"</small><br />" +
+    d3.select(".quick-stats.max-overall").html("<small>" + max_overallContext1 + "</small><br />" +
         maxMeasure.val.toFixed(2) +
         "<br /><small>" + max_overallDate + "</small>");
 
 }
-
-
 

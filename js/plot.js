@@ -43,7 +43,7 @@ function color(year) {
         c = maincolor;
     } else {
         c = bgcolor;
-    };
+    }
     
     return c;
 };
@@ -218,8 +218,8 @@ function loadDailyData() {
 
 // Keep the graph the same size as the map
 function setSVGSize() {
-    svg.attr("width", sitemap.getSize().x)
-        .attr("height", sitemap.getSize().y);
+    svg.attr("width", document.getElementById("mapid").offsetWidth)
+        .attr("height", document.getElementById("mapid").offsetHeight)
     
     width = +svg.attr("width") - margin.left - margin.right;
     height = +svg.attr("height") - margin.top - margin.bottom;

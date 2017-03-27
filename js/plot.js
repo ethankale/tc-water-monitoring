@@ -85,135 +85,118 @@ function calcWaterYear(dt) {
     return(wy);
 }
 
-// Plot the daily data
-function plotSite(data, g_id) {
-    // This is an async problem.  Really, we should be working with the
-    //   async nature of d3.csv and embedding things in callbacks.  However,
-    //   leaflet and d3 don"t seem to play nice together. Hence, this.
-    //
-    // It will cause an attempt to plot a site to fail (silently, for now)
-    //   if the data aren"t yet loaded.
+// Load the daily data
+function plotSite(g_id) {
+    // If the data have not yet been loaded, pull them in via d3.csv, then
+    //   write them to dailyData and update everything.
     
-    if (data.length >= 0) {
-      
-      // Wipe out the old graph
-      // In the future we can replace this with the standard enter/update/exit pattern,
-      //   which will open the door to using transitions, but this is quick & easy
-      d3.select("g.x-axis").remove();
-      d3.select("g.y-axis").remove();
-      svg.selectAll("path.valueLine").remove();
-      
-      // Only show data for the site we"ve selected; also sort by day.
-      data = _.filter(data, {"G_ID" : g_id});
-      var data_wy = _.groupBy(data, "wy");
-      
-      years = _.keys(data_wy);
-      var data_plot = [];
-      
-      // Get some info about the site we"re working with
-      site = sitelist.filter(function(d) {return d.G_ID == g_id})[0];
-      type = site.type;
-      
-      // Different data sets for each water year.
-      years.forEach(function(d, i) {
-          data_plot.push({
-              year: d,
-              points: _.sortBy(data_wy[d], ["day"])
-          });
-      });
-      
-      // Calculate a cumulative total if this is a rain site
-      if (type == "Rain" & !(site.cumCalculated == "Y")) {
-          data_plot.forEach(function(d) {
-              var cumulative = 0;
-              d.points.forEach(function(p) {
-                  p.oldval = p.val;
-                  p.val = cumulative + p.oldval;
-                  cumulative = p.val;
-              });
-          });
-          site.cumCalculated = "Y";
-      };
-      
-      // Create separate x scales for each water year.  They need to have the
-      //   same range, but the domain will be different; that allows different
-      //   dates to map to the same x coordinate, which is what we want.
-      years.forEach(function(d) {
-          x_scales["scale" + d] = d3.scaleTime()
-            .domain([new Date(d-1, 10, 1), new Date(d, 9, 30)])
-            .rangeRound([margin.left, width]);
-      });
-      
-      // Set up the range; important that it be inside the function for resizing
-      //x.rangeRound([0, width]);
-      y.rangeRound([height, 0]);
-      
-      //x.domain(d3.extent(data, function(d) { return d.day; }));
-      y.domain(d3.extent(data, function(d) { return d.val; }));
-
-      // Add the x-axis to the plot.  Use a class to identify it later.
-      g.append("g")
-          .attr("class", "x-axis")
-          .attr("transform", "translate(0," + height + ")")
-          .call(d3.axisBottom(x_scales["scale" + _.max(years)])
-            .tickFormat(d3.timeFormat("%b")))
-        .select(".domain")
-          .remove();
+    d3.select("g.x-axis").remove();
+    d3.select("g.y-axis").remove();
+    svg.selectAll("path.valueLine").remove();
     
-      // Add the y-axis to the graph.  Includes some labeling text.
-      g.append("g")
-          .call(d3.axisLeft(y))
-          .attr("class", "y-axis")
-        .append("text")
-          .attr("fill", "#000")
-          .attr("transform", "rotate(-90)")
-          .attr("y", 6)
-          .attr("dy", "0.8em")
-          .attr("text-anchor", "end")
-          .text(type == "Rain" ? "Rainfall (inches)" : "Water Level (feet)");
-      
-      // Add multiple lines to the graph; one for each water year
-      g.selectAll("valueLine")
-        .data(data_plot)
-        .enter()
-        .append("path")
-          .attr("class", "valueLine")
-          .attr("stroke", function(d,i) { return color(d.year)})
-          .attr("d", function(d) {
-              thisYear = "scale" + d.year;
-              return line(d.points)})
-          .attr("stroke-linejoin", "round")
-          .attr("stroke-linecap", "round")
-          .attr("stroke-width", 1.5)
-          .attr("fill", "none")
-          .on("mouseover", handleMouseOver)
-          .on("mouseout", handleMouseOut);
-        
-      
-    };
-};
-
-// Import the daily monitoring data
-//   Runs just once, when the page loads
-function loadDailyData() {
-    
-    d3.csv("./data/daily_data.csv", function(d) {
+    d3.csv("./data/g_id-" + g_id + ".csv", function(d) {
       d.val = +d.val;
-      d.day = parseDate(d.day.split(".")[0]);
+      d.day = parseDate(d.day);
       d.wy = calcWaterYear(d.day);
       
       return d;
     }, function(error, data) {
+        //dailyData = dailyData.concat(data);
         dailyData = data;
-        
-        g_id = d3.select("#selected-station").property("value");
-        //plotSite(data, g_id);
-        
-        setSVGSize();
-        selectSite(sitelist, g_id);
-        
+        updatePlot(g_id);
+        updateStatsRow(data);
     });
 };
+
+// Plot the daily data
+function updatePlot(g_id) {
+    
+    
+    // Only show data for the site we"ve selected.
+    data = _.filter(dailyData, {"G_ID" : g_id});
+    var data_wy = _.groupBy(data, "wy");
+    
+    years = _.keys(data_wy);
+    var data_plot = [];
+    
+    // Get some info about the site we"re working with
+    site = sitelist.filter(function(d) {return d.G_ID == g_id})[0];
+    type = site.type;
+    
+    // Different data sets for each water year; also sort by day.
+    years.forEach(function(d, i) {
+        data_plot.push({
+            year: d,
+            points: _.sortBy(data_wy[d], ["day"])
+        });
+    });
+    
+    // Calculate a cumulative total if this is a rain site
+    if (type == "Rain" & !(site.cumCalculated == "Y")) {
+        data_plot.forEach(function(d) {
+            var cumulative = 0;
+            d.points.forEach(function(p) {
+                p.oldval = p.val;
+                p.val = cumulative + p.oldval;
+                cumulative = p.val;
+            });
+        });
+        site.cumCalculated = "Y";
+    };
+    
+    // Create separate x scales for each water year.  They need to have the
+    //   same range, but the domain will be different; that allows different
+    //   dates to map to the same x coordinate, which is what we want.
+    years.forEach(function(d) {
+        x_scales["scale" + d] = d3.scaleTime()
+          .domain([new Date(d-1, 10, 1), new Date(d, 9, 30)])
+          .rangeRound([margin.left, width]);
+    });
+    
+    // Set up the y range; important that it be inside the function for resizing
+    //   Might be able to just include rangeRound in the resize function...
+    y.rangeRound([height, 0]);
+    y.domain(d3.extent(data, function(d) { return d.val; }));
+    
+    // Add the x-axis to the plot.  Use a class to identify it later.
+    g.append("g")
+        .attr("class", "x-axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x_scales["scale" + _.max(years)])
+          .tickFormat(d3.timeFormat("%b")))
+      .select(".domain")
+        .remove();
+    
+    // Add the y-axis to the graph.  Includes some labeling text.
+    g.append("g")
+        .call(d3.axisLeft(y))
+        .attr("class", "y-axis")
+      .append("text")
+        .attr("fill", "#000")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", "0.8em")
+        .attr("text-anchor", "end")
+        .text(type == "Rain" ? "Rainfall (inches)" : "Water Level (feet)");
+    
+    // Add multiple lines to the graph; one for each water year
+    g.selectAll("valueLine")
+      .data(data_plot)
+      .enter()
+      .append("path")
+        .attr("class", "valueLine")
+        .attr("stroke", function(d,i) { return color(d.year)})
+        .attr("d", function(d) {
+            thisYear = "scale" + d.year;
+            return line(d.points)})
+        .attr("stroke-linejoin", "round")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-width", 1.5)
+        .attr("fill", "none")
+        .on("mouseover", handleMouseOver)
+        .on("mouseout", handleMouseOut);
+}
+
 
 
 // Keep the graph the same size as the map

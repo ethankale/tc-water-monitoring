@@ -66,7 +66,7 @@ function loadSites() {
       
       return d;
     }, function(error, data) {
-      if (error) throw error;
+      //if (error) throw error;
       
       data = data.filter(function(d) {return d.STATUS == "Active"})
       
@@ -101,8 +101,11 @@ function updateMapSites(data) {
         };
     });
     
+    //console.log(new Date());
+    
     // Load up data when we launch the page
-    loadDailyData();
+    var g_id = sitelist[0].G_ID;
+    plotSite(g_id);
     
     
 };

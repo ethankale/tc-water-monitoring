@@ -2,8 +2,9 @@
 // Load this file first, before map.js and plot.js
 
 // On load, the progression is to load the globals (this script),
-//   then load the site list & map (map.js), then the async loadSites() function
-//   calls loadDailyData(), which pulls in the monitoring data.
+//   then load the site list & map (map.js).  Then the first site
+//   is selected, and the plotSite() function creates a graph.
+
 
 /* Functions that control what happens when a site is selected.
 
@@ -45,11 +46,11 @@ function selectSite(data, g_id) {
     highlightMarker.addTo(sitemap);
     
     // Plot data
-    plotSite(dailyData, g_id);
+    plotSite(g_id);
     
     // Update the quick-stats bar
-    var currentData = _.filter(dailyData, {G_ID: g_id});
-    updateStatsRow(currentData);
+    //var currentData = _.filter(dailyData, {G_ID: g_id});
+    //updateStatsRow(currentData);
 }
 
 // Calculate and add statistics to the stats row, using

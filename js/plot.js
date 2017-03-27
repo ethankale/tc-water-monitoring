@@ -58,6 +58,8 @@ function handleMouseOver(d, i) {
     currentLine = d3.select(this)
                     .attr("stroke-width", 4)
                     .attr("stroke", selectcolor);
+    d3.select(".x-axis .hoverText")
+        .text(d.year);
     // Use the line below if you want the select line to always appear on top.
     // http://stackoverflow.com/questions/14167863/how-can-i-bring-a-circle-to-the-front-with-d3
     //this.parentNode.appendChild(this);
@@ -67,6 +69,9 @@ function handleMouseOut(d, i) {
     d3.select(this)
         .attr("stroke-width", 1.5)
         .attr("stroke", color(d.year));
+    
+    d3.select(".x-axis .hoverText")
+        .text("");
 };
 
 // Helper function that takes a date object and calculates the water year
@@ -178,6 +183,7 @@ function updatePlot(g_id) {
       .select(".domain")
         .remove();
     
+    
     // Add the y-axis to the graph.  Includes some labeling text.
     g.append("g")
         .call(d3.axisLeft(y))
@@ -206,6 +212,16 @@ function updatePlot(g_id) {
         .attr("fill", "none")
         .on("mouseover", handleMouseOver)
         .on("mouseout", handleMouseOut);
+    
+    // Label years on mouseover
+    d3.select("g.x-axis")
+      .append("text")
+        .attr("class", "hoverText")
+        .attr("fill", "#000")
+        .attr("y", - 20)
+        .attr("x", width - 20)
+        .attr("dy", "0.8em")
+        .attr("text-anchor", "end");
 }
 
 
@@ -222,7 +238,7 @@ function setSVGSize() {
 function resize() {
     setSVGSize();
     g_id = d3.select("#selected-station").property("value");
-    plotSite(dailyData, g_id);
+    plotSite(g_id);
 }
 
 d3.select(window).on("resize", resize);

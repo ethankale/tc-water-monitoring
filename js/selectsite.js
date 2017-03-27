@@ -57,6 +57,8 @@ function selectSite(data, g_id) {
 //   data from the currently selected site
 function updateStatsRow(data) {
     
+    //d3.selectAll(".quick-stats").classed("bg-info", false)
+    
     // Calculate statistics
     var prettyDate = d3.timeFormat("%b %e, %Y");
     var yearOnlyFormat = d3.timeFormat("%Y");
@@ -142,5 +144,7 @@ function clearStatsRow() {
     d3.select(".quick-stats.count").html("");
     d3.select(".quick-stats.max-currentyear").html("");
     d3.select(".quick-stats.max-overall").html("");
+    
+    //d3.selectAll(".quick-stats").classed("bg-info", true)
 }
 

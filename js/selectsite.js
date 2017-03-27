@@ -21,7 +21,7 @@
 
 // Global variables.  I know, I"m a terrible person.
 var sitelist = {};
-var dailyData = {};
+var dailyData = [];
 
 // The user selected a different site in the selectbox
 function selectChange() {
@@ -134,5 +134,13 @@ function updateStatsRow(data) {
         maxMeasure.val.toFixed(2) +
         "<br /><small>" + max_overallDate + "</small>");
 
+}
+
+// Remove data from the stats row, and display a "Loading" alert
+function clearStatsRow() {
+    d3.select(".quick-stats.recent").html("<small>--</small><br />Loading...<br /><small>--</small>");
+    d3.select(".quick-stats.count").html("");
+    d3.select(".quick-stats.max-currentyear").html("");
+    d3.select(".quick-stats.max-overall").html("");
 }
 

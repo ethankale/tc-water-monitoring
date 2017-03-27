@@ -90,22 +90,33 @@ function plotSite(g_id) {
     // If the data have not yet been loaded, pull them in via d3.csv, then
     //   write them to dailyData and update everything.
     
-    d3.select("g.x-axis").remove();
-    d3.select("g.y-axis").remove();
+    d3.selectAll("g.x-axis").remove();
+    d3.selectAll("g.y-axis").remove();
     svg.selectAll("path.valueLine").remove();
     
-    d3.csv("./data/g_id-" + g_id + ".csv", function(d) {
-      d.val = +d.val;
-      d.day = parseDate(d.day);
-      d.wy = calcWaterYear(d.day);
-      
-      return d;
-    }, function(error, data) {
-        //dailyData = dailyData.concat(data);
-        dailyData = data;
+    clearStatsRow();
+    
+    var data = _.filter(dailyData, {"G_ID" : g_id});
+    
+    if (data.length > 0) {
         updatePlot(g_id);
         updateStatsRow(data);
-    });
+    } else {
+        
+        d3.csv("./data/g_id-" + g_id + ".csv", function(d) {
+          d.val =  d.val.length > 0 ? +d.val : "-";
+          d.day = parseDate(d.day);
+          d.wy = calcWaterYear(d.day);
+          
+          return d;
+        }, function(error, data) {
+            //console.log("Data file parsed.");
+            dailyData = dailyData.concat(data);
+            //dailyData = data;
+            updatePlot(g_id);
+            updateStatsRow(data);
+        });
+    };
 };
 
 // Plot the daily data
@@ -113,15 +124,15 @@ function updatePlot(g_id) {
     
     
     // Only show data for the site we"ve selected.
-    data = _.filter(dailyData, {"G_ID" : g_id});
+    var data = _.filter(dailyData, {"G_ID" : g_id});
     var data_wy = _.groupBy(data, "wy");
     
-    years = _.keys(data_wy);
+    var years = _.keys(data_wy);
     var data_plot = [];
     
     // Get some info about the site we"re working with
-    site = sitelist.filter(function(d) {return d.G_ID == g_id})[0];
-    type = site.type;
+    var site = sitelist.filter(function(d) {return d.G_ID == g_id})[0];
+    var type = site.type;
     
     // Different data sets for each water year; also sort by day.
     years.forEach(function(d, i) {

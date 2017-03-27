@@ -8,10 +8,15 @@ var sitemap = L.map("mapid").setView([47.04, -122.9], 10);
 
 // For now, we"ll use OSM.  In the future it might behoove us to make our own
 //  tile layer, maybe using NAIP, hillshade, streets, NHD?
-L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
-    maxZoom: 18,
-}).addTo(sitemap);
+
+var layer = new L.StamenTileLayer("toner");
+sitemap.addLayer(layer);
+
+
+//L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+//    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+//    maxZoom: 18,
+//}).addTo(sitemap);
 
 // Custom icons to differentiate between well, rain, and discharge monitoring.
 var CircleIcon = L.Icon.extend({

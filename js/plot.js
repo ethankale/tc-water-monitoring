@@ -108,7 +108,10 @@ function plotSite(g_id) {
         updateStatsRow(data);
     } else {
         
-        d3.csv("./data/g_id-" + g_id + ".csv", function(d) {
+        var filepath = "./data/g_id-" + g_id + ".csv"
+        //console.log("Loading " + filepath);
+        
+        d3.csv(filepath, function(d) {
           d.val =  d.val.length > 0 ? +d.val : "-";
           d.day = parseDate(d.day);
           d.wy = calcWaterYear(d.day);

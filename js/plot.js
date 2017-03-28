@@ -227,8 +227,6 @@ function updatePlot(g_id) {
         .attr("text-anchor", "end");
 }
 
-
-
 // Keep the graph the same size as the map
 function setSVGSize() {
     svg.attr("width", document.getElementById("mapid").offsetWidth)
@@ -245,5 +243,7 @@ function resize() {
 }
 
 d3.select(window).on("resize", resize);
+
+loadSites();
 
 

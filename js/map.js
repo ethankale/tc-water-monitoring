@@ -106,15 +106,15 @@ function updateMapSites(data) {
         };
     });
     
-    //console.log(new Date());
-    
     // Load up data when we launch the page
     var g_id = sitelist[0].G_ID;
     //console.log(g_id);
+    
     plotSite(g_id);
+    
 };
 
-loadSites();
+
 
 
 

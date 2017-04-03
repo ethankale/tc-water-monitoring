@@ -61,6 +61,24 @@ function iconType(type) {
     return icon;
 }
 
+// Make a legend
+var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function (sitemap) {
+    var div = L.DomUtil.create("div", "info legend"),
+        filenames = ["green_circle.png", "purple_circle.png", "orange_circle.png"],
+        labels = ["Rain", "Well", "Flow"];
+
+    for (var i=0; i<filenames.length; i++) {
+        div.innerHTML += '<img src="./img/marker/' + filenames[i] + '"></img>' +
+        '  ' + labels[i] + '<br />';
+    }
+    
+    return div;
+};
+
+legend.addTo(sitemap)
+
 // Load the data from the CSV file into memory
 function loadSites() {
     

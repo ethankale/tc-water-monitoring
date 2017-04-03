@@ -35,43 +35,23 @@ bgcolor = "#d9d9d9";
 maincolor = "#525252";
 selectcolor = "red";
 
-function color(year) {
-    c = "";
-    currentWY = calcWaterYear(new Date());
-    
-    if (+year == currentWY) {
-        c = maincolor;
-    } else {
-        c = bgcolor;
-    }
-    
-    return c;
-};
-
 // Function for building the SVG line from the data
 var line = d3.line()
     .x(function(d) { return x_scales[thisYear](d.day); })
     .y(function(d) { return y(d.val); });
 
-// Function for handling mouse events; highlight the line when you hover over it
-function handleMouseOver(d, i) {
-    currentLine = d3.select(this)
-                    .attr("stroke-width", 4)
-                    .attr("stroke", selectcolor);
-    d3.select(".x-axis .hoverText")
-        .text(d.year);
-    // Use the line below if you want the select line to always appear on top.
-    // http://stackoverflow.com/questions/14167863/how-can-i-bring-a-circle-to-the-front-with-d3
-    //this.parentNode.appendChild(this);
-};
 
-function handleMouseOut(d, i) {
-    d3.select(this)
-        .attr("stroke-width", 1.5)
-        .attr("stroke", color(d.year));
-    
-    d3.select(".x-axis .hoverText")
-        .text("");
+// Fires when the year selectbox changes value.
+function SelectYearChange() {
+    wy = d3.select("#selected-wy").property("value");
+    highlightYear(wy);
+}
+
+// Highlight the currently selected water year
+function highlightYear(wy) {
+    d3.selectAll("svg path.valueLine").classed("highlight", false);
+    d3.select("svg path.wy" + wy).classed("highlight", true);
+    d3.select("#selected-wy").property("value", wy);
 };
 
 // Helper function that takes a date object and calculates the water year
@@ -135,8 +115,21 @@ function updatePlot(g_id) {
     var data = _.filter(dailyData, {"G_ID" : g_id});
     var data_wy = _.groupBy(data, "wy");
     
-    var years = _.keys(data_wy);
+    years = _.keys(data_wy);
     var data_plot = [];
+    
+    // Update the water year select box; standard D3 update/enter/exit pattern
+    var options = d3.select("#selected-wy")
+        .on('change', SelectYearChange)
+      .selectAll("option")
+        .data(years, function(d) {return d;});
+      
+    options.enter().append("option")
+        .attr("value", function(d) { return d})
+        .text(function(d) {return d});
+        
+    options.exit().remove();
+    
     
     // Get some info about the site we"re working with
     var site = sitelist.filter(function(d) {return d.G_ID == g_id})[0];
@@ -200,12 +193,12 @@ function updatePlot(g_id) {
         .text(type == "Rain" ? "Rainfall (inches)" : "Water Level (feet)");
     
     // Add multiple lines to the graph; one for each water year
-    g.selectAll("valueLine")
+    g.selectAll(".valueLine")
       .data(data_plot)
       .enter()
       .append("path")
-        .attr("class", "valueLine")
-        .attr("stroke", function(d,i) { return color(d.year)})
+        .attr("class", function(d,i) {return "valueLine wy" + d.year})
+        .classed("currentwy", function(d) {return (new Date()).getFullYear() == +d.year})
         .attr("d", function(d) {
             thisYear = "scale" + d.year;
             return line(d.points)})
@@ -213,8 +206,7 @@ function updatePlot(g_id) {
         .attr("stroke-linecap", "round")
         .attr("stroke-width", 1.5)
         .attr("fill", "none")
-        .on("mouseover", handleMouseOver)
-        .on("mouseout", handleMouseOut);
+        .on("mouseover", function(d) { highlightYear(d.year)});
     
     // Label years on mouseover
     d3.select("g.x-axis")

@@ -3,7 +3,7 @@
 -----------------
 
 
-select g.G_ID, g.SITE_CODE + ' - ' + g.SITE_NAME as site, d3.R_TimeDate as latest_sample, 'Rain' as type, d3.R_Value as last_val
+select g.G_ID, g.LAT, g.LON, g.SITE_CODE + ' - ' + g.SITE_NAME as site, d3.R_TimeDate as latest_sample, 'Rain' as type, d3.R_Value as last_val
 from tblGaugeLLID as g
 left join (
     select d1.R_TimeDate, d1.G_ID, d1.R_Value
@@ -19,7 +19,7 @@ where STATUS = 'Active'
 
 UNION
 
-select g.G_ID, g.SITE_CODE + ' - ' + g.SITE_NAME as site, d3.D_TimeDate as latest_sample, 'Flow' as type, d3.D_Stage as last_val
+select g.G_ID, g.LAT, g.LON, g.SITE_CODE + ' - ' + g.SITE_NAME as site, d3.D_TimeDate as latest_sample, 'Flow' as type, d3.D_Stage as last_val
 from tblGaugeLLID as g
 left join (
     select d1.D_TimeDate, d1.G_ID, d1.D_Stage
@@ -35,7 +35,7 @@ where STATUS = 'Active'
 
 UNION
 
-select g.G_ID, g.SITE_CODE + ' - ' + g.SITE_NAME as site, d3.P_TimeDate as latest_sample, 'Well' as type, d3.P_Value as last_val
+select g.G_ID, g.LAT, g.LON, g.SITE_CODE + ' - ' + g.SITE_NAME as site, d3.P_TimeDate as latest_sample, 'Well' as type, d3.P_Value as last_val
 from tblGaugeLLID as g
 left join (
     select d1.P_TimeDate, d1.G_ID, d1.P_Value

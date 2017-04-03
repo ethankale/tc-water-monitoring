@@ -1,67 +1,58 @@
-﻿G_ID,SITE_CODE,SITE_NAME,STATUS,LAT,LON,type,count
-965,10a,Eaton Creek @ Yelm Hwy,Active,46.9852,-122.73495,Flow,3072
-966,10u,Meridian Rd_Rain,Active,46.97402,-122.73863,Rain,4616
-967,11a,Deschutes River @ Waldrick Rd.,Inactive,46.92026,-122.80999,Flow,662
-968,13u,Lake Lawrence_Rain,Active,46.85578,-122.57851,Rain,3756
-971,18u,Lacey Fire Dist. 3 Fire Station_Rain,Active,47.03678,-122.8161,Rain,5357
-972,18w,WARC TC_Rain,Active,47.06578,-122.76009,Rain,5317
-974,20a,Woodard Creek @ 36th Ave.,Active,47.08331,-122.86034,Flow,3183
-975,20u,Southbay Firestation_Rain ,Active,47.08173,-122.84514,Rain,4018
-978,23u,Percival Creek, Bldg 4_Rain,Active,47.02865,-122.91413,Rain,5668
-980,27u,Boston Harbor_Rain,Active,47.13611,-122.90205,Rain,4000
-982,32u,Kaiser Rd_Rain,Inactive,47.07019,-122.95583,Rain,3692
-984,33w,Griffin FS_Rain ,Active,47.08539,-123.01648,Rain,3177
-986,45a,Black River @ 110th Ave.,Inactive,46.92835,-123.00811,Flow,2969
-988,45u,Littlerock_Rain,Active,46.90223,-123.02264,Rain,3880
-991,55a,Scatter Creek @ James Rd.,Active,46.80698,-123.07229,Flow,2790
-992,55u,Tenino_Rain,Active,46.86129,-122.84066,Rain,3909
-993,59u,Bloody Run USGS_Rain,Active,46.79028,-122.73417,Rain,2855
-996,05u,Yelm WRF_Rain,Active,46.95176,-122.59726,Rain,3388
-997,60u,Bucoda USGS_Rain,Active,46.77222,-122.92306,Rain,2860
-998,65u,Grand Mound_Rain,Active,46.79431,-123.02445,Rain,3870
-999,69u,Summit Lake_Rain,Active,47.05091,-123.13704,Rain,4024
-1000,ABS362,5143 Windermere Dr SE,Active,47.00065,-122.84091,Well,91
-1001,DP1,5013 Donnelly Dr SE,Active,47.00298,-122.8426,Well,91
-1002,DP2,3986 Woodlawn Dr SE,Active,47.00018,-122.83705,Well,91
-1003,DP3,5535 Donnelly Dr SE,Active,46.99775,-122.84141,Well,91
-1004,ECY1,5143 Windermere Dr SE,Active,47.00126,-122.84092,Well,91
-1005,ECY2,5535 Donnelly Dr SE,Active,46.99774,-122.84136,Well,91
-1006,ET1,8538 9th Way SE,Active,47.03996,-122.7577,Well,104
-1007,ET2,802 Torrey St SE,Inactive,47.04101,-122.7566,Well,32
-1008,ET3,8th Way & Tanbark St SE,Inactive,47.04248,-122.75501,Well,36
-1009,ET4,902 Tanbark St SE,Inactive,47.04079,-122.75505,Well,33
-1010,ET5,918 Tanbark St SE,Inactive,47.03984,-122.75499,Well,36
-1011,ET6,8507 9th Ave SE,Inactive,47.04078,-122.7591,Well,35
-1012,HFB-01,628 Hidden Forest Dr SE,Active,47.05128,-122.75095,Well,150
-1013,HFB-02,524 Hidden Forest Dr SE,Active,47.05348,-122.75026,Well,150
-1014,HFB-03,8836 6th Way SE,Active,47.05149,-122.75228,Well,148
-1015,LRS11a,9605 Tilley Rd S,Active,46.94846,-122.90799,Well,149
-1016,LRS12,9411 SW Kimmie St,Active,46.95049,-122.92914,Well,149
-1018,LRS7a,3804 93rd Ave SW,Active,46.95284,-122.96454,Well,515
-1019,LRS8,8943 Walter Ct SW,Active,46.95724,-122.92025,Well,4314
-1020,LRS9,2729 93rd Ave SW (Lathrop),Active,46.95242,-122.94228,Well,149
-1021,MW1,10415 Littlerock Rd SW,Active,46.93786,-122.99057,Well,149
-1022,MW2,10415 Littlerock Rd SW,Active,46.93786,-122.99057,Well,144
-1023,MW3,3623 104TH Ave SW (Jones),Active,46.93628,-122.96041,Well,149
-1024,MW5,800 93rd Ave SE,Active,46.95279,-122.89429,Well,149
-1025,TWB1,Huskey Way SE & Carpenter Rd SE,Active,47.04977,-122.79583,Well,94
-1026,TWB10,Choker Ct & Bobcat Dr SE,Active,47.0488,-122.77476,Well,94
-1027,TWB11,315 Ranger Dr SE,Active,47.05115,-122.78149,Well,69
-1028,TWB2,6731 Kinwood St SE,Active,47.05004,-122.79155,Well,94
-1029,TWB3,7309 Husky Way SE,Active,47.04997,-122.78251,Well,94
-1030,TWB4,7653 Husky Way SE,Active,47.04952,-122.77773,Well,94
-1031,TWB5,404 Choker St SE,Active,47.04982,-122.77464,Well,94
-1032,TWB6,Husky Way SE & Wildcat St SE,Active,47.05019,-122.78508,Well,94
-1033,TWB7,454 Cougar St SE,Active,47.04861,-122.78405,Well,94
-1034,TWB8,455 Bulldog St SE,Active,47.04816,-122.78674,Well,94
-1045,45w,Rochester Drop Box_Rain,Active,46.84762,-123.04808,Rain,2782
-1046,SLB-1,Scott Lake, Trevue Ave SW & Scott Creek Dr SW,Active,46.91956,-122.94014,Well,100
-1047,SLB-2,Scott Lake,  11746 Scott Creek Dr SW,Active,46.91353,-122.933,Well,100
-1049,11u,NOAA Olympia Airport,Active,46.97374,-122.90492,Rain,22706
-1051,18b,Long Lake Level,Active,NULL,NULL,Flow,2325
-1052,24u,McLane FS Wx,Inactive,47.02457,-122.3606,Rain,1655
-1054,11w,Rainier Transfer Station,Active,46.53559,-122.41546,Rain,1402
-1100,10b,Lake St. Clair,Active,46.99682,-122.72035,Flow,33
-
-(63 row(s) affected)
-
+"G_ID","SITE_CODE","SITE_NAME","STATUS","LAT","LON","type","count"
+"965","10a","Eaton Creek @ Yelm Hwy","Active","46.985199999999999","-122.73495","Flow","3215"
+"1100","10b","Lake St. Clair","Active","46.99682","-122.72035","Flow","143"
+"1101","14a","Spurgeon Creek","Active","46.949210000000001","-122.8442","Flow","36"
+"970","18a","Woodland Creek @ Pleasant Glade Rd.","Active","47.071779999999997","-122.81723","Flow","534"
+"1051","18b","Long Lake Level","Active","","","Flow","2325"
+"974","20a","Woodard Creek @ 36th Ave.","Active","47.083309999999997","-122.86033999999999","Flow","3183"
+"991","55a","Scatter Creek @ James Rd.","Active","46.806980000000003","-123.07229","Flow","2790"
+"996","05u","Yelm WRF_Rain","Active","46.95176","-122.59726000000001","Rain","3388"
+"966","10u","Meridian Rd_Rain","Active","46.974020000000003","-122.73863","Rain","4616"
+"1049","11u","NOAA Olympia Airport","Active","46.973739999999999","-122.90492","Rain","22706"
+"1054","11w","Rainier Transfer Station","Active","46.898899999999998","-122.69844000000001","Rain","1402"
+"968","13u","Lake Lawrence_Rain","Active","46.855780000000003","-122.57850999999999","Rain","3756"
+"971","18u","Lacey Fire Dist. 3 Fire Station_Rain","Active","47.03678","-122.81610000000001","Rain","5357"
+"972","18w","WARC TC_Rain","Active","47.065779999999997","-122.76009000000001","Rain","5317"
+"975","20u","Southbay Firestation_Rain ","Active","47.08173","-122.84514","Rain","4018"
+"978","23u","Percival Creek, Bldg 4_Rain","Active","47.028649999999999","-122.91413","Rain","5668"
+"980","27u","Boston Harbor_Rain","Active","47.136110000000002","-122.90205","Rain","4000"
+"984","33w","Griffin FS_Rain ","Active","47.085389999999997","-123.01648","Rain","3177"
+"988","45u","Littlerock_Rain","Active","46.902230000000003","-123.02264","Rain","3880"
+"1045","45w","Rochester Drop Box_Rain","Active","46.847619999999999","-123.04808","Rain","2782"
+"992","55u","Tenino_Rain","Active","46.861289999999997","-122.84066","Rain","3909"
+"993","59u","Bloody Run USGS_Rain","Active","46.790280000000003","-122.73417000000001","Rain","2855"
+"997","60u","Bucoda USGS_Rain","Active","46.772219999999997","-122.92306000000001","Rain","2860"
+"998","65u","Grand Mound_Rain","Active","46.794310000000003","-123.02445","Rain","3870"
+"999","69u","Summit Lake_Rain","Active","47.050910000000002","-123.13704","Rain","4024"
+"1000","ABS362","5143 Windermere Dr SE","Active","47.00065","-122.84090999999999","Well","91"
+"1001","DP1","5013 Donnelly Dr SE","Active","47.002980000000001","-122.8426","Well","93"
+"1002","DP2","3986 Woodlawn Dr SE","Active","47.00018","-122.83705","Well","92"
+"1003","DP3","5535 Donnelly Dr SE","Active","46.997750000000003","-122.84141","Well","92"
+"1004","ECY1","5143 Windermere Dr SE","Active","47.001260000000002","-122.84092","Well","92"
+"1005","ECY2","5535 Donnelly Dr SE","Active","46.99774","-122.84135999999999","Well","92"
+"1006","ET1","8538 9th Way SE","Active","47.039960000000001","-122.7577","Well","104"
+"1012","HFB-01","628 Hidden Forest Dr SE","Active","47.051279999999998","-122.75095","Well","150"
+"1013","HFB-02","524 Hidden Forest Dr SE","Active","47.05348","-122.75026","Well","150"
+"1014","HFB-03","8836 6th Way SE","Active","47.051490000000001","-122.75228","Well","148"
+"1015","LRS11a","9605 Tilley Rd S","Active","46.948459999999997","-122.90799","Well","4571"
+"1016","LRS12","9411 SW Kimmie St","Active","46.950490000000002","-122.92914","Well","4580"
+"1017","LRS1a","6841 Foster Dr SW","Active","46.98527","-122.94353","Well","144"
+"1018","LRS7a","3804 93rd Ave SW","Active","46.952840000000002","-122.96454","Well","3791"
+"1019","LRS8","8943 Walter Ct SW","Active","46.957239999999999","-122.92025","Well","4344"
+"1020","LRS9","2729 93rd Ave SW (Lathrop)","Active","46.952419999999996","-122.94228","Well","3732"
+"1021","MW1","10415 Littlerock Rd SW","Active","46.937860000000001","-122.99057000000001","Well","179"
+"1022","MW2","10415 Littlerock Rd SW","Active","46.937860000000001","-122.99057000000001","Well","144"
+"1023","MW3","3623 104TH Ave SW (Jones)","Active","46.936279999999996","-122.96041","Well","4383"
+"1024","MW5","800 93rd Ave SE","Active","46.95279","-122.89429","Well","6213"
+"1046","SLB-1","Scott Lake, Trevue Ave SW & Scott Creek Dr SW","Active","46.919559999999997","-122.94014","Well","100"
+"1047","SLB-2","Scott Lake,  11746 Scott Creek Dr SW","Active","46.913530000000002","-122.93300000000001","Well","100"
+"1025","TWB1","Huskey Way SE & Carpenter Rd SE","Active","47.049770000000002","-122.79583","Well","94"
+"1026","TWB10","Choker Ct & Bobcat Dr SE","Active","47.0488","-122.77476","Well","94"
+"1027","TWB11","315 Ranger Dr SE","Active","47.05115","-122.78149000000001","Well","69"
+"1028","TWB2","6731 Kinwood St SE","Active","47.050040000000003","-122.79155","Well","94"
+"1029","TWB3","7309 Husky Way SE","Active","47.049970000000002","-122.78251","Well","94"
+"1030","TWB4","7653 Husky Way SE","Active","47.049520000000001","-122.77773000000001","Well","94"
+"1031","TWB5","404 Choker St SE","Active","47.049819999999997","-122.77464000000001","Well","94"
+"1032","TWB6","Husky Way SE & Wildcat St SE","Active","47.050190000000001","-122.78507999999999","Well","94"
+"1033","TWB7","454 Cougar St SE","Active","47.048609999999996","-122.78404999999999","Well","94"
+"1034","TWB8","455 Bulldog St SE","Active","47.048160000000003","-122.78673999999999","Well","94"

@@ -20,3 +20,18 @@ h1 {
     font-size: 2rem;
 }
 
+svg path.valueLine {
+    stroke: #d9d9d9;
+    stroke-opacity: 0.5;
+}
+
+svg path.currentwy {
+    stroke: #525252;
+    stroke-opacity: 1;
+}
+
+svg path.highlight {
+    stroke-width: 2.5;
+    stroke: red;
+    stroke-opacity: 1;
+}

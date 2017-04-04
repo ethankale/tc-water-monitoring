@@ -48,19 +48,30 @@ h1 {
 }
 
 svg path.valueLine {
-    stroke: #d9d9d9;
+    stroke: #cccccc;
     stroke-opacity: 0.5;
+    stroke-width: 2;
+    stroke-dasharray: 5,3;
 }
 
 svg path.currentwy {
     stroke: #525252;
     stroke-opacity: 1;
+    stroke-width: 2.5;
+    stroke-dasharray: 1;
 }
 
 svg path.highlight {
     stroke-width: 2.5;
     stroke: red;
     stroke-opacity: 1;
+    stroke-dasharray: 1;
 }
+
+svg path.hover {
+    stroke-dasharray: 1;
+    stroke-opacity: 1;
+}
+
 
 

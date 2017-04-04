@@ -50,9 +50,27 @@ function SelectYearChange() {
 // Highlight the currently selected water year
 function highlightYear(wy) {
     d3.selectAll("svg path.valueLine").classed("highlight", false);
-    d3.select("svg path.wy" + wy).classed("highlight", true);
-    d3.select("#selected-wy").property("value", wy);
+    if (wy != "Clear") {
+        d3.select("svg path.wy" + wy).classed("highlight", true);
+        d3.select("#selected-wy").property("value", wy);
+    }
 };
+
+// Show the exact date and value on mouseover
+function hoverYear(wy) {
+    d3.select(".x-axis .hoverText")
+        .text(wy);
+    
+    d3.select("svg path.wy" + wy).classed("hover", true);
+}
+
+// Return to normal when leaving hover (mouseout)
+function unHoverYear(wy) {
+    d3.select(".x-axis .hoverText")
+        .text("");
+        
+    d3.select("svg path.wy" + wy).classed("hover", false);
+}
 
 // Helper function that takes a date object and calculates the water year
 function calcWaterYear(dt) {
@@ -116,13 +134,15 @@ function updatePlot(g_id) {
     var data_wy = _.groupBy(data, "wy");
     
     years = _.keys(data_wy);
+    var wy_options = _.clone(years);
     var data_plot = [];
     
     // Update the water year select box; standard D3 update/enter/exit pattern
+    wy_options.push("Clear");
     var options = d3.select("#selected-wy")
         .on('change', SelectYearChange)
       .selectAll("option")
-        .data(years, function(d) {return d;});
+        .data(wy_options, function(d) {return d;});
       
     options.enter().append("option")
         .attr("value", function(d) { return d})
@@ -206,7 +226,9 @@ function updatePlot(g_id) {
         .attr("stroke-linecap", "round")
         .attr("stroke-width", 1.5)
         .attr("fill", "none")
-        .on("mouseover", function(d) { highlightYear(d.year)});
+        .on("mouseover", function(d) { hoverYear(d.year)})
+        .on("mouseout", function(d) {unHoverYear(d.year)})
+        .on("click", function(d) { highlightYear(d.year)});
     
     // Label years on mouseover
     d3.select("g.x-axis")

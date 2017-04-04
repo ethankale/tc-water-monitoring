@@ -23,7 +23,7 @@ gulp.task('deploy', function() {
         "./js/*",
         "./css/*",
         "./bin/*",
-        "./img/*",
+        "./img/marker/*.png",
         "./index.html"], {base: "./"})
     .pipe(gulp.dest('\\\\rsh2o\\Web_Water-Monitoring\\'));
 });

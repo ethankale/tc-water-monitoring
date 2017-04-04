@@ -19,9 +19,8 @@ sitemap.addLayer(layer);
 //}).addTo(sitemap);
 
 // Custom icons to differentiate between well, rain, and discharge monitoring.
-var CircleIcon = L.Icon.extend({
+var SiteIcon = L.Icon.extend({
     options: {
-        shadowUrl: "./img/marker/shadow_circle.png",
         iconSize:     [15, 15],
         shadowSize:   [15, 15],
         iconAnchor:   [7.5, 7.5],
@@ -30,11 +29,14 @@ var CircleIcon = L.Icon.extend({
     }
 });
 
-var greenIcon = new CircleIcon({iconUrl: "./img/marker/green_circle.png"}),
-    purpleIcon = new CircleIcon({iconUrl: "./img/marker/purple_circle.png"}),
-    orangeIcon = new CircleIcon({iconUrl: "./img/marker/orange_circle.png"});
+var greenIcon = new SiteIcon({iconUrl: "./img/marker/green_circle.png",
+                              shadowURL: "./img/marker/shadow_circle.png"}),
+    purpleIcon = new SiteIcon({iconUrl: "./img/marker/purple_triangle.png",
+                              shadowURL: "./img/marker/shadow_triangle.png"}),
+    orangeIcon = new SiteIcon({iconUrl: "./img/marker/orange_square.png",
+                              shadowURL: "./img/marker/shadow_square.png"});
 
-// The highlight icon will be different - slightly larger
+// The highlight icon will be different - slightly smaller
 var highlightIcon = L.icon({
     iconUrl: "./img/marker/highlight_circle.png",
     
@@ -66,7 +68,7 @@ var legend = L.control({position: 'bottomright'});
 
 legend.onAdd = function (sitemap) {
     var div = L.DomUtil.create("div", "info legend"),
-        filenames = ["green_circle.png", "purple_circle.png", "orange_circle.png"],
+        filenames = ["green_circle.png", "purple_triangle.png", "orange_square.png"],
         labels = ["Rain", "Well", "Flow"];
 
     for (var i=0; i<filenames.length; i++) {

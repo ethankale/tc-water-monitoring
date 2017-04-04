@@ -150,6 +150,8 @@ function updatePlot(g_id) {
         
     options.exit().remove();
     
+    // Set the water year selection back to "Clear" every time.
+    d3.select("#selected-wy").property("value", "Clear");
     
     // Get some info about the site we"re working with
     var site = sitelist.filter(function(d) {return d.G_ID == g_id})[0];

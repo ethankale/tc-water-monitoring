@@ -127,10 +127,12 @@ function updateMapSites(data) {
     });
     
     // Load up data when we launch the page
-    var g_id = sitelist[0].G_ID;
-    //console.log(g_id);
+    var getvars = window.location.href.split("?")[1];
+    var g_id = typeof getvars === "undefined" ? sitelist[0].G_ID : getvars.split("=")[1];
+    //var g_id = sitelist[0].G_ID;
+    console.log(g_id);
     
-    plotSite(g_id);
+    selectSite(sitelist, g_id);
     
 };
 

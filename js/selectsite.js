@@ -22,7 +22,6 @@
 // Global variables.  I know, I"m a terrible person.
 var sitelist = {};
 var dailyData = [];
-var current_site = "";
 
 
 // The user selected a different site in the selectbox

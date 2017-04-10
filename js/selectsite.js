@@ -22,6 +22,8 @@
 // Global variables.  I know, I"m a terrible person.
 var sitelist = {};
 var dailyData = [];
+var current_site = "";
+
 
 // The user selected a different site in the selectbox
 function selectChange() {
@@ -34,8 +36,38 @@ function onMarkerClick(e) {
     selectSite(sitelist, e.target.g_id);
 }
 
+// The user pressed the back or forward button
+window.onpopstate = function(e) {
+    
+
+    if(e.state) {
+        
+        console.log(e.state);
+        
+        var url = window.location.href;
+        
+        if (url.split("?").length > 1) {
+            g_id = url.split("?")[1].split("=")[1];
+            selectSite(sitelist, g_id, "popstate");
+        }
+    }
+}
+
 // What happens when a user selects a site from the map or the list
-function selectSite(data, g_id) {
+function selectSite(data, g_id, called_by) {
+    
+    // Set the site GET variable, and update the browser history
+    if (typeof called_by === "undefined") {
+        url = window.location.href;
+        
+        if (url.split("?").length > 1) {
+            url = url.split("?")[0];
+        }
+        
+        window.history.pushState({"site": g_id}, "TC Water Monitoring", "/?site=" + g_id);
+    };
+    
+    // Collect the site-specific data
     var site = data.filter(function(d) { return (d.G_ID === g_id); })[0];
     d3.select("#selected-station").property("value", g_id);
     
@@ -47,10 +79,6 @@ function selectSite(data, g_id) {
     
     // Plot data
     plotSite(g_id);
-    
-    // Update the quick-stats bar
-    //var currentData = _.filter(dailyData, {G_ID: g_id});
-    //updateStatsRow(currentData);
 }
 
 // Calculate and add statistics to the stats row, using

@@ -46,7 +46,7 @@ window.onpopstate = function(e) {
         var url = window.location.href;
         
         if (url.split("?").length > 1) {
-            g_id = url.split("?")[1].split("=")[1];
+            g_id = url.split("?")[1].split("=")[1].replace(/\D/g,'');
             selectSite(sitelist, g_id, "popstate");
         }
     }
@@ -69,6 +69,9 @@ function selectSite(data, g_id, called_by) {
     // Collect the site-specific data
     var site = data.filter(function(d) { return (d.G_ID === g_id); })[0];
     d3.select("#selected-station").property("value", g_id);
+    
+    // Update the download link
+    d3.select("#downloadCSV").property("href", "/data/g_id-" + g_id + ".csv");
     
     // Map manipulation
     sitemap.panTo([site.LAT, site.LON]);

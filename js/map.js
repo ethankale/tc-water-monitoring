@@ -127,7 +127,7 @@ function updateMapSites(data) {
     });
     
     // Load up data when we launch the page
-    var getvars = window.location.href.split("?")[1];
+    var getvars = window.location.href.split("#")[1];
     var g_id = typeof getvars === "undefined" ? sitelist[0].G_ID : getvars.split("=")[1].replace(/\D/g,'');
     //var g_id = sitelist[0].G_ID;
     //console.log(g_id);

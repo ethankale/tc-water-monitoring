@@ -45,8 +45,8 @@ window.onpopstate = function(e) {
         
         var url = window.location.href;
         
-        if (url.split("?").length > 1) {
-            g_id = url.split("?")[1].split("=")[1].replace(/\D/g,'');
+        if (url.split("#").length > 1) {
+            g_id = url.split("#")[1].split("=")[1].replace(/\D/g,'');
             selectSite(sitelist, g_id, "popstate");
         }
     }
@@ -59,11 +59,11 @@ function selectSite(data, g_id, called_by) {
     if (typeof called_by === "undefined") {
         url = window.location.href;
         
-        if (url.split("?").length > 1) {
-            url = url.split("?")[0];
+        if (url.split("#").length > 1) {
+            url = url.split("#")[0];
         }
         
-        window.history.pushState({"site": g_id}, "TC Water Monitoring", "/?site=" + g_id);
+        window.history.pushState({"site": g_id}, "TC Water Monitoring", "#site=" + g_id);
     };
     
     // Collect the site-specific data
@@ -135,18 +135,18 @@ function updateStatsRow(data) {
     var recentContext1 = "Most Recent";
     var recentContext2 = "";
     
-    var max_currentyearContext1 = "Max This Year";
+    var max_currentyearContext1 = "Max This Water Year";
     
     var max_overallContext1 = "Highest Recorded";
     var max_overallDate = prettyDate(maxMeasure.day)
     
     if (site.type == "Rain") {
-        recentContext1 = "Inches This Year";
+        recentContext1 = "Inches This Water Year";
         recentContext2 = "As Of ";
         
-        max_currentyearContext1 = "Wettest Day This Year";
+        max_currentyearContext1 = "Wettest Day This Water Year";
         
-        max_overallContext1 = "Wettest Year";
+        max_overallContext1 = "Wettest Water Year";
         max_overallDate = yearOnlyFormat(maxMeasure.day);
     }
     
@@ -155,7 +155,7 @@ function updateStatsRow(data) {
         mostRecent.val.toFixed(2) +
         " <br /><small>" + recentContext2 + prettyDate(mostRecent.day) + "</small>");
     
-    d3.select(".quick-stats.count").html("<small>Years Measured</small><br />" +
+    d3.select(".quick-stats.count").html("<small>Water Years Measured</small><br />" +
         yearCount);
     
     d3.select(".quick-stats.max-currentyear").html("<small>" + max_currentyearContext1 + "</small><br />" +

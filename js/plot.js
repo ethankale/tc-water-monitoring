@@ -13,11 +13,12 @@ var parseDate = d3.timeParse("%Y-%m-%d %H:%M:%S");
 var svg = d3.select("svg")
     .attr("width", document.getElementById("mapid").offsetWidth)
     .attr("height", document.getElementById("mapid").offsetHeight),
-    margin = {top: 20, right: 10, bottom: 30, left: 50},
+    margin = {top: 20, right: 10, bottom: 50, left: 50},
     width = +svg.attr("width") - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     bisectDate = d3.bisector(function(d) { return d.date; }).left;
 
+// Add the SVG container for the plot
 var g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 //var x = d3.scaleTime();
@@ -33,13 +34,45 @@ var years = [];
 
 bgcolor = "#d9d9d9";
 maincolor = "#525252";
-selectcolor = "red";
+
+// Color the dots that indicate provisional, warning, and estimated data
+//   differently from each other; warning > estimated > provisional
+
+function qalevel(d) {
+    var level = "";
+    if (d.w == 1) {
+      level = "Warning";
+    } else if (d.e == 1) {
+      level = "Estimate";
+    } else if (d.p == 1) {
+      level = "Provisional";
+    }
+    return level;
+}
+
+var circleColor = d3.scaleOrdinal()
+    .domain(["Normal","Warning", "Estimate", "Provisional"])
+    .range(["#cccccc", "#8e0152", "#de77ae", "#4d9221"])
+
+// Add the legend
+svg.append("g")
+  .attr("class", "legendOrdinal")
+  .attr("transform", "translate(" + margin.left + ", " + (height + margin.bottom - 5) + ")");
+
+var legend = d3.legendColor()
+    .shape("circle")
+    .orient("horizontal")
+    .shapeRadius(3)
+    .shapePadding((width + margin.left + margin.right)/4)
+    .scale(circleColor)
+
+svg.select(".legendOrdinal")
+    .call(legend);
 
 // Function for building the SVG line from the data
 var line = d3.line()
     .x(function(d) { return x_scales[thisYear](d.day); })
     .y(function(d) { return y(d.val); });
-
 
 // Fires when the year selectbox changes value.
 function SelectYearChange() {
@@ -50,8 +83,10 @@ function SelectYearChange() {
 // Highlight the currently selected water year
 function highlightYear(wy) {
     d3.selectAll("svg path.valueLine").classed("highlight", false);
+    d3.selectAll("svg circle.valueCircle").classed("highlight", false);
     if (wy != "Clear") {
         d3.select("svg path.wy" + wy).classed("highlight", true);
+        d3.selectAll("svg circle.wy" + wy).classed("highlight", true);
         d3.select("#selected-wy").property("value", wy);
     }
 };
@@ -62,6 +97,7 @@ function hoverYear(wy) {
         .text(wy);
     
     d3.select("svg path.wy" + wy).classed("hover", true);
+    d3.selectAll("svg circle.wy" + wy).classed("hover", true);
 }
 
 // Return to normal when leaving hover (mouseout)
@@ -70,6 +106,7 @@ function unHoverYear(wy) {
         .text("");
         
     d3.select("svg path.wy" + wy).classed("hover", false);
+    d3.selectAll("svg circle.wy" + wy).classed("hover", false);
 }
 
 // Helper function that takes a date object and calculates the water year
@@ -96,6 +133,7 @@ function plotSite(g_id) {
     d3.selectAll("g.x-axis").remove();
     d3.selectAll("g.y-axis").remove();
     svg.selectAll("path.valueLine").remove();
+    svg.selectAll("circle.valueCircle").remove();
     
     clearStatsRow();
     
@@ -113,6 +151,10 @@ function plotSite(g_id) {
           d.val =  d.val.length > 0 ? +d.val : "-";
           d.day = parseDate(d.day);
           d.wy = calcWaterYear(d.day);
+          d.p = d.provisional == 0 || d.provisional == "False" ? 0 : 1;
+          d.w = d.warning == 0 || d.warning == "False" ? 0 : 1;
+          d.e = d.estimate == 0 || d.estimate == "False" ? 0 : 1;
+          d.qa = qalevel(d);
           
           return d;
         }, function(error, data) {
@@ -214,6 +256,30 @@ function updatePlot(g_id) {
         .attr("text-anchor", "end")
         .text(type == "Rain" ? "Rainfall (inches)" : "Water Level (feet)");
     
+    // Add circles for the provisional values
+    var data_provisional = _.filter(data, function(d) {
+        return d.p + d.e + d.w > 0;
+    });
+    
+    //console.log(data_provisional);
+    
+    g.selectAll(".valueCircle")
+        .data(data_provisional)
+        .enter()
+        .append("circle")
+        .attr("class", function(d,i) {return "valueCircle wy" + d.wy})
+        .attr("cx", function(d) { return x_scales["scale" + d.wy](d.day)})
+        .attr("cy", function(d) { return y(d.val)})
+        .attr("r", 3)
+        .attr("stroke", function(d) { return circleColor(d.qa)})
+        .attr("fill", function(d) { return circleColor(d.qa)})
+        .on("mouseover", function(d) { hoverYear(d.wy)})
+        .on("mouseout", function(d) {unHoverYear(d.wy)})
+        .on("click", function(d) { highlightYear(d.wy)})
+      .exit()
+        .remove();
+    
+    
     // Add multiple lines to the graph; one for each water year
     g.selectAll(".valueLine")
       .data(data_plot)
@@ -231,6 +297,8 @@ function updatePlot(g_id) {
         .on("mouseover", function(d) { hoverYear(d.year)})
         .on("mouseout", function(d) {unHoverYear(d.year)})
         .on("click", function(d) { highlightYear(d.year)});
+    
+
     
     // Label years on mouseover
     d3.select("g.x-axis")
@@ -254,6 +322,9 @@ function setSVGSize() {
 
 function resize() {
     setSVGSize();
+    // Reset legend to match width
+    legend.shapePadding((width + margin.left + margin.right)/4);
+    svg.select(".legendOrdinal").call(legend);
     g_id = d3.select("#selected-station").property("value");
     plotSite(g_id);
 }

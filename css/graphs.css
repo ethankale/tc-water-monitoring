@@ -63,7 +63,7 @@ svg path.currentwy {
 
 svg path.highlight {
     stroke-width: 2.5;
-    stroke: red;
+    stroke: blue;
     stroke-opacity: 1;
     stroke-dasharray: 1;
 }
@@ -73,5 +73,18 @@ svg path.hover {
     stroke-opacity: 1;
 }
 
+svg circle.valueCircle {
+    stroke-opacity: 0.5;
+    fill-opacity: 0.5;
+}
 
+svg circle.hover {
+    stroke-opacity: 1;
+    fill-opacity: 1;
+}
+
+svg circle.highlight {
+    stroke-opacity: 1;
+    fill-opacity: 1;
+}
 

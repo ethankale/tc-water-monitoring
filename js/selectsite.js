@@ -71,7 +71,7 @@ function selectSite(data, g_id, called_by) {
     d3.select("#selected-station").property("value", g_id);
     
     // Update the download link
-    d3.select("#downloadCSV").property("href", "/data/g_id-" + g_id + ".csv");
+    d3.select("#downloadCSV").property("href", url.split("#")[0].split("index")[0] + "/data/g_id-" + g_id + ".csv");
     
     // Map manipulation
     sitemap.panTo([site.LAT, site.LON]);

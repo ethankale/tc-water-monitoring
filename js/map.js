@@ -6,13 +6,17 @@ var displayDateFormat = d3.timeFormat("%Y-%m-%d");
 
 var sitemap = L.map("mapid").setView([47.04, -122.9], 10);
 
-// For now, we"ll use OSM.  In the future it might behoove us to make our own
-//  tile layer, maybe using NAIP, hillshade, streets, NHD?
+L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/' +
+                'World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; <a href="http://services.arcgisonline.com/ArcGIS/' +
+                    'rest/services/World_Topo_Map/MapServer">ArcGIS</a>',
+            }).addTo(sitemap);
 
-var layer = new L.StamenTileLayer("toner");
-sitemap.addLayer(layer);
+// Stamen
+//var layer = new L.StamenTileLayer("toner");
+//sitemap.addLayer(layer);
 
-
+// Osm
 //L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 //    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
 //    maxZoom: 18,
@@ -69,7 +73,7 @@ var legend = L.control({position: 'bottomright'});
 legend.onAdd = function (sitemap) {
     var div = L.DomUtil.create("div", "info legend"),
         filenames = ["green_circle.png", "purple_triangle.png", "orange_square.png"],
-        labels = ["Rain", "Well", "Flow"];
+        labels = ["Rain", "Well", "Stream"];
 
     for (var i=0; i<filenames.length; i++) {
         div.innerHTML += '<img src="./img/marker/' + filenames[i] + '"></img>' +

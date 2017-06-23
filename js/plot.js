@@ -13,7 +13,7 @@ var parseDate = d3.timeParse("%Y-%m-%d %H:%M:%S");
 var svg = d3.select("svg")
     .attr("width", document.getElementById("mapid").offsetWidth)
     .attr("height", document.getElementById("mapid").offsetHeight),
-    margin = {top: 20, right: 10, bottom: 50, left: 50},
+    margin = {top: 20, right: 10, bottom: 70, left: 50},
     width = +svg.attr("width") - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     bisectDate = d3.bisector(function(d) { return d.date; }).left;
@@ -243,6 +243,15 @@ function updatePlot(g_id) {
       .select(".domain")
         .remove();
     
+    g.select(".x-axis")
+      .append("text")
+        .attr("class", "x-axis-label")
+        .attr("font-size", "1.2em")
+        .attr("y", 40)
+        .attr("x", width / 2)
+        .attr("text-anchor", "middle")
+        .text("Time of Year")
+        .on("click", function() {window.open("https://en.wikipedia.org/wiki/Water_year"); });
     
     // Add the y-axis to the graph.  Includes some labeling text.
     g.append("g")
@@ -250,9 +259,10 @@ function updatePlot(g_id) {
         .attr("class", "y-axis")
       .append("text")
         .attr("fill", "#000")
+        .attr("font-size", "1.2em")
         .attr("transform", "rotate(-90)")
         .attr("y", 6)
-        .attr("dy", "0.8em")
+        .attr("dy", "1em")
         .attr("text-anchor", "end")
         .text(type == "Rain" ? "Rainfall (inches)" : "Water Level (feet)");
     

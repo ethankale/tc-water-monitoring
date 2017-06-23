@@ -47,6 +47,12 @@ h1 {
     font-size: 2rem;
 }
 
+.x-axis-label {
+    cursor: pointer;
+    text-decoration: underline;
+    fill: #0000EE;
+}
+
 svg path.valueLine {
     stroke: #cccccc;
     stroke-opacity: 0.5;

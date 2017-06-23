@@ -135,18 +135,18 @@ function updateStatsRow(data) {
     var recentContext1 = "Most Recent";
     var recentContext2 = "";
     
-    var max_currentyearContext1 = "Max This Water Year";
+    var max_currentyearContext1 = "Max This Year";
     
     var max_overallContext1 = "Highest Recorded";
     var max_overallDate = prettyDate(maxMeasure.day)
     
     if (site.type == "Rain") {
-        recentContext1 = "Inches This Water Year";
+        recentContext1 = "Inches This Year";
         recentContext2 = "As Of ";
         
-        max_currentyearContext1 = "Wettest Day This Water Year";
+        max_currentyearContext1 = "Wettest Day This Year";
         
-        max_overallContext1 = "Wettest Water Year";
+        max_overallContext1 = "Wettest Year";
         max_overallDate = yearOnlyFormat(maxMeasure.day);
     }
     
@@ -155,7 +155,7 @@ function updateStatsRow(data) {
         mostRecent.val.toFixed(2) +
         " <br /><small>" + recentContext2 + prettyDate(mostRecent.day) + "</small>");
     
-    d3.select(".quick-stats.count").html("<small>Water Years Measured</small><br />" +
+    d3.select(".quick-stats.count").html("<small>Years Measured</small><br />" +
         yearCount);
     
     d3.select(".quick-stats.max-currentyear").html("<small>" + max_currentyearContext1 + "</small><br />" +

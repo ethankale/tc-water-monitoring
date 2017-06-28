@@ -12,6 +12,7 @@ h1 {
     /*font-size: 2rem;*/
 }
 
+
 /* Map stuff */
 #mapid { 
     height: 400px; 
@@ -49,8 +50,10 @@ h1 {
 
 .x-axis-label {
     cursor: pointer;
+    fill: #337ab7;
+}
+.x-axis-label:hover {
     text-decoration: underline;
-    fill: #0000EE;
 }
 
 svg path.valueLine {

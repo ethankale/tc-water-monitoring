@@ -107,12 +107,25 @@ function loadSites() {
         .enter()
         .append("option")
           .attr("value", function(d) { return d.G_ID})
-          .text(function(d) {return d.SITE_CODE + ": " + d.SITE_NAME + " (" + d.type + ")"});
+          .text(function(d) {return d.SITE_CODE + ": " + d.SITE_NAME + " (" + (d.type == "Flow" ? "Stream" : d.type) + ")"});
       
       sitelist = data;
       
-      updateMapSites(data);
-      
+      // Load up the list of URLs for each site, to update the Site Information link when a new site is chosen
+      d3.csv("./data/station_urls.csv", function(d) {
+        d.G_ID = +d.G_ID;
+        return d;
+      }, function(error, data) {
+          siteurls = data;
+          
+          // Create a new URL property for every site 
+          
+          for (var i=0; i<sitelist.length; i++) {
+              sitelist[i].URL = siteurls.filter(function(d) { return (d.G_ID === +sitelist[i].G_ID); })[0].URL;
+          }
+          
+          updateMapSites(sitelist);
+      });
     });
 };
 

@@ -1,0 +1,66 @@
+G_ID,SITE_CODE,SITE_NAME,URL
+965,10a,Eaton Creek @ Yelm Hwy,http://www.co.thurston.wa.us/monitoring/flow/flow-Eaton%20Creek.html
+1100,10b,Lake St. Clair,
+1101,14a,Spurgeon Creek,
+970,18a,Woodland Creek @ Pleasant Glade Rd.,http://www.co.thurston.wa.us/monitoring/flow/flow-woodland.htm
+1051,18b,Long Lake Level,
+974,20a,Woodard Creek @ 36th Ave.,http://www.co.thurston.wa.us/monitoring/flow/flow-woodard.htm
+1113,53a,Scott Lake Culvert,
+991,55a,Scatter Creek @ James Rd.,http://www.co.thurston.wa.us/monitoring/flow/flow-scatter.html
+996,05u,Yelm WRF_Rain,http://www.co.thurston.wa.us/monitoring/precip/precip-yelm.htm
+966,10u,Meridian Rd_Rain,http://www.co.thurston.wa.us/monitoring/precip/precip-eaton.html
+1049,11u,NOAA Olympia Airport,
+1054,11w,Rainier Transfer Station,http://www.co.thurston.wa.us/monitoring/precip/precip-Rainier.htm
+968,13u,Lake Lawrence_Rain,http://www.co.thurston.wa.us/monitoring/precip/precip-lawrence.html
+971,18u,Lacey Fire Dist. 3 Fire Station_Rain,http://www.co.thurston.wa.us/monitoring/precip/precip-woodland.html
+972,18w,WARC TC_Rain,http://www.co.thurston.wa.us/monitoring/precip/precip-warc.html
+975,20u,Southbay Firestation_Rain ,http://www.co.thurston.wa.us/monitoring/precip/precip-woodard.html
+978,23u,"Percival Creek, Bldg 4_Rain",http://www.co.thurston.wa.us/monitoring/precip/precip-percival.htm
+980,27u,Boston Harbor_Rain,http://www.co.thurston.wa.us/monitoring/precip/precip-bostonharbor.html
+984,33w,Griffin FS_Rain ,http://www.co.thurston.wa.us/monitoring/precip/precip-sunrise.html
+988,45u,Littlerock_Rain,
+1045,45w,Rochester Drop Box_Rain,http://www.co.thurston.wa.us/monitoring/precip/precip-rochester.htm
+992,55u,Tenino_Rain,http://www.co.thurston.wa.us/monitoring/precip/precip-tenino.html
+993,59u,Bloody Run USGS_Rain,
+997,60u,Bucoda USGS_Rain,http://www.co.thurston.wa.us/monitoring/precip/precip-skookumchuck.html
+998,65u,Grand Mound_Rain,http://www.co.thurston.wa.us/monitoring/precip/precip-grandmound.html
+999,69u,Summit Lake_Rain,http://www.co.thurston.wa.us/monitoring/precip/precip-summit.html
+1001,DP1,5013 Donnelly Dr SE,http://www.co.thurston.wa.us/monitoring-salmoncreek/home.html
+1002,DP2,3986 Woodlawn Dr SE,http://www.co.thurston.wa.us/monitoring-salmoncreek/home.html
+1003,DP3,5535 Donnelly Dr SE,http://www.co.thurston.wa.us/monitoring-salmoncreek/home.html
+1004,ECY1,5143 Windermere Dr SE,http://www.co.thurston.wa.us/monitoring-salmoncreek/home.html
+1005,ECY2,5535 Donnelly Dr SE,http://www.co.thurston.wa.us/monitoring-salmoncreek/home.html
+1006,ET1,8538 9th Way SE,
+1012,HFB-01,628 Hidden Forest Dr SE,http://www.co.thurston.wa.us/monitoring/special/special-hidden.html
+1013,HFB-02,524 Hidden Forest Dr SE,http://www.co.thurston.wa.us/monitoring/special/special-hidden.html
+1014,HFB-03,8836 6th Way SE,http://www.co.thurston.wa.us/monitoring/special/special-hidden.html
+1015,LRS11a,9605 Tilley Rd S,http://www.co.thurston.wa.us/monitoring-salmoncreek/home.html
+1016,LRS12,9411 SW Kimmie St,http://www.co.thurston.wa.us/monitoring-salmoncreek/home.html
+1017,LRS1a,6841 Foster Dr SW,http://www.co.thurston.wa.us/monitoring-salmoncreek/home.html
+1018,LRS7a,3804 93rd Ave SW,http://www.co.thurston.wa.us/monitoring-salmoncreek/home.html
+1019,LRS8,8943 Walter Ct SW,http://www.co.thurston.wa.us/monitoring-salmoncreek/home.html
+1020,LRS9,2729 93rd Ave SW (Lathrop),http://www.co.thurston.wa.us/monitoring-salmoncreek/home.html
+1021,MW1,10415 Littlerock Rd SW,http://www.co.thurston.wa.us/monitoring-salmoncreek/home.html
+1022,MW2,10415 Littlerock Rd SW,http://www.co.thurston.wa.us/monitoring-salmoncreek/home.html
+1023,MW3,3623 104TH Ave SW (Jones),http://www.co.thurston.wa.us/monitoring-salmoncreek/home.html
+1024,MW5,800 93rd Ave SE,http://www.co.thurston.wa.us/monitoring-salmoncreek/home.html
+1046,SLB-1,"Scott Lake, Trevue Ave SW & Scott Creek Dr SW",http://www.co.thurston.wa.us/monitoring/special/special-scott.html
+1047,SLB-2,"Scott Lake,  11746 Scott Creek Dr SW",http://www.co.thurston.wa.us/monitoring/special/special-scott.html
+1025,TWB1,Huskey Way SE & Carpenter Rd SE,http://www.co.thurston.wa.us/monitoring/flow/docs-woodland/tanglewilde/tanglewilde-home.html
+1026,TWB10,Choker Ct & Bobcat Dr SE,http://www.co.thurston.wa.us/monitoring/flow/docs-woodland/tanglewilde/tanglewilde-home.html
+1027,TWB11,315 Ranger Dr SE,http://www.co.thurston.wa.us/monitoring/flow/docs-woodland/tanglewilde/tanglewilde-home.html
+1028,TWB2,6731 Kinwood St SE,http://www.co.thurston.wa.us/monitoring/flow/docs-woodland/tanglewilde/tanglewilde-home.html
+1029,TWB3,7309 Husky Way SE,http://www.co.thurston.wa.us/monitoring/flow/docs-woodland/tanglewilde/tanglewilde-home.html
+1030,TWB4,7653 Husky Way SE,http://www.co.thurston.wa.us/monitoring/flow/docs-woodland/tanglewilde/tanglewilde-home.html
+1031,TWB5,404 Choker St SE,http://www.co.thurston.wa.us/monitoring/flow/docs-woodland/tanglewilde/tanglewilde-home.html
+1032,TWB6,Husky Way SE & Wildcat St SE,http://www.co.thurston.wa.us/monitoring/flow/docs-woodland/tanglewilde/tanglewilde-home.html
+1033,TWB7,454 Cougar St SE,http://www.co.thurston.wa.us/monitoring/flow/docs-woodland/tanglewilde/tanglewilde-home.html
+1034,TWB8,455 Bulldog St SE,http://www.co.thurston.wa.us/monitoring/flow/docs-woodland/tanglewilde/tanglewilde-home.html
+1105,SCMW_1,Leon St. SW,http://www.co.thurston.wa.us/monitoring/ground/scatter-creek.html
+1106,SCMW_2,Pendleton and 180th,http://www.co.thurston.wa.us/monitoring/ground/scatter-creek.html
+1107,SCMW_3,201st and Old HW 99,http://www.co.thurston.wa.us/monitoring/ground/scatter-creek.html
+1108,SCMW_4,Edinger Morris and Florence,http://www.co.thurston.wa.us/monitoring/ground/scatter-creek.html
+1109,SCMW_5,183rd Ave,http://www.co.thurston.wa.us/monitoring/ground/scatter-creek.html
+1110,SCMW_6,Loganberry,http://www.co.thurston.wa.us/monitoring/ground/scatter-creek.html
+1111,SCMW_7,Leitner and 180th,http://www.co.thurston.wa.us/monitoring/ground/scatter-creek.html
+1112,SCMW_8,Old HW 99 and Violet Prairie,http://www.co.thurston.wa.us/monitoring/ground/scatter-creek.html

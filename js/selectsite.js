@@ -19,10 +19,10 @@
    - Update the graph for the new data
 */
 
-// Global variables.  I know, I"m a terrible person.
+// Global variables.  I know, I'm a terrible person.
 var sitelist = {};
 var dailyData = [];
-
+var siteurls = {};
 
 // The user selected a different site in the selectbox
 function selectChange() {
@@ -37,8 +37,6 @@ function onMarkerClick(e) {
 
 // The user pressed the back or forward button
 window.onpopstate = function(e) {
-    
-
     if(e.state) {
         
         console.log(e.state);
@@ -66,12 +64,15 @@ function selectSite(data, g_id, called_by) {
         window.history.pushState({"site": g_id}, "TC Water Monitoring", "#site=" + g_id);
     };
     
+    
+    
     // Collect the site-specific data
     var site = data.filter(function(d) { return (d.G_ID === g_id); })[0];
     d3.select("#selected-station").property("value", g_id);
     
-    // Update the download link
+    // Update the download and more information links
     d3.select("#downloadCSV").property("href", url.split("#")[0].split("index")[0] + "/data/g_id-" + g_id + ".csv");
+    d3.select("#siteInfoLink").property("href", site.URL);
     
     // Map manipulation
     sitemap.panTo([site.LAT, site.LON]);

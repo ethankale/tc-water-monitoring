@@ -64,15 +64,13 @@ function selectSite(data, g_id, called_by) {
         window.history.pushState({"site": g_id}, "TC Water Monitoring", "#site=" + g_id);
     };
     
-    
-    
     // Collect the site-specific data
     var site = data.filter(function(d) { return (d.G_ID === g_id); })[0];
     d3.select("#selected-station").property("value", g_id);
     
     // Update the download and more information links
     d3.select("#downloadCSV").property("href", url.split("#")[0].split("index")[0] + "/data/g_id-" + g_id + ".csv");
-    d3.select("#siteInfoLink").property("href", site.URL);
+    d3.select("#siteInfoLink").property("href", site.URL == "NULL" ? "http://www.co.thurston.wa.us/monitoring/" : site.URL);
     
     // Map manipulation
     sitemap.panTo([site.LAT, site.LON]);

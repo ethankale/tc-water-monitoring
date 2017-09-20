@@ -39,6 +39,8 @@ var greenIcon = new SiteIcon({iconUrl: "./img/marker/green_circle.png",
                               shadowURL: "./img/marker/shadow_triangle.png"}),
     orangeIcon = new SiteIcon({iconUrl: "./img/marker/orange_square.png",
                               shadowURL: "./img/marker/shadow_square.png"});
+    blueIcon = new SiteIcon({iconUrl: "./img/marker/blue_diamond.png",
+                              shadowURL: "./img/marker/shadow_diamond.png"});
 
 // The highlight icon will be different - slightly smaller
 var highlightIcon = L.icon({
@@ -62,6 +64,8 @@ function iconType(type) {
         icon = purpleIcon;
     } if (type == "Flow") {
         icon = orangeIcon;
+    } if (type == "Lake") {
+        icon = blueIcon;
     };
     
     return icon;
@@ -72,8 +76,8 @@ var legend = L.control({position: 'bottomright'});
 
 legend.onAdd = function (sitemap) {
     var div = L.DomUtil.create("div", "info legend"),
-        filenames = ["green_circle.png", "purple_triangle.png", "orange_square.png"],
-        labels = ["Rain", "Well", "Stream"];
+        filenames = ["green_circle.png", "purple_triangle.png", "orange_square.png", "blue_diamond.png"],
+        labels = ["Rain", "Well", "Stream", "Lake"];
 
     for (var i=0; i<filenames.length; i++) {
         div.innerHTML += '<img src="./img/marker/' + filenames[i] + '"></img>' +

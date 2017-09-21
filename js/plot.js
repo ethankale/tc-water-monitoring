@@ -13,7 +13,7 @@ var parseDate = d3.timeParse("%Y-%m-%d %H:%M:%S");
 var svg = d3.select("svg")
     .attr("width", document.getElementById("mapid").offsetWidth)
     .attr("height", document.getElementById("mapid").offsetHeight),
-    margin = {top: 20, right: 10, bottom: 70, left: 50},
+    margin = {top: 20, right: 10, bottom: 70, left: 20},
     width = +svg.attr("width") - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     bisectDate = d3.bisector(function(d) { return d.date; }).left;
@@ -225,7 +225,7 @@ function updatePlot(g_id) {
     //   dates to map to the same x coordinate, which is what we want.
     years.forEach(function(d) {
         x_scales["scale" + d] = d3.scaleTime()
-          .domain([new Date(d-1, 10, 1), new Date(d, 9, 30)])
+          .domain([new Date(d-1, 9, 1), new Date(d, 8, 30)])
           .rangeRound([margin.left, width]);
     });
     

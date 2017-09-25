@@ -337,7 +337,7 @@ function updatePlot(g_id) {
                 .attr("id", "groundText")
                 .text("Ground Elevation")
                 .attr("text-anchor", "middle")
-                .attr("y", 20)
+                .attr("y", -10)
                 .attr("x", (width)/2);
         }
     } else {

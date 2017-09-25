@@ -96,6 +96,7 @@ function loadSites() {
       d.id = +d.G_ID;
       d.LAT = +d.LAT;
       d.LON = +d.LON;
+      d.Elevation = +d.Elevation;
       
       return d;
     }, function(error, data) {

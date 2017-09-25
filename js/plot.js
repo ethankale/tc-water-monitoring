@@ -13,7 +13,7 @@ var parseDate = d3.timeParse("%Y-%m-%d %H:%M:%S");
 var svg = d3.select("svg")
     .attr("width", document.getElementById("mapid").offsetWidth)
     .attr("height", document.getElementById("mapid").offsetHeight),
-    margin = {top: 20, right: 10, bottom: 70, left: 20},
+    margin = {top: 20, right: 10, bottom: 70, left: 30},
     width = +svg.attr("width") - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     bisectDate = d3.bisector(function(d) { return d.date; }).left;
@@ -170,8 +170,7 @@ function plotSite(g_id) {
 // Plot the daily data
 function updatePlot(g_id) {
     
-    
-    // Only show data for the site we"ve selected.
+    // Only show data for the site we've selected.
     var data = _.filter(dailyData, {"G_ID" : g_id});
     var data_wy = _.groupBy(data, "wy");
     
@@ -230,9 +229,12 @@ function updatePlot(g_id) {
     });
     
     // Set up the y range; important that it be inside the function for resizing
-    //   Might be able to just include rangeRound in the resize function...
     y.rangeRound([height, 0]);
-    y.domain(d3.extent(data, function(d) { return d.val; }));
+    y_extent = d3.extent(data, function(d) { return d.val; });
+    if (site.type == "Well") {
+        y_extent = [y_extent[0], Math.max(y_extent[1], site.Elevation)]
+    }
+    y.domain(y_extent);
     
     // Add the x-axis to the plot.  Use a class to identify it later.
     g.append("g")
@@ -308,7 +310,40 @@ function updatePlot(g_id) {
         .on("mouseout", function(d) {unHoverYear(d.year)})
         .on("click", function(d) { highlightYear(d.year)});
     
-
+    // Add the ground elevation to the plot (or remove it, if not a well)
+    var groundLine = g.select("#groundLine")
+    var groundText = g.select("#groundText")
+    
+    if(site.type == "Well") {
+        var firstYear = years[0];
+        //var dates = _.map(data, 'day')
+        var data_ground = [{day: new Date(firstYear-1, 9, 1), val: site.Elevation},
+                           {day: new Date(firstYear, 8, 30), val: site.Elevation}]
+        
+        console.log(data_ground);
+        console.log(line(data_ground));
+        
+        if(groundLine.empty()) {
+            groundLine = g.append('path')
+                .attr("id", "groundLine")
+                .attr("class", "groundLine")
+                .attr("d", function(){thisYear = "scale" + firstYear; return line(data_ground)})
+                .attr("stroke-linejoin", "round")
+                .attr("stroke-linecap", "round")
+                .attr("stroke-width", 1.5)
+                .attr("fill", "none");
+            
+            groundText = g.append('text')
+                .attr("id", "groundText")
+                .text("Ground Elevation")
+                .attr("text-anchor", "middle")
+                .attr("y", 20)
+                .attr("x", (width)/2);
+        }
+    } else {
+        groundLine.remove();
+        groundText.remove();
+    }
     
     // Label years on mouseover
     d3.select("g.x-axis")

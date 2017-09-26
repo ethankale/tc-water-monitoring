@@ -231,7 +231,7 @@ function updatePlot(g_id) {
     // Set up the y range; important that it be inside the function for resizing
     y.rangeRound([height, 0]);
     y_extent = d3.extent(data, function(d) { return d.val; });
-    if (site.type == "Well") {
+    if (type == "Well") {
         y_extent = [y_extent[0], Math.max(y_extent[1], site.Elevation)]
     }
     y.domain(y_extent);
@@ -256,6 +256,17 @@ function updatePlot(g_id) {
         .on("click", function() {window.open("https://en.wikipedia.org/wiki/Water_year"); });
     
     // Add the y-axis to the graph.  Includes some labeling text.
+    var axisLabel = "";
+    switch (type) {
+        case "Rain": 
+            axisLabel = "Rainfall (inches)";
+            break;
+        case "Well":
+            axisLabel = "Water Elevation (feet)";
+            break;
+        default:
+            axisLabel = "Water Level (feet)";
+    }
     g.append("g")
         .call(d3.axisLeft(y))
         .attr("class", "y-axis")
@@ -266,8 +277,8 @@ function updatePlot(g_id) {
         .attr("y", 6)
         .attr("dy", "1em")
         .attr("text-anchor", "end")
-        .text(type == "Rain" ? "Rainfall (inches)" : "Water Level (feet)");
-    
+        //.text(type == "Rain" ? "Rainfall (inches)" : "Water Level (feet)");
+        .text(axisLabel)
     // Add circles for the provisional values
     var data_provisional = _.filter(data, function(d) {
         return d.p + d.e + d.w > 0;
@@ -320,8 +331,8 @@ function updatePlot(g_id) {
         var data_ground = [{day: new Date(firstYear-1, 9, 1), val: site.Elevation},
                            {day: new Date(firstYear, 8, 30), val: site.Elevation}]
         
-        console.log(data_ground);
-        console.log(line(data_ground));
+        //console.log(data_ground);
+        //console.log(line(data_ground));
         
         if(groundLine.empty()) {
             groundLine = g.append('path')

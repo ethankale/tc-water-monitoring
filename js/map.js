@@ -76,8 +76,8 @@ var legend = L.control({position: 'bottomright'});
 
 legend.onAdd = function (sitemap) {
     var div = L.DomUtil.create("div", "info legend"),
-        filenames = ["green_circle.png", "purple_triangle.png", "orange_square.png", "blue_diamond.png"],
-        labels = ["Rain", "Well", "Stream", "Lake"];
+        filenames = ["green_circle.png", "purple_triangle.png", "blue_diamond.png", "orange_square.png"],
+        labels = ["Rain", "Well", "Lake", "Stream/<br />River"];
 
     for (var i=0; i<filenames.length; i++) {
         div.innerHTML += '<img src="./img/marker/' + filenames[i] + '"></img>' +

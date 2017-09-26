@@ -13,7 +13,7 @@ var parseDate = d3.timeParse("%Y-%m-%d %H:%M:%S");
 var svg = d3.select("svg")
     .attr("width", document.getElementById("mapid").offsetWidth)
     .attr("height", document.getElementById("mapid").offsetHeight),
-    margin = {top: 20, right: 10, bottom: 70, left: 30},
+    margin = {top: 20, right: 10, bottom: 75, left: 30},
     width = +svg.attr("width") - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     bisectDate = d3.bisector(function(d) { return d.date; }).left;
@@ -84,7 +84,9 @@ function SelectYearChange() {
 function highlightYear(wy) {
     d3.selectAll("svg path.valueLine").classed("highlight", false);
     d3.selectAll("svg circle.valueCircle").classed("highlight", false);
-    if (wy != "Clear") {
+    
+    var currentYear = new Date().getFullYear()
+    if (wy != currentYear) {
         d3.select("svg path.wy" + wy).classed("highlight", true);
         d3.selectAll("svg circle.wy" + wy).classed("highlight", true);
         d3.select("#selected-wy").property("value", wy);
@@ -158,11 +160,13 @@ function plotSite(g_id) {
           
           return d;
         }, function(error, data) {
-            //console.log("Data file parsed.");
-            dailyData = dailyData.concat(data);
-            //dailyData = data;
-            updatePlot(g_id);
-            updateStatsRow(data);
+            if(data.length > 0) {
+                dailyData = dailyData.concat(data);
+                updatePlot(g_id);
+                updateStatsRow(data);
+            } else {
+                d3.select(".quick-stats.recent").html("<small>--</small><br />No Data Available<br /><small>--</small>");
+            }
         });
     };
 };
@@ -179,7 +183,7 @@ function updatePlot(g_id) {
     var data_plot = [];
     
     // Update the water year select box; standard D3 update/enter/exit pattern
-    wy_options.push("Clear");
+    //wy_options.push("Clear");
     var options = d3.select("#selected-wy")
         .on('change', SelectYearChange)
       .selectAll("option")
@@ -192,7 +196,7 @@ function updatePlot(g_id) {
     options.exit().remove();
     
     // Set the water year selection back to "Clear" every time.
-    d3.select("#selected-wy").property("value", "Clear");
+    d3.select("#selected-wy").property("value", new Date().getFullYear());
     
     // Get some info about the site we"re working with
     var site = sitelist.filter(function(d) {return d.G_ID == g_id})[0];
@@ -252,8 +256,8 @@ function updatePlot(g_id) {
         .attr("y", 40)
         .attr("x", width / 2)
         .attr("text-anchor", "middle")
-        .text("Time of Year")
-        .on("click", function() {window.open("https://en.wikipedia.org/wiki/Water_year"); });
+        .text("Why October through September?")
+        .on("click", function() {window.open("http://www.thurstoncountywa.gov/sw/Pages/monitoring-researchers-definitions.aspx"); });
     
     // Add the y-axis to the graph.  Includes some labeling text.
     var axisLabel = "";

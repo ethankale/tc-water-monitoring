@@ -84,12 +84,12 @@ function SelectYearChange() {
 function highlightYear(wy) {
     d3.selectAll("svg path.valueLine").classed("highlight", false);
     d3.selectAll("svg circle.valueCircle").classed("highlight", false);
+    d3.select("#selected-wy").property("value", wy);
     
     var currentYear = new Date().getFullYear()
     if (wy != currentYear) {
         d3.select("svg path.wy" + wy).classed("highlight", true);
         d3.selectAll("svg circle.wy" + wy).classed("highlight", true);
-        d3.select("#selected-wy").property("value", wy);
     }
 };
 

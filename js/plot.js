@@ -86,7 +86,7 @@ function highlightYear(wy) {
     d3.selectAll("svg circle.valueCircle").classed("highlight", false);
     d3.select("#selected-wy").property("value", wy);
     
-    var currentYear = new Date().getFullYear()
+    var currentYear = calcWaterYear(new Date())
     if (wy != currentYear) {
         d3.select("svg path.wy" + wy).classed("highlight", true);
         d3.selectAll("svg circle.wy" + wy).classed("highlight", true);
@@ -196,7 +196,7 @@ function updatePlot(g_id) {
     options.exit().remove();
     
     // Set the water year selection back to "Clear" every time.
-    d3.select("#selected-wy").property("value", new Date().getFullYear());
+    d3.select("#selected-wy").property("value", calcWaterYear(new Date()));
     
     // Get some info about the site we"re working with
     var site = sitelist.filter(function(d) {return d.G_ID == g_id})[0];
@@ -313,7 +313,7 @@ function updatePlot(g_id) {
       .enter()
       .append("path")
         .attr("class", function(d,i) {return "valueLine wy" + d.year})
-        .classed("currentwy", function(d) {return (new Date()).getFullYear() == +d.year})
+        .classed("currentwy", function(d) {return (calcWaterYear(new Date()) == +d.year)})
         .attr("d", function(d) {
             thisYear = "scale" + d.year;
             return line(d.points)})

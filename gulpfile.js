@@ -22,7 +22,7 @@ gulp.task('deploy', function() {
     return gulp.src([
         "./js/*",
         "./css/*",
-        "./bin/**/*",
+        "./bin-js/**/*",
         "./img/marker/*.png",
         "./index.html"], {base: "./"})
     .pipe(gulp.dest('\\\\rsh2o\\Web_Water-Monitoring\\'));
@@ -33,7 +33,7 @@ gulp.task('deploy-test', function() {
         "./data/*",
         "./js/*",
         "./css/*",
-        "./bin/**/*",
+        "./bin-js/**/*",
         "./img/marker/*.png",
         "./index.html"], {base: "./"})
     .pipe(gulp.dest('\\\\rsh2o\\Web_Water-Monitoring\\test\\'));

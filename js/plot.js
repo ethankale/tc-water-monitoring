@@ -145,12 +145,12 @@ function plotSite(g_id) {
         updatePlot(g_id);
         updateStatsRow(data);
     } else {
-        
         var filepath = "./data/g_id-" + g_id + ".csv"
         //console.log("Loading " + filepath);
         
         d3.csv(filepath, function(d) {
           d.val =  d.val.length > 0 ? +d.val : "-";
+          d.temp_c = d.temp_c > 0 ? +d.temp : "-";
           d.day = parseDate(d.day);
           d.wy = calcWaterYear(d.day);
           d.p = d.provisional == 0 || d.provisional == "False" ? 0 : 1;
@@ -210,6 +210,15 @@ function updatePlot(g_id) {
         });
     });
     
+    // Create separate x scales for each water year.  They need to have the
+    //   same range, but the domain will be different; that allows different
+    //   dates to map to the same x coordinate, which is what we want.
+    years.forEach(function(d) {
+        x_scales["scale" + d] = d3.scaleTime()
+          .domain([new Date(d-1, 9, 1), new Date(d, 8, 30)])
+          .rangeRound([margin.left, width]);
+    });
+    
     // Calculate a cumulative total if this is a rain site
     if (type == "Rain" & !(site.cumCalculated == "Y")) {
         data_plot.forEach(function(d) {
@@ -222,15 +231,6 @@ function updatePlot(g_id) {
         });
         site.cumCalculated = "Y";
     };
-    
-    // Create separate x scales for each water year.  They need to have the
-    //   same range, but the domain will be different; that allows different
-    //   dates to map to the same x coordinate, which is what we want.
-    years.forEach(function(d) {
-        x_scales["scale" + d] = d3.scaleTime()
-          .domain([new Date(d-1, 9, 1), new Date(d, 8, 30)])
-          .rangeRound([margin.left, width]);
-    });
     
     // Set up the y range; important that it be inside the function for resizing
     y.rangeRound([height, 0]);
@@ -281,14 +281,11 @@ function updatePlot(g_id) {
         .attr("y", 6)
         .attr("dy", "1em")
         .attr("text-anchor", "end")
-        //.text(type == "Rain" ? "Rainfall (inches)" : "Water Level (feet)");
         .text(axisLabel)
     // Add circles for the provisional values
     var data_provisional = _.filter(data, function(d) {
         return d.p + d.e + d.w > 0;
     });
-    
-    //console.log(data_provisional);
     
     g.selectAll(".valueCircle")
         .data(data_provisional)

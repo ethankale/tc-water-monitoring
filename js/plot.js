@@ -354,6 +354,8 @@ function updatePlot(g_id) {
                 .attr("text-anchor", "middle")
                 .attr("y", -10)
                 .attr("x", (width)/2);
+        } else {
+            groundLine.attr("d", function(){thisYear = "scale" + firstYear; return line(data_ground)})
         }
     } else {
         groundLine.remove();

@@ -4,7 +4,15 @@
 
 var displayDateFormat = d3.timeFormat("%Y-%m-%d");
 
-var sitemap = L.map("mapid").setView([47.04, -122.9], 10);
+var sitemap = L.map("mapid", {
+    center: [47.04, -122.9],
+    zoom: 10,
+    scrollWheelZoom: true,
+    dragging: false
+});
+
+sitemap.on('focus', function() {sitemap.dragging.enable(); })
+sitemap.on('blur', function() {sitemap.dragging.disable(); })
 
 L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/' +
                 'World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {

@@ -3,6 +3,7 @@
 <head>
 
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>TC Water Monitoring</title>
 
@@ -27,7 +28,7 @@
             <select class="form-control input-lg col-md-3" id="selected-wy"></select>
           </div>
           
-          <div class="row quick-stats">
+          <div class="row quick-stats col-md-12 col-xs-4">
             <h3 class="quick-stats recent text-center col-md-3">
               <small>--</small><br />
               Loading...<br />
@@ -45,15 +46,15 @@
           
           </div>
           
-          <div class="row">
-            <div class="col-md-6">
+          <!--<div class="row col-md-12"> -->
+            <div class="col-md-6 col-xs-8">
               <div id="mapid"></div>
             </div>
             
-            <div class="col-md-6">
+            <div class="col-md-6 col-xs-12" id="chartContainer">
               <svg xmlns:xlink="http://www.w3.org/1999/xlink"></svg>
             </div>
-          </div>
+          <!--</div> -->
         
         </div>
         

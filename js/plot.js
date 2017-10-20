@@ -372,7 +372,7 @@ function updatePlot(g_id) {
 
 // Keep the graph the same size as the map
 function setSVGSize() {
-    svg.attr("width", document.getElementById("mapid").offsetWidth)
+    svg.attr("width", document.getElementById("chartContainer").offsetWidth)
         .attr("height", document.getElementById("mapid").offsetHeight)
     
     width = +svg.attr("width") - margin.left - margin.right;

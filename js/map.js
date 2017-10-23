@@ -87,7 +87,8 @@ legend.onAdd = function (sitemap) {
     var div = L.DomUtil.create("div", "info legend"),
         filenames = ["green_circle.png", "purple_triangle.png", "blue_diamond.png", "orange_square.png"],
         labels = ["Rain", "Well", "Lake", "Stream/<br />River"];
-
+    
+    div.innerHTML += '<strong>Gauges</strong><br />';
     for (var i=0; i<filenames.length; i++) {
         div.innerHTML += '<img src="./img/marker/' + filenames[i] + '"></img>' +
         '  ' + labels[i] + '<br />';

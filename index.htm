@@ -17,15 +17,16 @@
 
     <div class="container">
         <div class='col-md-12'>
-          <h1>Thurston Water Monitoring Dashboard</h1>
-          <div class='col-md-10'>
+          <h1 class='visible-md-block visible-lg-block'>Thurston Water Monitoring Dashboard</h1>
+          <h1 class='visible-xs-block visible-sm-block'>TC Water Data</h1>
+          <div class='col-md-10  col-sm-9'>
             Site (<a id="siteInfoLink" target="blank" href="http://www.google.com">more information</a>)
             <select class="form-control input-lg" id="selected-station"></select>
           </div>
           
-          <div class='col-md-2'>
+          <div id="yearSelect" class='col-md-2 col-sm-3'>
             Year
-            <select class="form-control input-lg col-md-3" id="selected-wy"></select>
+            <select class="form-control input-lg" id="selected-wy"></select>
           </div>
           
           <!--<div class="row quick-stats col-md-12 col-xs-4"> -->

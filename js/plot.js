@@ -372,7 +372,7 @@ function updatePlot(g_id) {
 
 // Keep the graph the same size as the map
 function setSVGSize() {
-    svg.attr("width", document.getElementById("chartContainer").offsetWidth)
+    svg.attr("width", document.getElementById("mapid").offsetWidth)
         .attr("height", document.getElementById("mapid").offsetHeight)
     
     width = +svg.attr("width") - margin.left - margin.right;
@@ -385,6 +385,8 @@ function resize() {
     legend.shapePadding((width + margin.left + margin.right)/4);
     svg.select(".legendOrdinal").call(legend);
     g_id = d3.select("#selected-station").property("value");
+    var groundText = g.select("#groundText");
+    if(!groundText.empty()) {groundText.attr("x", (width)/2);};
     plotSite(g_id);
 }
 

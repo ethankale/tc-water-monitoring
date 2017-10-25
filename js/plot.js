@@ -182,6 +182,9 @@ function updatePlot(g_id) {
     var wy_options = _.clone(years);
     var data_plot = [];
     
+    // Remember the currently selected water year
+    var selected_wy = d3.select("#selected-wy").property("value")
+    
     // Update the water year select box; standard D3 update/enter/exit pattern
     //wy_options.push("Clear");
     var options = d3.select("#selected-wy")
@@ -195,8 +198,10 @@ function updatePlot(g_id) {
         
     options.exit().remove();
     
-    // Set the water year selection back to "Clear" every time.
-    d3.select("#selected-wy").property("value", calcWaterYear(new Date()));
+    // Select the water year that was selected before, OR the most recent water year
+    if(!years.includes(selected_wy)) { selected_wy = years[years.length-1] }
+    
+    d3.select("#selected-wy").property("value", selected_wy)
     
     // Get some info about the site we"re working with
     var site = sitelist.filter(function(d) {return d.G_ID == g_id})[0];
@@ -368,6 +373,8 @@ function updatePlot(g_id) {
         .attr("x", width - 20)
         .attr("dy", "0.8em")
         .attr("text-anchor", "end");
+    
+    SelectYearChange()
 }
 
 // Keep the graph the same size as the map

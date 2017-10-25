@@ -19,7 +19,6 @@ gulp.task('build', function(cb) {
   );
 });
 
-
 gulp.task('deploy', function() {
     return gulp.src([
         "./js/*",

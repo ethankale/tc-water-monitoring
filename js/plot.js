@@ -72,7 +72,7 @@ svg.select(".legendOrdinal")
 // Function for building the SVG line from the data
 var line = d3.line()
     .x(function(d) { return x_scales[thisYear](d.day); })
-    .y(function(d) { return y(d.val); });
+    .y(function(d) { return y(d.plotval); });
 
 // Fires when the year selectbox changes value.
 function SelectYearChange() {
@@ -127,8 +127,22 @@ function calcWaterYear(dt) {
     return(wy);
 }
 
+// Take raw daily data and filter by G ID, set the plot values correctly,
+//  and remove NA/NAN values
+function filterData(g_id, dailyData, param) {
+    var data = _.filter(dailyData, {"G_ID" : g_id});
+    if (param == "level") {
+        data.forEach(function(d) { d.plotval = d.val})
+    } else if (param == "temp") {
+        data.forEach(function(d) { d.plotval = d.temp_c})
+    }
+    data = _.filter(data, function(d) { return parseFloat(d.plotval) === d.plotval})
+    return data;
+}
+
+
 // Load the daily data
-function plotSite(g_id) {
+function plotSite(g_id, param) {
     // If the data have not yet been loaded, pull them in via d3.csv, then
     //   write them to dailyData and update everything.
     
@@ -142,15 +156,15 @@ function plotSite(g_id) {
     var data = _.filter(dailyData, {"G_ID" : g_id});
     
     if (data.length > 0) {
-        updatePlot(g_id);
-        updateStatsRow(data);
+        updatePlot(g_id, param);
+        updateStatsRow(g_id, data, param);
     } else {
         var filepath = "./data/g_id-" + g_id + ".csv"
         //console.log("Loading " + filepath);
         
         d3.csv(filepath, function(d) {
           d.val =  d.val.length > 0 ? +d.val : "-";
-          d.temp_c = d.temp_c > 0 ? +d.temp : "-";
+          d.temp_c = d.temp_c > 0 ? +d.temp_c : "-";
           d.day = parseDate(d.day);
           d.wy = calcWaterYear(d.day);
           d.p = d.provisional == 0 || d.provisional == "False" ? 0 : 1;
@@ -162,8 +176,8 @@ function plotSite(g_id) {
         }, function(error, data) {
             if(data.length > 0) {
                 dailyData = dailyData.concat(data);
-                updatePlot(g_id);
-                updateStatsRow(data);
+                updatePlot(g_id, param);
+                updateStatsRow(g_id, data, param);
             } else {
                 d3.select(".quick-stats.recent").html("<small>--</small><br />No Data Available<br /><small>--</small>");
             }
@@ -172,10 +186,14 @@ function plotSite(g_id) {
 };
 
 // Plot the daily data
-function updatePlot(g_id) {
+function updatePlot(g_id, param) {
+    param = param || "level";
+    
     
     // Only show data for the site we've selected.
-    var data = _.filter(dailyData, {"G_ID" : g_id});
+    
+    var data = filterData(g_id, dailyData, param)
+    
     var data_wy = _.groupBy(data, "wy");
     
     years = _.keys(data_wy);
@@ -200,10 +218,9 @@ function updatePlot(g_id) {
     
     // Select the water year that was selected before, OR the most recent water year
     if(!years.includes(selected_wy)) { selected_wy = years[years.length-1] }
-    
     d3.select("#selected-wy").property("value", selected_wy)
     
-    // Get some info about the site we"re working with
+    // Get some info about the site we're working with
     var site = sitelist.filter(function(d) {return d.G_ID == g_id})[0];
     var type = site.type;
     
@@ -225,22 +242,24 @@ function updatePlot(g_id) {
     });
     
     // Calculate a cumulative total if this is a rain site
-    if (type == "Rain" & !(site.cumCalculated == "Y")) {
+    //  AND we're measuring rainfall (not temperature)
+    //if (type == "Rain" & !(site.cumCalculated == "Y") & param == "level") {
+    if (type == "Rain" & param == "level") {
         data_plot.forEach(function(d) {
             var cumulative = 0;
             d.points.forEach(function(p) {
-                p.oldval = p.val;
-                p.val = cumulative + p.oldval;
-                cumulative = p.val;
+                p.oldval = p.plotval;
+                p.plotval = cumulative + p.oldval;
+                cumulative = p.plotval;
             });
         });
-        site.cumCalculated = "Y";
+        //site.cumCalculated = "Y";
     };
     
     // Set up the y range; important that it be inside the function for resizing
     y.rangeRound([height, 0]);
-    y_extent = d3.extent(data, function(d) { return d.val; });
-    if (type == "Well") {
+    y_extent = d3.extent(data, function(d) { return d.plotval; });
+    if (type == "Well" & param == "level") {
         y_extent = [y_extent[0], Math.max(y_extent[1], site.Elevation)]
     }
     y.domain(y_extent);
@@ -266,15 +285,19 @@ function updatePlot(g_id) {
     
     // Add the y-axis to the graph.  Includes some labeling text.
     var axisLabel = "";
-    switch (type) {
-        case "Rain": 
-            axisLabel = "Rainfall (inches)";
-            break;
-        case "Well":
-            axisLabel = "Water Elevation (feet)";
-            break;
-        default:
-            axisLabel = "Water Level (feet)";
+    if (param == "level") {
+        switch (type) {
+            case "Rain": 
+                axisLabel = "Rainfall (inches)";
+                break;
+            case "Well":
+                axisLabel = "Water Elevation (feet)";
+                break;
+            default:
+                axisLabel = "Water Level (feet)";
+        }
+    } else if (param == "temp") {
+        axisLabel = "Temperature (celsius)";
     }
     g.append("g")
         .call(d3.axisLeft(y))
@@ -298,7 +321,7 @@ function updatePlot(g_id) {
         .append("circle")
         .attr("class", function(d,i) {return "valueCircle wy" + d.wy})
         .attr("cx", function(d) { return x_scales["scale" + d.wy](d.day)})
-        .attr("cy", function(d) { return y(d.val)})
+        .attr("cy", function(d) { return y(d.plotval)})
         .attr("r", 3)
         .attr("stroke", function(d) { return circleColor(d.qa)})
         .attr("fill", function(d) { return circleColor(d.qa)})
@@ -331,11 +354,11 @@ function updatePlot(g_id) {
     var groundLine = g.select("#groundLine")
     var groundText = g.select("#groundText")
     
-    if(site.type == "Well") {
+    if(site.type == "Well" & param == "level") {
         var firstYear = years[0];
         //var dates = _.map(data, 'day')
-        var data_ground = [{day: new Date(firstYear-1, 9, 1), val: site.Elevation},
-                           {day: new Date(firstYear, 8, 30), val: site.Elevation}]
+        var data_ground = [{day: new Date(firstYear-1, 9, 1), plotval: site.Elevation},
+                           {day: new Date(firstYear, 8, 30), plotval: site.Elevation}]
         
         //console.log(data_ground);
         //console.log(line(data_ground));

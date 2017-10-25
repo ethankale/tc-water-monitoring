@@ -140,9 +140,11 @@ function selectSite(data, g_id, called_by) {
 
 // Calculate and add statistics to the stats row, using
 //   data from the currently selected site
-function updateStatsRow(data) {
+function updateStatsRow(g_id, data, param) {
     
     //d3.selectAll(".quick-stats").classed("bg-info", false)
+    
+    var data = filterData(g_id, data, param)
     
     // Calculate statistics
     var prettyDate = d3.timeFormat("%b %e, %Y");
@@ -150,7 +152,7 @@ function updateStatsRow(data) {
     
     var site = sitelist.filter(function (d) { return (d.G_ID === data[0].G_ID); })[0];
     
-    var maxMeasure = _.maxBy(data, "val");
+    var maxMeasure = _.maxBy(data, "plotval");
     var mostRecent = _.maxBy(data, "day");
     
     var currYearList = _.uniqBy(data, "wy");
@@ -167,12 +169,12 @@ function updateStatsRow(data) {
     if (maxYear === currWY) {
         var maxThisYear = {};
         
-        if (site.type === "Rain") {
+        if (site.type === "Rain" & param == "level") {
             maxThisYear = _.maxBy(data_thisyear, "oldval");
             maxThisYearVal = maxThisYear.oldval.toFixed(2);
         } else {
-            var maxThisYear = _.maxBy(data_thisyear, "val");
-            maxThisYearVal = maxThisYear.val.toFixed(2);
+            var maxThisYear = _.maxBy(data_thisyear, "plotval");
+            maxThisYearVal = maxThisYear.plotval.toFixed(2);
         }
         
         maxThisYearDay = prettyDate(maxThisYear.day);
@@ -195,7 +197,7 @@ function updateStatsRow(data) {
     var max_overallContext1 = "Highest Recorded";
     var max_overallDate = prettyDate(maxMeasure.day)
     
-    if (site.type == "Rain") {
+    if (site.type == "Rain" & param == "level") {
         recentContext1 = "Inches This Year";
         recentContext2 = "As Of ";
         
@@ -207,7 +209,7 @@ function updateStatsRow(data) {
     
     // Using the calculated stats & context, update the text
     d3.select(".quick-stats.recent").html("<small>" + recentContext1 + "</small><br />" +
-        mostRecent.val.toFixed(2) +
+        mostRecent.plotval.toFixed(2) +
         " <br /><small>" + recentContext2 + prettyDate(mostRecent.day) + "</small>");
     
     d3.select(".quick-stats.count").html("<small>Years Measured</small><br />" +
@@ -218,7 +220,7 @@ function updateStatsRow(data) {
         "<br /><small>" + maxThisYearDay + "</small>");
         
     d3.select(".quick-stats.max-overall").html("<small>" + max_overallContext1 + "</small><br />" +
-        maxMeasure.val.toFixed(2) +
+        maxMeasure.plotval.toFixed(2) +
         "<br /><small>" + max_overallDate + "</small>");
 
 }

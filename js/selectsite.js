@@ -109,14 +109,35 @@ window.onpopstate = function(e) {
 // The user clicked on the temperature button
 var el_temp = document.getElementById("thermImg");
 el_temp.addEventListener("click", function(){
-    plotSite(d3.select("#selected-station").property("value"), "temp"); 
-    }, false);
+    var g_id = d3.select("#selected-station").property("value");
+    if (filterData(g_id, dailyData, "temp").length > 0) {
+        plotSite(g_id, "temp"); 
+    };
+}, false);
 
 // The user clicked on the water button
 var el_temp = document.getElementById("waterImg");
 el_temp.addEventListener("click", function(){
-    plotSite(d3.select("#selected-station").property("value"), "level"); 
-    }, false);
+    var g_id = d3.select("#selected-station").property("value");
+    if (filterData(g_id, dailyData, "level").length > 0) {
+        plotSite(g_id, "level"); 
+    };
+}, false);
+
+// Which parameter is currently selected?
+function currentParam() {
+    var selected = d3.select("#buttonRow img.selected").attr("id");
+    var param = "";
+    switch (selected) {
+        case "waterImg":
+            param = "level";
+            break;
+        case "thermImg":
+            param = "temp";
+            break;
+    }
+    return param;
+};
 
 // What happens when a user selects a site from the map or the list
 function selectSite(data, g_id, called_by) {

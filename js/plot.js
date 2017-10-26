@@ -13,7 +13,7 @@ var parseDate = d3.timeParse("%Y-%m-%d %H:%M:%S");
 var svg = d3.select("#chartSVG")
     .attr("width", document.getElementById("mapid").offsetWidth)
     .attr("height", document.getElementById("mapid").offsetHeight),
-    margin = {top: 20, right: 10, bottom: 75, left: 30},
+    margin = {top: 20, right: 10, bottom: 75, left: 35},
     width = +svg.attr("width") - margin.left - margin.right,
     height = +svg.attr("height") - margin.top - margin.bottom,
     bisectDate = d3.bisector(function(d) { return d.date; }).left;
@@ -130,14 +130,14 @@ function calcWaterYear(dt) {
 // Take raw daily data and filter by G ID, set the plot values correctly,
 //  and remove NA/NAN values
 function filterData(g_id, dailyData, param) {
-    var data = _.filter(dailyData, {"G_ID" : g_id});
+    var data_filtered = _.filter(dailyData, {"G_ID" : g_id});
     if (param == "level") {
-        data.forEach(function(d) { d.plotval = d.val})
+        data_filtered.forEach(function(d) { d.plotval = d.val})
     } else if (param == "temp") {
-        data.forEach(function(d) { d.plotval = d.temp_c})
+        data_filtered.forEach(function(d) { d.plotval = d.temp_c})
     }
-    data = _.filter(data, function(d) { return parseFloat(d.plotval) === d.plotval})
-    return data;
+    var d2 = _.filter(data_filtered, function(d) { return parseFloat(d.plotval) === d.plotval})
+    return d2;
 }
 
 
@@ -189,16 +189,40 @@ function plotSite(g_id, param) {
 function updatePlot(g_id, param) {
     param = param || "level";
     
+    // Set the status of the parameter buttons/images
+    d3.selectAll("#buttonRow img").classed("disabled", false)
+    
+    var data_t = filterData(g_id, dailyData, "temp")
+    if (data_t.length == 0) {
+        d3.select("#thermImg").classed("disabled", true)
+    }
+    
+    var data_l = filterData(g_id, dailyData, "level")
+    if (data_l.length == 0) {
+        d3.select("#waterImg").classed("disabled", true)
+    }
     
     // Only show data for the site we've selected.
-    
+    //  This MUST be after the parameter button stuff, otherwise
+    //  it messes with the filtered data
     var data = filterData(g_id, dailyData, param)
+    //var d2 = _.clone(data);
     
     var data_wy = _.groupBy(data, "wy");
     
     years = _.keys(data_wy);
     var wy_options = _.clone(years);
     var data_plot = [];
+    
+    
+
+    
+    d3.selectAll("#buttonRow img").classed("selected", false)
+    if (param == "level") {
+        d3.select("#waterImg").classed("selected", true)
+    } else if (param == "temp") {
+        d3.select("#thermImg").classed("selected", true)
+    }
     
     // Remember the currently selected water year
     var selected_wy = d3.select("#selected-wy").property("value")
@@ -259,6 +283,8 @@ function updatePlot(g_id, param) {
     // Set up the y range; important that it be inside the function for resizing
     y.rangeRound([height, 0]);
     y_extent = d3.extent(data, function(d) { return d.plotval; });
+    y_extent[0] = y_extent[0] - 0.01;
+    y_extent[1] = y_extent[1] + 0.01;
     if (type == "Well" & param == "level") {
         y_extent = [y_extent[0], Math.max(y_extent[1], site.Elevation)]
     }
@@ -417,7 +443,7 @@ function resize() {
     g_id = d3.select("#selected-station").property("value");
     var groundText = g.select("#groundText");
     if(!groundText.empty()) {groundText.attr("x", (width)/2);};
-    plotSite(g_id);
+    plotSite(g_id, currentParam());
 }
 
 d3.select(window).on("resize", resize);

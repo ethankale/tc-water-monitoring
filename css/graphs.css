@@ -12,6 +12,32 @@ h1 {
     /*font-size: 2rem;*/
 }
 
+/* Set up the buttons to switch */
+
+#buttonRow img {
+    opacity: 0.4;
+    cursor: pointer;
+}
+
+#buttonRow img.selected {
+    opacity: 1;
+    border-bottom: #000;
+    border-bottom-style: solid;
+}
+
+#buttonRow img.disabled {
+    opacity: 0.4;
+    cursor: auto;
+}
+
+#buttonRow img:hover {
+    opacity: 1;
+}
+
+#buttonRow img.disabled:hover {
+    opacity: 0.4;
+}
+
 /* Map stuff */
 #mapid { 
     height: 400px; 

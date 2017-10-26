@@ -25,6 +25,7 @@ gulp.task('deploy', function() {
         "./css/*",
         "./bin-js/**/*",
         "./img/marker/*.png",
+        "./img/icon/*.png",
         "./index.htm"], {base: "./"})
     .pipe(gulp.dest('\\\\rsh2o\\Web_Water-Monitoring\\'));
 });
@@ -36,6 +37,7 @@ gulp.task('deploy-test', function() {
         "./css/*",
         "./bin-js/**/*",
         "./img/marker/*.png",
+        "./img/icon/*.png",
         "./index.htm"], {base: "./"})
     .pipe(gulp.dest('\\\\rsh2o\\Web_Water-Monitoring\\test\\'));
 });

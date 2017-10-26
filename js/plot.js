@@ -283,12 +283,13 @@ function updatePlot(g_id, param) {
     // Set up the y range; important that it be inside the function for resizing
     y.rangeRound([height, 0]);
     y_extent = d3.extent(data, function(d) { return d.plotval; });
-    y_extent[0] = y_extent[0] - 0.01;
-    y_extent[1] = y_extent[1] + 0.01;
+    y_extent[0] = y_extent[0] - 0.1;
+    y_extent[1] = y_extent[1] + 0.1;
     if (type == "Well" & param == "level") {
         y_extent = [y_extent[0], Math.max(y_extent[1], site.Elevation)]
     }
-    y.domain(y_extent);
+    y.domain(y_extent)
+        .tickFormat(d3.format(".1f"));
     
     // Add the x-axis to the plot.  Use a class to identify it later.
     g.append("g")

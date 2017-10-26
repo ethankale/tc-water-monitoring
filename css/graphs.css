@@ -8,6 +8,10 @@ h1 {
     font-size: 2rem;
 }
 
+.text-muted {
+    font-size: 1.2rem;
+}
+
 #selected-station {
     /*font-size: 2rem;*/
 }

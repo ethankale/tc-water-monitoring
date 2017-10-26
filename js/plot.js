@@ -10,7 +10,7 @@
 
 var parseDate = d3.timeParse("%Y-%m-%d %H:%M:%S");
 
-var svg = d3.select("svg")
+var svg = d3.select("#chartSVG")
     .attr("width", document.getElementById("mapid").offsetWidth)
     .attr("height", document.getElementById("mapid").offsetHeight),
     margin = {top: 20, right: 10, bottom: 75, left: 30},

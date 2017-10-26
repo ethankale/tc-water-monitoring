@@ -106,6 +106,18 @@ window.onpopstate = function(e) {
     }
 }
 
+// The user clicked on the temperature button
+var el_temp = document.getElementById("thermImg");
+el_temp.addEventListener("click", function(){
+    plotSite(d3.select("#selected-station").property("value"), "temp"); 
+    }, false);
+
+// The user clicked on the water button
+var el_temp = document.getElementById("waterImg");
+el_temp.addEventListener("click", function(){
+    plotSite(d3.select("#selected-station").property("value"), "level"); 
+    }, false);
+
 // What happens when a user selects a site from the map or the list
 function selectSite(data, g_id, called_by) {
     

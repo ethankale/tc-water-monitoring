@@ -189,17 +189,23 @@ function plotSite(g_id, param) {
 function updatePlot(g_id, param) {
     param = param || "level";
     
+    // Get some info about the site we're working with
+    var site = sitelist.filter(function(d) {return d.G_ID == g_id})[0];
+    var type = site.type;
+    
     // Set the status of the parameter buttons/images
     d3.selectAll("#buttonRow img").classed("disabled", false)
     
     var data_t = filterData(g_id, dailyData, "temp")
     if (data_t.length == 0) {
         d3.select("#thermImg").classed("disabled", true)
+        //d3.select("#tempIconLabel").classed("text-muted", true)
     }
     
     var data_l = filterData(g_id, dailyData, "level")
     if (data_l.length == 0) {
         d3.select("#waterImg").classed("disabled", true)
+        //d3.select("#waterIconLabel").classed("text-muted", true)
     }
     
     // Only show data for the site we've selected.
@@ -214,14 +220,21 @@ function updatePlot(g_id, param) {
     var wy_options = _.clone(years);
     var data_plot = [];
     
-    
-
-    
+    // Update the buttons 
     d3.selectAll("#buttonRow img").classed("selected", false)
+    //d3.selectAll("#buttonRow p").classed("text-muted", true)
     if (param == "level") {
         d3.select("#waterImg").classed("selected", true)
+        //d3.select("#waterIconLabel").classed("text-muted", false)
     } else if (param == "temp") {
         d3.select("#thermImg").classed("selected", true)
+        //d3.select("#tempIconLabel").classed("text-muted", false)
+    }
+    
+    if (type == "Rain") {
+        d3.select("#waterIconLabel").text("Rainfall")
+    } else {
+        d3.select("#waterIconLabel").text("Water Level")
     }
     
     // Remember the currently selected water year
@@ -243,10 +256,6 @@ function updatePlot(g_id, param) {
     // Select the water year that was selected before, OR the most recent water year
     if(!years.includes(selected_wy)) { selected_wy = years[years.length-1] }
     d3.select("#selected-wy").property("value", selected_wy)
-    
-    // Get some info about the site we're working with
-    var site = sitelist.filter(function(d) {return d.G_ID == g_id})[0];
-    var type = site.type;
     
     // Different data sets for each water year; also sort by day.
     years.forEach(function(d, i) {

@@ -16,17 +16,31 @@ h1 {
     /*font-size: 2rem;*/
 }
 
-/* Set up the buttons to switch */
+/* Set up the buttons to switch between parameters */
+
+.paramDiv img, .paramDiv p {
+    transition: 0.3s ease-in-out;
+}
+
+.paramDiv p {
+    opacity: 0;
+}
+
+.paramDiv:hover p {
+    opacity:1;
+}
 
 #buttonRow img {
-    opacity: 0.4;
+    opacity: 0.3;
     cursor: pointer;
 }
 
 #buttonRow img.selected {
     opacity: 1;
-    border-bottom: #000;
-    border-bottom-style: solid;
+    /*border-bottom: #000;
+    border-bottom-style: solid;*/
+    border: solid 2px gray;
+    border-radius: 5px;
 }
 
 #buttonRow img.disabled {

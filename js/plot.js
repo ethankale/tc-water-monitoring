@@ -10,6 +10,9 @@
 
 var parseDate = d3.timeParse("%Y-%m-%d %H:%M:%S");
 
+var formatMouseNumber = d3.format(",.2f");
+var formatMouseDate = d3.timeFormat("%Y-%m-%d");
+
 var svg = d3.select("#chartSVG")
     .attr("width", document.getElementById("mapid").offsetWidth)
     .attr("height", document.getElementById("mapid").offsetHeight),
@@ -95,24 +98,6 @@ function highlightYear(wy) {
         d3.selectAll("svg circle.wy" + wy).classed("highlight", true);
     }
 };
-
-// Show the exact date and value on mouseover
-function hoverYear(wy) {
-    d3.select(".x-axis .hoverText")
-        .text(wy);
-    
-    d3.select("svg path.wy" + wy).classed("hover", true);
-    d3.selectAll("svg circle.wy" + wy).classed("hover", true);
-}
-
-// Return to normal when leaving hover (mouseout)
-function unHoverYear(wy) {
-    d3.select(".x-axis .hoverText")
-        .text("");
-        
-    d3.select("svg path.wy" + wy).classed("hover", false);
-    d3.selectAll("svg circle.wy" + wy).classed("hover", false);
-}
 
 // Helper function that takes a date object and calculates the water year
 function calcWaterYear(dt) {
@@ -208,14 +193,12 @@ function updatePlot(g_id, param) {
     var data_l = filterData(g_id, dailyData, "level")
     if (data_l.length == 0) {
         d3.select("#waterImg").classed("disabled", true)
-        //d3.select("#waterIconLabel").classed("text-muted", true)
     }
     
     // Only show data for the site we've selected.
     //  This MUST be after the parameter button stuff, otherwise
     //  it messes with the filtered data
     var data = filterData(g_id, dailyData, param)
-    //var d2 = _.clone(data);
     
     var data_wy = _.groupBy(data, "wy");
     
@@ -303,6 +286,21 @@ function updatePlot(g_id, param) {
     y.domain(y_extent)
         .tickFormat(d3.format(".1f"));
     
+    // Add the mouseover data overlay to the plot
+    d3.selectAll(".focus").remove();
+    d3.selectAll(".overlay").remove();
+    
+    var focus = g.append("g")
+        .attr("class", "focus")
+        .style("display", "none");
+    
+    focus.append("circle")
+        .attr("r", 4.5);
+    
+    focus.append("text")
+        .attr("x", 9)
+        .attr("dy", ".35em");
+    
     // Add the x-axis to the plot.  Use a class to identify it later.
     g.append("g")
         .attr("class", "x-axis")
@@ -364,8 +362,6 @@ function updatePlot(g_id, param) {
         .attr("r", 3)
         .attr("stroke", function(d) { return circleColor(d.qa)})
         .attr("fill", function(d) { return circleColor(d.qa)})
-        .on("mouseover", function(d) { hoverYear(d.wy)})
-        .on("mouseout", function(d) {unHoverYear(d.wy)})
         .on("click", function(d) { highlightYear(d.wy)})
       .exit()
         .remove();
@@ -385,8 +381,6 @@ function updatePlot(g_id, param) {
         .attr("stroke-linecap", "round")
         .attr("stroke-width", 1.5)
         .attr("fill", "none")
-        .on("mouseover", function(d) { hoverYear(d.year)})
-        .on("mouseout", function(d) {unHoverYear(d.year)})
         .on("click", function(d) { highlightYear(d.year)});
     
     // Add the ground elevation to the plot (or remove it, if not a well)
@@ -427,7 +421,7 @@ function updatePlot(g_id, param) {
     }
     
     // Label years on mouseover
-    d3.select("g.x-axis")
+    var hover = d3.select("g.x-axis")
       .append("text")
         .attr("class", "hoverText")
         .attr("fill", "#000")
@@ -436,24 +430,14 @@ function updatePlot(g_id, param) {
         .attr("dy", "0.8em")
         .attr("text-anchor", "end");
     
-    // Label values on mouseover  var focus = svg.append("g")
-    var focus = g.append("g")
-        .attr("class", "focus")
-        .style("display", "none");
-    
-    focus.append("circle")
-        .attr("r", 4.5);
-    
-    focus.append("text")
-        .attr("x", 9)
-        .attr("dy", ".35em");
+    // Label values on mouseover  
     
     g.append("rect")
         .attr("class", "overlay")
         .attr("width", width)
         .attr("height", height)
-        .on("mouseover", function() { focus.style("display", null); })
-        .on("mouseout", function() { focus.style("display", "none"); })
+        .on("mouseover", function() { focus.style("display", null); hover.style("display", null); })
+        .on("mouseout", function() { focus.style("display", "none"); hover.style("display", "none"); })
         .on("mousemove", mousemove);
     
     function mousemove() {
@@ -461,10 +445,13 @@ function updatePlot(g_id, param) {
             x0 = x.invert(d3.mouse(this)[0]),
             i = bisectDate(data, x0, 1),
             d0 = data[i - 1],
-            d1 = data[i],
-            d = x0 - d0.day > d1.day - x0 ? d1 : d0;
-        focus.attr("transform", "translate(" + x(d.day) + "," + y(d.plotval) + ")");
-        focus.select("text").text(d.plotval);
+            d1 = data[i];
+        if ( (typeof(d0) != "undefined") && (typeof(d1) != "undefined")  && (x(x0) >= margin.left)) {
+            var d = x0 - d0.day > d1.day - x0 ? d1 : d0;
+            hover.text(formatMouseNumber(d.plotval) + " | " + formatMouseDate(d.day));
+            focus.attr("transform", "translate(" + x(d.day) + "," + y(d.plotval) + ")");
+        };
+        //focus.select("text").text(formatMouseNumber(d.plotval) + " <br> " + formatMouseDate(d.day));
     }
     
     SelectYearChange()

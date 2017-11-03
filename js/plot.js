@@ -35,6 +35,9 @@ var years = [];
 bgcolor = "#d9d9d9";
 maincolor = "#525252";
 
+// Function to support labelling on mouseover
+bisectDate = d3.bisector(function(d) { return d.day; }).left
+
 // Color the dots that indicate provisional, warning, and estimated data
 //   differently from each other; warning > estimated > provisional
 
@@ -432,6 +435,37 @@ function updatePlot(g_id, param) {
         .attr("x", width - 20)
         .attr("dy", "0.8em")
         .attr("text-anchor", "end");
+    
+    // Label values on mouseover  var focus = svg.append("g")
+    var focus = g.append("g")
+        .attr("class", "focus")
+        .style("display", "none");
+    
+    focus.append("circle")
+        .attr("r", 4.5);
+    
+    focus.append("text")
+        .attr("x", 9)
+        .attr("dy", ".35em");
+    
+    g.append("rect")
+        .attr("class", "overlay")
+        .attr("width", width)
+        .attr("height", height)
+        .on("mouseover", function() { focus.style("display", null); })
+        .on("mouseout", function() { focus.style("display", "none"); })
+        .on("mousemove", mousemove);
+    
+    function mousemove() {
+        var x = x_scales["scale" + d3.select("#selected-wy").property("value")],
+            x0 = x.invert(d3.mouse(this)[0]),
+            i = bisectDate(data, x0, 1),
+            d0 = data[i - 1],
+            d1 = data[i],
+            d = x0 - d0.day > d1.day - x0 ? d1 : d0;
+        focus.attr("transform", "translate(" + x(d.day) + "," + y(d.plotval) + ")");
+        focus.select("text").text(d.plotval);
+    }
     
     SelectYearChange()
 }

@@ -87,6 +87,16 @@ h1 {
 }
 
 /* Graph stuff */
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.focus circle {
+  fill: none;
+  stroke: steelblue;
+}
+
 .x-axis .hoverText {
     font-size: 2rem;
 }

@@ -75,10 +75,11 @@ if (!Array.prototype.includes) {
 }
 
 
-// Global variables.  I know, I'm a terrible person.
+// Global variables. 
 var sitelist = {};
 var dailyData = [];
 var siteurls = {};
+var message = "";
 
 // The user selected a different site in the selectbox
 function selectChange() {
@@ -267,4 +268,29 @@ function clearStatsRow() {
     
     //d3.selectAll(".quick-stats").classed("bg-info", true)
 }
+
+// Deep linking from in the iframe 
+//  (see http://jonathonhill.net/2013-10-22/deep-linking-into-an-iframe-cross-domain/)
+function bindEvent(el, eventName, eventHandler)
+{
+    if (el.addEventListener)
+    {
+        el.addEventListener(eventName, eventHandler);
+    }
+    else
+    {
+        el.attachEvent('on' + eventName, eventHandler);
+    }
+}
+
+bindEvent(window, 'message', function(e)
+{
+    if (e.origin === "http://www.thurstoncountywa.gov")
+    {
+        message = JSON.parse(e.data);
+        var the_gid = message.location.hash.split("=")[1]
+        selectSite(sitelist, the_gid);
+        //alert(message.location.href);
+    }
+});
 

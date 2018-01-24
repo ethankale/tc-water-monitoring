@@ -97,3 +97,4 @@ G_ID,day,val,provisional,estimate,warning,temp_c
 1003,2017-08-01 00:00:00,180.17,0,False,False,
 1003,2017-08-31 00:00:00,180.17,0,False,False,
 1003,2017-10-02 00:00:00,180.19,0,False,False,
+1003,2017-11-01 00:00:00,180.21,0,False,False,

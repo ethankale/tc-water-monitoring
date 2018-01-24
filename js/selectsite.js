@@ -160,7 +160,14 @@ function selectSite(data, g_id, called_by) {
     
     // Update the download and more information links
     d3.select("#downloadCSV").property("href", url.split("#")[0].split("index")[0] + "/data/g_id-" + g_id + ".csv");
-    d3.select("#siteInfoLink").property("href", site.URL == "NULL" ? "http://www.co.thurston.wa.us/monitoring/" : site.URL);
+    
+    if (site.URL == "") {
+        d3.select("#siteInfoSpan").style("visibility", "hidden")
+    } else {
+        d3.select("#siteInfoSpan").style("visibility", "visible")
+        d3.select("#siteInfoLink").property("href", site.URL)
+    }
+    //d3.select("#siteInfoLink").property("href", site.URL == "NULL" ? "http://www.thurstoncountywa.gov/sw/Pages/monitoring-dashboard.aspx" : site.URL);
     
     // Map manipulation
     sitemap.panTo([site.LAT, site.LON]);

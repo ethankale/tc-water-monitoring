@@ -136,7 +136,11 @@ function updateMapSites(data) {
     data.forEach(function(d) {
         if (!(isNaN(d.LAT) || isNaN(d.LON)) & d.STATUS == "Active"){
             
-            var marker = L.marker([d.LAT, d.LON], {icon: iconType(d.type)});
+            var marker = L.marker([d.LAT, d.LON], {
+                icon: iconType(d.type),
+                riseOnHover: true,
+                title: d.SITE_CODE
+                });
             marker.g_id = d.G_ID;
             marker.on("click", onMarkerClick);
             
@@ -153,6 +157,11 @@ function updateMapSites(data) {
     selectSite(sitelist, g_id);
     
 };
+
+// The user clicked on a marker in the Leaflet map
+function onMarkerClick(e) {
+    selectSite(sitelist, e.target.g_id);
+}
 
 
 

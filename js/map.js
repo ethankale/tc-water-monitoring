@@ -12,6 +12,8 @@ var sitemap = L.map("mapid", {
     //tap: false
 });
 
+var siteMarkers = L.layerGroup();
+
 //sitemap.on('focus', function() {sitemap.dragging.enable(); })
 //sitemap.on('blur', function() {sitemap.dragging.disable(); })
 
@@ -50,19 +52,21 @@ var greenIcon = new SiteIcon({iconUrl: "./img/marker/green_circle.png",
                               shadowURL: "./img/marker/shadow_square.png"});
     blueIcon = new SiteIcon({iconUrl: "./img/marker/blue_diamond.png",
                               shadowURL: "./img/marker/shadow_diamond.png"});
+    starIcon = new SiteIcon({iconUrl: "./img/marker/select.png",
+                              shadowURL: "./img/marker/shadow_select.png"});
 
 // The highlight icon will be different - slightly smaller
-var highlightIcon = L.icon({
-    iconUrl: "./img/marker/highlight_circle.png",
+// var highlightIcon = L.icon({
+    // iconUrl: "./img/marker/highlight_circle.png",
     
-    iconSize:       [10, 10],
-    shadowSize:     [10, 10],
-    iconAnchor:     [5, 5],
-    shadowAnchor:   [10, 10],
-    popupAnchor:    [10, 10]
-})
+    // iconSize:       [10, 10],
+    // shadowSize:     [10, 10],
+    // iconAnchor:     [5, 5],
+    // shadowAnchor:   [10, 10],
+    // popupAnchor:    [10, 10]
+// })
 
-var highlightMarker = L.marker({icon: highlightIcon});
+// var highlightMarker = L.marker({icon: highlightIcon});
 
 function iconType(type) {
     var icon = {};
@@ -139,14 +143,17 @@ function updateMapSites(data) {
             var marker = L.marker([d.LAT, d.LON], {
                 icon: iconType(d.type),
                 riseOnHover: true,
-                title: d.SITE_CODE
+                title: d.SITE_CODE,
                 });
             marker.g_id = d.G_ID;
+            marker.g_type = d.type;
             marker.on("click", onMarkerClick);
             
-            marker.addTo(sitemap);
+            siteMarkers.addLayer(marker);
         };
     });
+    
+    siteMarkers.addTo(sitemap);
     
     // Load up data when we launch the page
     var getvars = window.location.href.split("#")[1];

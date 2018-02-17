@@ -87,11 +87,6 @@ function selectChange() {
     selectSite(sitelist, g_id);
 }
 
-// The user clicked on a marker in the Leaflet map
-function onMarkerClick(e) {
-    selectSite(sitelist, e.target.g_id);
-}
-
 // The user pressed the back or forward button
 window.onpopstate = function(e) {
     if(e.state) {
@@ -171,9 +166,22 @@ function selectSite(data, g_id, called_by) {
     
     // Map manipulation
     sitemap.panTo([site.LAT, site.LON]);
-    highlightMarker.setLatLng([site.LAT, site.LON]);
-    highlightMarker.setIcon(highlightIcon);
-    highlightMarker.addTo(sitemap);
+    //highlightMarker.setLatLng([site.LAT, site.LON]);
+    //highlightMarker.setIcon(highlightIcon);
+    //highlightMarker.addTo(sitemap);
+    
+    var i = 0;
+    siteMarkers.eachLayer(function(layer) {
+        i++;
+        if (g_id == layer.g_id) {
+            layer.setZIndexOffset(1000);
+            layer.setIcon(starIcon);
+        } else {
+            layer.setZIndexOffset(i);
+            layer.setIcon(iconType(layer.g_type));
+
+        };
+    });
     
     // Plot data
     plotSite(g_id);

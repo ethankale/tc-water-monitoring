@@ -74,7 +74,6 @@ if (!Array.prototype.includes) {
   });
 }
 
-
 // Global variables. 
 var sitelist = {};
 var dailyData = [];
@@ -91,7 +90,7 @@ function selectChange() {
 window.onpopstate = function(e) {
     if(e.state) {
         
-        console.log(e.state);
+        //console.log(e.state);
         
         var url = window.location.href;
         
@@ -151,7 +150,9 @@ function selectSite(data, g_id, called_by) {
     
     // Collect the site-specific data
     var site = data.filter(function(d) { return (d.G_ID === g_id); })[0];
-    d3.select("#selected-station").property("value", g_id);
+    //d3.select("#selected-station").property("value", g_id);
+    $("#selected-station").val(g_id);
+    $("#selected-station").trigger("change");
     
     // Update the download and more information links
     d3.select("#downloadCSV").property("href", url.split("#")[0].split("index")[0] + "/data/g_id-" + g_id + ".csv");

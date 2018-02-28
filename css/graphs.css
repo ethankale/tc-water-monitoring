@@ -16,6 +16,15 @@ h1 {
     /*font-size: 2rem;*/
 }
 
+#selected-wy {
+    font-weight: bold;
+}
+
+/* Select2 */
+span.select2-container--bootstrap {
+    font-weight: bold;
+}
+
 /* Set up the buttons to switch between parameters */
 
 .paramDiv img, .paramDiv p {
@@ -155,4 +164,9 @@ svg circle.highlight {
     stroke-opacity: 1;
     fill-opacity: 1;
 }
+
+
+
+
+
 

@@ -8,6 +8,7 @@ gulp.task('build', function(cb) {
     pump([ 
         gulp.src(['./bin-js/d3/d3.min.js', './bin-js/d3-legend/d3-legend.min.js',
             './bin-js/leaflet/leaflet.js', './bin-js/lodash/lodash.js',
+            './bin-js/jquery/jquery-3.3.1.min.js', './bin-js/select2/select2.min.js',
             './js/selectsite.js', './js/map.js', './js/plot.js']),
         sourcemaps.init(),
         uglify(),

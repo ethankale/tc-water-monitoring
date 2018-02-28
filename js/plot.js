@@ -471,9 +471,11 @@ function resize() {
     // Reset legend to match width
     legend.shapePadding((width + margin.left + margin.right)/4);
     svg.select(".legendOrdinal").call(legend);
-    g_id = d3.select("#selected-station").property("value");
+    
     var groundText = g.select("#groundText");
     if(!groundText.empty()) {groundText.attr("x", (width)/2);};
+    
+    g_id = d3.select("#selected-station").property("value");
     plotSite(g_id, currentParam());
 }
 

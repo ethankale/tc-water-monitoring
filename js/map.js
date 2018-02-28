@@ -120,7 +120,6 @@ function loadSites() {
       
       // Create the list of sites in the selectbox
       var select = d3.select("#selected-station")
-          .on("change", selectChange)
         .selectAll("option")
         .data(data)
         .enter()
@@ -129,6 +128,16 @@ function loadSites() {
           .text(function(d) {return d.SITE_CODE + ": " + d.SITE_NAME + " (" + (d.type == "Flow" ? "Stream" : d.type) + ")"});
       
       sitelist = data;
+      
+      // Make the select box better
+      $('#selected-station').select2({
+          theme: "bootstrap",
+          width: "100%"
+      });
+      
+      $('#selected-station').on('select2:select', function(e) {
+          selectChange();
+      });
       
       updateMapSites(sitelist);
     });

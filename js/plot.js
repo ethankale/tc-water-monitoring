@@ -128,6 +128,33 @@ function filterData(g_id, dailyData, param) {
     return d2;
 }
 
+// What do we call our parameters?
+function param_pretty_name(name, site_type) {
+    //console.log(site_type);
+    var pretty_name = "";
+    switch (name) {
+        case 'level':
+            pretty_name = site_type == 'Rain' ? "Rainfall" : "Water Level";
+            break;
+        case 'temp':
+            pretty_name = "Temperature";
+            break;
+        default:
+            pretty_name = name;
+    }
+    //console.log(pretty_name);
+    return pretty_name;
+}
+
+// Select which parameter to graph
+function selectParam() {
+    var g_id = d3.select("#selected-station").property("value");
+    var param = d3.select("#selected-param").property("value");
+    console.log(param);
+    if (filterData(g_id, dailyData, param).length > 0) {
+        plotSite(g_id, param); 
+    };
+};
 
 // Load the daily data
 function plotSite(g_id, param) {
@@ -183,21 +210,24 @@ function updatePlot(g_id, param) {
     
     // Set the status of the parameter buttons/images
     d3.selectAll("#buttonRow img").classed("disabled", false)
+
+    var parameters = [];
+
+    var data_l = filterData(g_id, dailyData, "level")
+    if (data_l.length == 0) {
+        d3.select("#waterImg").classed("disabled", true);
+    } else {
+        parameters.push(['level', param_pretty_name('level', type)]);
+    }
     
     var data_t = filterData(g_id, dailyData, "temp")
     if (data_t.length == 0) {
-        d3.select("#thermImg").classed("disabled", true)
+        d3.select("#thermImg").classed("disabled", true);
         //d3.select("#tempIconLabel").classed("text-muted", true)
+    } else {
+        parameters.push(['temp', param_pretty_name('temp', type)]);
     }
-    
-    var data_l = filterData(g_id, dailyData, "level")
-    if (data_l.length == 0) {
-        d3.select("#waterImg").classed("disabled", true)
-    }
-    
-    // Only show data for the site we've selected.
-    //  This MUST be after the parameter button stuff, otherwise
-    //  it messes with the filtered data
+
     var data = filterData(g_id, dailyData, param)
     
     var data_wy = _.groupBy(data, "wy");
@@ -217,11 +247,7 @@ function updatePlot(g_id, param) {
         //d3.select("#tempIconLabel").classed("text-muted", false)
     }
     
-    if (type == "Rain") {
-        d3.select("#waterIconLabel").text("Rainfall")
-    } else {
-        d3.select("#waterIconLabel").text("Water Level")
-    }
+    d3.select("#waterIconLabel").text(param_pretty_name("level", type))
     
     // Remember the currently selected water year
     var selected_wy = d3.select("#selected-wy").property("value")
@@ -237,6 +263,18 @@ function updatePlot(g_id, param) {
         .attr("value", function(d) { return d})
         .text(function(d) {return d});
         
+    options.exit().remove();
+    
+    // Update the parameter select box
+    var options = d3.select("#selected-param")
+        .on('change', selectParam)
+      .selectAll("option")
+        .data(parameters, function(d) {return d;});
+    
+    options.enter().append("option")
+        .attr('value', function(d) {return d[0]})
+        .text(function(d) {return d[1]});
+    
     options.exit().remove();
     
     // Select the water year that was selected before, OR the most recent water year

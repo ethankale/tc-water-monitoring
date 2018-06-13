@@ -186,7 +186,8 @@ function selectSite(data, g_id, called_by) {
     });
     
     // Plot data
-    plotSite(g_id);
+    var param = d3.select("#selected-param").property("value");
+    plotSite(g_id, param);
 }
 
 // Calculate and add statistics to the stats row, using
@@ -310,9 +311,3 @@ bindEvent(window, 'message', function(e)
         //alert(message.location.href);
     }
 });
-
-// Resizing the iframe
-function resize() {
-  var height = document.getElementsByTagName("html")[0].scrollHeight;
-  window.parent.postMessage(["setHeight", height], "*"); 
-}

@@ -16,7 +16,7 @@ h1 {
     /*font-size: 2rem;*/
 }
 
-#selected-wy {
+#selected-wy, #selected-param {
     font-weight: bold;
 }
 

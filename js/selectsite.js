@@ -74,6 +74,7 @@ if (!Array.prototype.includes) {
   });
 }
 
+
 // Global variables. 
 var sitelist = {};
 var dailyData = [];
@@ -310,3 +311,8 @@ bindEvent(window, 'message', function(e)
     }
 });
 
+// Resizing the iframe
+function resize() {
+  var height = document.getElementsByTagName("html")[0].scrollHeight;
+  window.parent.postMessage(["setHeight", height], "*"); 
+}

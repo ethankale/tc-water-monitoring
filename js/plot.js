@@ -146,11 +146,11 @@ function param_pretty_name(name, site_type) {
     return pretty_name;
 }
 
-// Select which parameter to graph
+// Select which parameter to graph from drop down menu
 function selectParam() {
     var g_id = d3.select("#selected-station").property("value");
     var param = d3.select("#selected-param").property("value");
-    console.log(param);
+    //console.log(param);
     if (filterData(g_id, dailyData, param).length > 0) {
         plotSite(g_id, param); 
     };
@@ -169,10 +169,19 @@ function plotSite(g_id, param) {
     clearStatsRow();
     
     var data = _.filter(dailyData, {"G_ID" : g_id});
+    var param_data = filterData(g_id, dailyData, param)
     
+    // Sometimes a user will click on a new site with a parameter selected for which
+    //   that new site has no data.  In that case, revert to level.
     if (data.length > 0) {
-        updatePlot(g_id, param);
-        updateStatsRow(g_id, data, param);
+        if (param_data.length > 0) {
+            updatePlot(g_id, param);
+            updateStatsRow(g_id, data, param);
+        } else {
+            param = 'level';
+            updatePlot(g_id, param);
+            updateStatsRow(g_id, data, param);
+        }
     } else {
         var filepath = "./data/g_id-" + g_id + ".csv"
         //console.log("Loading " + filepath);
@@ -209,21 +218,20 @@ function updatePlot(g_id, param) {
     var type = site.type;
     
     // Set the status of the parameter buttons/images
-    d3.selectAll("#buttonRow img").classed("disabled", false)
+    //d3.selectAll("#buttonRow img").classed("disabled", false)
 
     var parameters = [];
 
     var data_l = filterData(g_id, dailyData, "level")
     if (data_l.length == 0) {
-        d3.select("#waterImg").classed("disabled", true);
+        //if (param == 'level') {param = 'temp'};
     } else {
         parameters.push(['level', param_pretty_name('level', type)]);
     }
     
     var data_t = filterData(g_id, dailyData, "temp")
     if (data_t.length == 0) {
-        d3.select("#thermImg").classed("disabled", true);
-        //d3.select("#tempIconLabel").classed("text-muted", true)
+        //if (param == 'temp') {param = 'level'};
     } else {
         parameters.push(['temp', param_pretty_name('temp', type)]);
     }
@@ -237,7 +245,7 @@ function updatePlot(g_id, param) {
     var data_plot = [];
     
     // Update the buttons 
-    d3.selectAll("#buttonRow img").classed("selected", false)
+    //d3.selectAll("#buttonRow img").classed("selected", false)
     //d3.selectAll("#buttonRow p").classed("text-muted", true)
     if (param == "level") {
         d3.select("#waterImg").classed("selected", true)
@@ -404,7 +412,6 @@ function updatePlot(g_id, param) {
       .exit()
         .remove();
     
-    
     // Add multiple lines to the graph; one for each water year
     g.selectAll(".valueLine")
       .data(data_plot)
@@ -430,9 +437,6 @@ function updatePlot(g_id, param) {
         //var dates = _.map(data, 'day')
         var data_ground = [{day: new Date(firstYear-1, 9, 1), plotval: site.Elevation},
                            {day: new Date(firstYear, 8, 30), plotval: site.Elevation}]
-        
-        //console.log(data_ground);
-        //console.log(line(data_ground));
         
         if(groundLine.empty()) {
             groundLine = g.append('path')

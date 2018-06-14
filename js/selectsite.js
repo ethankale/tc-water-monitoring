@@ -103,22 +103,22 @@ window.onpopstate = function(e) {
 }
 
 // The user clicked on the temperature button
-var el_temp = document.getElementById("thermImg");
-el_temp.addEventListener("click", function(){
-    var g_id = d3.select("#selected-station").property("value");
-    if (filterData(g_id, dailyData, "temp").length > 0) {
-        plotSite(g_id, "temp"); 
-    };
-}, false);
+//var el_temp = document.getElementById("thermImg");
+//el_temp.addEventListener("click", function(){
+//    var g_id = d3.select("#selected-station").property("value");
+//    if (filterData(g_id, dailyData, "temp").length > 0) {
+//        plotSite(g_id, "temp"); 
+//    };
+//}, false);
 
 // The user clicked on the water button
-var el_temp = document.getElementById("waterImg");
-el_temp.addEventListener("click", function(){
-    var g_id = d3.select("#selected-station").property("value");
-    if (filterData(g_id, dailyData, "level").length > 0) {
-        plotSite(g_id, "level"); 
-    };
-}, false);
+//var el_temp = document.getElementById("waterImg");
+//el_temp.addEventListener("click", function(){
+//    var g_id = d3.select("#selected-station").property("value");
+//    if (filterData(g_id, dailyData, "level").length > 0) {
+//        plotSite(g_id, "level"); 
+//    };
+//}, false);
 
 // Which parameter is currently selected?
 function currentParam() {
@@ -291,20 +291,15 @@ function clearStatsRow() {
 //  (see http://jonathonhill.net/2013-10-22/deep-linking-into-an-iframe-cross-domain/)
 function bindEvent(el, eventName, eventHandler)
 {
-    if (el.addEventListener)
-    {
+    if (el.addEventListener) {
         el.addEventListener(eventName, eventHandler);
-    }
-    else
-    {
+    } else {
         el.attachEvent('on' + eventName, eventHandler);
     }
 }
 
-bindEvent(window, 'message', function(e)
-{
-    if (e.origin === "http://www.thurstoncountywa.gov")
-    {
+bindEvent(window, 'message', function(e) {
+    if (e.origin === "http://www.thurstoncountywa.gov") {
         message = JSON.parse(e.data);
         var the_gid = message.location.hash.split("=")[1]
         selectSite(sitelist, the_gid);

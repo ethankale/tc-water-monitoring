@@ -41,8 +41,13 @@
             <select class="form-control" id="selected-param" aria-label="Choose Parameter"></select>
           </div>
           
+          <div id="toggle_row" class="row col-xs-12">
+            <p class="toggle_link col-xs-6"><a id="toggle_stats_link" target="blank" href="#">Show Stats</a></p>
+            <p class="toggle_link col-xs-6"><a id="toggle_filter_link" target="blank" href="#">Filter Sites</a></p>
+          </div>
+          
           <!--<div class="row quick-stats col-md-12 col-xs-4"> -->
-          <div id="quick_stats_row" class="row quick-stats col-xs-12">
+          <div id="quick_stats_row" class="hidden row quick-stats col-xs-12">
             <h3 class="quick-stats recent text-center col-md-3 col-xs-6">
               <small>--</small><br />
               Loading...<br />
@@ -61,29 +66,13 @@
           </div>
           
           <!--<div class="row col-md-12"> -->
-            <div class="col-md-6 col-xs-12">
-              <div id="mapid"></div>
-            </div>
-            
-            <div class="col-md-6 col-xs-12" id="chartContainer">
+            <div class="main-container col-md-6 col-xs-12" id="chartContainer">
               <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="chartSVG"></svg>
             </div>
             
-            <!--<div class="col-md-2 col-xs-12" id="buttonRow">
-              
-              <div class="col-md-12 col-xs-6 text-center paramDiv" id="waterIconDiv">
-                <img id="waterImg" alt="Water level or rainfall button" src="./img/icon/water.png" /> 
-                <p class="text-muted" id="waterIconLabel">Water Level</p>
-              </div>
-              
-              <div class="hidden-sm hidden-xs col-md-2">&nbsp;</div>
-              
-              <div class="col-md-12 col-xs-6 text-center paramDiv" id="thermIconDiv">
-                <img id="thermImg" alt="Temperature button" src="./img/icon/therm.png" /> 
-                <p class="text-muted" id="tempIconLabel">Temperature</p>
-              </div>
-              
-            </div>-->
+            <div class="main-container col-md-6 col-xs-12" id="mapContainer">
+              <div id="mapid"></div>
+            </div>
             
         </div>
         
@@ -91,13 +80,6 @@
           <hr />
           <p class="text-center"><a id="downloadCSV" href="#">Download Daily Data (csv)</a> | 
             <a href="http://www.thurstoncountywa.gov/sw/Pages/monitoring-researchers.aspx">For Researchers</a>
-          </p>
-          <p class="text-center text-muted">Icons by <a href="http://thenounproject.com/">the Noun Project</a> - 
-              <a href="https://thenounproject.com/search/?q=water&i=1235506">Water</a> by 
-                <a href="https://thenounproject.com/manohara54/">Manohara</a></li> - 
-              <a href="https://thenounproject.com/search/?q=thermometer&i=1094148">Temperature</a> by
-                <a href="https://thenounproject.com/agniakash40/">Agni</a></li>
-            </ul>
           </p>
         </div>
         

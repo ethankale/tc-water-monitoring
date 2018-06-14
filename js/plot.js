@@ -518,7 +518,8 @@ function resize() {
     if(!groundText.empty()) {groundText.attr("x", (width)/2);};
     
     g_id = d3.select("#selected-station").property("value");
-    plotSite(g_id, currentParam());
+    param = d3.select("#selected-param").property("value");
+    plotSite(g_id, param);
 }
 
 d3.select(window).on("resize", resize);

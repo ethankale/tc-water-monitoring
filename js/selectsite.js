@@ -108,24 +108,6 @@ $("#toggle_stats_link").click(function(e) {
     $("#quick_stats_row").toggleClass("hidden");
 });
 
-// The user clicked on the temperature button
-//var el_temp = document.getElementById("thermImg");
-//el_temp.addEventListener("click", function(){
-//    var g_id = d3.select("#selected-station").property("value");
-//    if (filterData(g_id, dailyData, "temp").length > 0) {
-//        plotSite(g_id, "temp"); 
-//    };
-//}, false);
-
-// The user clicked on the water button
-//var el_temp = document.getElementById("waterImg");
-//el_temp.addEventListener("click", function(){
-//    var g_id = d3.select("#selected-station").property("value");
-//    if (filterData(g_id, dailyData, "level").length > 0) {
-//        plotSite(g_id, "level"); 
-//    };
-//}, false);
-
 // What happens when a user selects a site from the map or the list
 function selectSite(data, g_id, called_by) {
     
@@ -159,9 +141,6 @@ function selectSite(data, g_id, called_by) {
     
     // Map manipulation
     sitemap.panTo([site.LAT, site.LON]);
-    //highlightMarker.setLatLng([site.LAT, site.LON]);
-    //highlightMarker.setIcon(highlightIcon);
-    //highlightMarker.addTo(sitemap);
     
     var i = 0;
     siteMarkers.eachLayer(function(layer) {

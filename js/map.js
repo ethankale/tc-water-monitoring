@@ -13,15 +13,21 @@ var sitemap = L.map("mapid", {
 });
 
 var siteMarkers = L.layerGroup();
+var inactiveMarkers = L.layerGroup();
+var rainMarkers = L.layerGroup();
+var streamMarkers = L.layerGroup();
+var wellMarkers = L.layerGroup();
+var lakeMarkers = L.layerGroup();
+
+// Basemap
+var arcmapBase = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/' +
+    'World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; <a href="http://services.arcgisonline.com/ArcGIS/' +
+        'rest/services/World_Topo_Map/MapServer">ArcGIS</a>',
+}).addTo(sitemap);
 
 //sitemap.on('focus', function() {sitemap.dragging.enable(); })
 //sitemap.on('blur', function() {sitemap.dragging.disable(); })
-
-L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/' +
-                'World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-                attribution: 'Tiles &copy; <a href="http://services.arcgisonline.com/ArcGIS/' +
-                    'rest/services/World_Topo_Map/MapServer">ArcGIS</a>',
-            }).addTo(sitemap);
 
 // Stamen
 //var layer = new L.StamenTileLayer("toner");
@@ -116,7 +122,7 @@ function loadSites() {
     }, function(error, data) {
       //if (error) throw error;
       
-      data = data.filter(function(d) {return d.STATUS == "Active"})
+      //data = data.filter(function(d) {return d.STATUS == "Active"})
       
       // Create the list of sites in the selectbox
       var select = d3.select("#selected-station")
@@ -147,7 +153,7 @@ function loadSites() {
 function updateMapSites(data) {
     
     data.forEach(function(d) {
-        if (!(isNaN(d.LAT) || isNaN(d.LON)) & d.STATUS == "Active"){
+        if (!(isNaN(d.LAT) || isNaN(d.LON))){
             
             var marker = L.marker([d.LAT, d.LON], {
                 icon: iconType(d.type),
@@ -159,19 +165,58 @@ function updateMapSites(data) {
             marker.on("click", onMarkerClick);
             
             siteMarkers.addLayer(marker);
+            
+            switch (d.type) {
+              case 'Flow':
+                streamMarkers.addLayer(marker);
+                break;
+              case 'Well':
+                wellMarkers.addLayer(marker);
+                break;
+              case 'Rain':
+                rainMarkers.addLayer(marker);
+                break;
+              case 'Lake':
+                lakeMarkers.addLayer(marker);
+            }
+            
+            if (d.STATUS == "Active") {
+
+            } else {
+                inactiveMarkers.addLayer(marker);
+            };
         };
     });
     
     siteMarkers.addTo(sitemap);
+    streamMarkers.addTo(sitemap);
+    rainMarkers.addTo(sitemap);
+    wellMarkers.addTo(sitemap);
+    lakeMarkers.addTo(sitemap);
+    inactiveMarkers.addTo(sitemap);
+    
+    // Add a layer control
+
+    
+    var overlayMaps = {
+        "Stream/River": streamMarkers,
+        "Rain": rainMarkers,
+        "Well": wellMarkers,
+        "Lake": lakeMarkers,
+        "Inactive": inactiveMarkers
+    };
+    
+    var baseMaps = {
+        "ArcMap": arcmapBase
+    };
+    
+    L.control.layers(null, overlayMaps).addTo(sitemap);
     
     // Load up data when we launch the page
     var getvars = window.location.href.split("#")[1];
     var g_id = typeof getvars === "undefined" ? sitelist[0].G_ID : getvars.split("=")[1].replace(/\D/g,'');
-    //var g_id = sitelist[0].G_ID;
-    //console.log(g_id);
     
     selectSite(sitelist, g_id);
-    
 };
 
 // The user clicked on a marker in the Leaflet map

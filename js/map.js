@@ -55,11 +55,19 @@ var greenIcon = new SiteIcon({iconUrl: "./img/marker/green_circle.png",
     purpleIcon = new SiteIcon({iconUrl: "./img/marker/purple_triangle.png",
                               shadowURL: "./img/marker/shadow_triangle.png"}),
     orangeIcon = new SiteIcon({iconUrl: "./img/marker/orange_square.png",
-                              shadowURL: "./img/marker/shadow_square.png"});
+                              shadowURL: "./img/marker/square_shadow.png"});
     blueIcon = new SiteIcon({iconUrl: "./img/marker/blue_diamond.png",
                               shadowURL: "./img/marker/shadow_diamond.png"});
     starIcon = new SiteIcon({iconUrl: "./img/marker/select.png",
-                              shadowURL: "./img/marker/shadow_select.png"});
+                              shadowURL: "./img/marker/shadow_select.png"}),
+    circleGrayIcon = new SiteIcon({iconUrl: "./img/marker/shadow_circle.png",
+                              shadowURL: "./img/marker/shadow_circle.png"}),
+    triangleGrayIcon = new SiteIcon({iconUrl: "./img/marker/shadow_triangle.png",
+                              shadowURL: "./img/marker/shadow_triangle.png"}),
+    squareGrayIcon = new SiteIcon({iconUrl: "./img/marker/square_shadow.png",
+                              shadowURL: "./img/marker/square_shadow.png"}),
+    diamondGrayIcon = new SiteIcon({iconUrl: "./img/marker/shadow_diamond.png",
+                              shadowURL: "./img/marker/shadow_diamond.png"});
 
 // The highlight icon will be different - slightly smaller
 // var highlightIcon = L.icon({
@@ -74,17 +82,39 @@ var greenIcon = new SiteIcon({iconUrl: "./img/marker/green_circle.png",
 
 // var highlightMarker = L.marker({icon: highlightIcon});
 
-function iconType(type) {
+function iconType(type, status) {
     var icon = {};
-    
-    if (type == "Rain") {
-        icon = greenIcon;
-    } if (type == "Well") {
-        icon = purpleIcon;
-    } if (type == "Flow") {
-        icon = orangeIcon;
-    } if (type == "Lake") {
-        icon = blueIcon;
+    //console.log(type + " - " + status)
+    if (status == "Active") {
+        switch (type) {
+          case 'Rain':
+            icon = greenIcon;
+            break;
+          case 'Well':
+            icon = purpleIcon;
+            break;
+          case 'Flow':
+            icon = orangeIcon;
+            break;
+          case 'Lake':
+            icon = blueIcon;
+            break;
+        };
+    } else {
+        switch (type) {
+          case 'Rain':
+            icon = circleGrayIcon;
+            break;
+          case 'Well':
+            icon = triangleGrayIcon;
+            break;
+          case 'Flow':
+            icon = squareGrayIcon;
+            break;
+          case 'Lake':
+            icon = diamondGrayIcon;
+            break;
+        };
     };
     
     return icon;
@@ -98,7 +128,7 @@ legend.onAdd = function (sitemap) {
         filenames = ["green_circle.png", "purple_triangle.png", "blue_diamond.png", "orange_square.png"],
         labels = ["Rain", "Well", "Lake", "Stream/<br />River"];
     
-    div.innerHTML += '<strong>Gauges</strong><br />';
+    div.innerHTML += '<strong>Gauges</strong><br />Inactive in gray<br />';
     for (var i=0; i<filenames.length; i++) {
         div.innerHTML += '<img src="./img/marker/' + filenames[i] + '"></img>' +
         '  ' + labels[i] + '<br />';
@@ -154,34 +184,34 @@ function updateMapSites(data) {
     
     data.forEach(function(d) {
         if (!(isNaN(d.LAT) || isNaN(d.LON))){
+            var theIcon = iconType(d.type, d.STATUS);
             
             var marker = L.marker([d.LAT, d.LON], {
-                icon: iconType(d.type),
+                icon: theIcon,
                 riseOnHover: true,
                 title: d.SITE_CODE,
                 });
             marker.g_id = d.G_ID;
             marker.g_type = d.type;
+            marker.g_status = d.STATUS;
             marker.on("click", onMarkerClick);
             
             siteMarkers.addLayer(marker);
             
-            switch (d.type) {
-              case 'Flow':
-                streamMarkers.addLayer(marker);
-                break;
-              case 'Well':
-                wellMarkers.addLayer(marker);
-                break;
-              case 'Rain':
-                rainMarkers.addLayer(marker);
-                break;
-              case 'Lake':
-                lakeMarkers.addLayer(marker);
-            }
-            
             if (d.STATUS == "Active") {
-
+                switch (d.type) {
+                  case 'Flow':
+                    streamMarkers.addLayer(marker);
+                    break;
+                  case 'Well':
+                    wellMarkers.addLayer(marker);
+                    break;
+                  case 'Rain':
+                    rainMarkers.addLayer(marker);
+                    break;
+                  case 'Lake':
+                    lakeMarkers.addLayer(marker);
+                }
             } else {
                 inactiveMarkers.addLayer(marker);
             };

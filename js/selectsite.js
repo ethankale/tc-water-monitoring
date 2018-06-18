@@ -142,6 +142,7 @@ function selectSite(data, g_id, called_by) {
     // Map manipulation
     sitemap.panTo([site.LAT, site.LON]);
     
+    
     var i = 0;
     siteMarkers.eachLayer(function(layer) {
         i++;
@@ -150,10 +151,10 @@ function selectSite(data, g_id, called_by) {
             layer.setIcon(starIcon);
         } else {
             layer.setZIndexOffset(i);
-            layer.setIcon(iconType(layer.g_type));
-
+            layer.setIcon(iconType(layer.g_type, layer.g_status));
         };
     });
+    
     
     // Plot data
     var param = d3.select("#selected-param").property("value");

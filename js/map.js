@@ -26,19 +26,6 @@ var arcmapBase = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/service
         'rest/services/World_Topo_Map/MapServer">ArcGIS</a>',
 }).addTo(sitemap);
 
-//sitemap.on('focus', function() {sitemap.dragging.enable(); })
-//sitemap.on('blur', function() {sitemap.dragging.disable(); })
-
-// Stamen
-//var layer = new L.StamenTileLayer("toner");
-//sitemap.addLayer(layer);
-
-// Osm
-//L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-//    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
-//    maxZoom: 18,
-//}).addTo(sitemap);
-
 // Custom icons to differentiate between well, rain, and discharge monitoring.
 var SiteIcon = L.Icon.extend({
     options: {
@@ -69,18 +56,6 @@ var greenIcon = new SiteIcon({iconUrl: "./img/marker/green_circle.png",
     diamondGrayIcon = new SiteIcon({iconUrl: "./img/marker/shadow_diamond.png",
                               shadowURL: "./img/marker/shadow_diamond.png"});
 
-// The highlight icon will be different - slightly smaller
-// var highlightIcon = L.icon({
-    // iconUrl: "./img/marker/highlight_circle.png",
-    
-    // iconSize:       [10, 10],
-    // shadowSize:     [10, 10],
-    // iconAnchor:     [5, 5],
-    // shadowAnchor:   [10, 10],
-    // popupAnchor:    [10, 10]
-// })
-
-// var highlightMarker = L.marker({icon: highlightIcon});
 
 function iconType(type, status) {
     var icon = {};
@@ -150,9 +125,6 @@ function loadSites() {
       
       return d;
     }, function(error, data) {
-      //if (error) throw error;
-      
-      //data = data.filter(function(d) {return d.STATUS == "Active"})
       
       // Create the list of sites in the selectbox
       var select = d3.select("#selected-station")

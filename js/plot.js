@@ -218,8 +218,6 @@ function updatePlot(g_id, param) {
     var type = site.type;
     
     // Set the status of the parameter buttons/images
-    //d3.selectAll("#buttonRow img").classed("disabled", false)
-
     var parameters = [];
 
     var data_l = filterData(g_id, dailyData, "level")
@@ -245,14 +243,10 @@ function updatePlot(g_id, param) {
     var data_plot = [];
     
     // Update the buttons 
-    //d3.selectAll("#buttonRow img").classed("selected", false)
-    //d3.selectAll("#buttonRow p").classed("text-muted", true)
     if (param == "level") {
         d3.select("#waterImg").classed("selected", true)
-        //d3.select("#waterIconLabel").classed("text-muted", false)
     } else if (param == "temp") {
         d3.select("#thermImg").classed("selected", true)
-        //d3.select("#tempIconLabel").classed("text-muted", false)
     }
     
     d3.select("#waterIconLabel").text(param_pretty_name("level", type))
@@ -261,7 +255,6 @@ function updatePlot(g_id, param) {
     var selected_wy = d3.select("#selected-wy").property("value")
     
     // Update the water year select box; standard D3 update/enter/exit pattern
-    //wy_options.push("Clear");
     var options = d3.select("#selected-wy")
         .on('change', SelectYearChange)
       .selectAll("option")
@@ -493,7 +486,6 @@ function updatePlot(g_id, param) {
             hover.text(formatMouseNumber(d.plotval) + " | " + formatMouseDate(d.day));
             focus.attr("transform", "translate(" + x(d.day) + "," + y(d.plotval) + ")");
         };
-        //focus.select("text").text(formatMouseNumber(d.plotval) + " <br> " + formatMouseDate(d.day));
     }
     
     SelectYearChange()

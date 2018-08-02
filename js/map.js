@@ -20,9 +20,9 @@ var wellMarkers = L.layerGroup();
 var lakeMarkers = L.layerGroup();
 
 // Basemap
-var arcmapBase = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/' +
+var arcmapBase = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/' +
     'World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Tiles &copy; <a href="http://services.arcgisonline.com/ArcGIS/' +
+        attribution: 'Tiles &copy; <a href="https://services.arcgisonline.com/ArcGIS/' +
         'rest/services/World_Topo_Map/MapServer">ArcGIS</a>',
 }).addTo(sitemap);
 

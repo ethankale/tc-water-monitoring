@@ -83,7 +83,10 @@ var line = d3.line()
 // Fires when the year selectbox changes value.
 function SelectYearChange() {
     wy = d3.select("#selected-wy").property("value");
+    g_id = d3.select("#selected-station").property("value");
+    param = d3.select("#selected-param").property("value");
     highlightYear(wy);
+    updateStatsRow(g_id, dailyData, param);
 }
 
 // Highlight the currently selected water year

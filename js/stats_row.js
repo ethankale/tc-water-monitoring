@@ -93,109 +93,110 @@ function getLevelExtremeDayHTML(data, year) {
     return markup;
 }
 
+// Cell 3: Overall extremes
+function getOverallExtremesHTML(data) {
+    var max_row = _.maxBy(data, "plotval");
+    var min_row = _.minBy(data, "plotval");
+    
+    var max_day = prettyDate(max_row.day);
+    var max_level = max_row.val.toFixed(2)
+    
+    var min_day = prettyDate(min_row.day);
+    var min_level = min_row.val.toFixed(2)
+    
+    var markup = "<small>Level Max / Min </small><br />" +
+        max_level + " / " + min_level +
+        "<br /><small>" + max_day + " / " + min_day + "</small>"
+    
+    return markup;
+}
+
+function getOverallExtremeTempsHTML(data) {
+    var max_row = _.maxBy(data, "temp_c");
+    var min_row = _.minBy(data, "temp_c");
+    
+    var max_day = prettyDate(max_row.day);
+    var max_temp = max_row.temp_c.toFixed(2)
+    
+    var min_day = prettyDate(min_row.day);
+    var min_temp = min_row.temp_c.toFixed(2)
+    
+    var markup = "<small>Temperature Max / Min </small><br />" +
+        max_temp + " / " + min_temp +
+        "<br /><small>" + max_day + " / " + min_day + "</small>"
+    
+    return markup;
+}
+
+function getExtremeRainYearsHTML(data) {
+    var wateryear = _(data)
+      .groupBy('wy')
+      .map(function(year, id) { return {
+        wy: id,
+        rain: _.sumBy(year, 'val'),
+        days: year.length}
+      })
+      .filter(function(y) { return y.days >= 365} )
+      .value()
+    
+    var max_row = _.maxBy(wateryear, "rain");
+    var min_row = _.minBy(wateryear, "rain");
+    
+    var max_rain = max_row.rain.toFixed(2);
+    var min_rain = min_row.rain.toFixed(2);
+    
+    var markup = "<small>Total Rainfall Max / Min </small><br />" +
+        max_rain + " / " + min_rain +
+        "<br /><small>" + max_row.wy + " / " + min_row.wy + "</small>"
+    
+    return markup;
+}
+
 
 // Calculate and add statistics to the stats row, using
 //   data from the currently selected site
 function updateStatsRow(g_id, data, param) {
     
-    //d3.selectAll(".quick-stats").classed("bg-info", false)
-    
     var data = filterData(g_id, data, param)
     var wy = d3.select("#selected-wy").property("value");
     
     // Calculate statistics
-    
     var site = sitelist.filter(function (d) { return (d.G_ID === data[0].G_ID); })[0];
-    
-    var maxMeasure = _.maxBy(data, "plotval");
-    var mostRecent = _.maxBy(data, "day");
     
     var currYearList = _.uniqBy(data, "wy");
     var yearCount = currYearList.length;
-    var maxYear = _.maxBy(currYearList, "wy").wy;
     
-    var currWY = calcWaterYear(new Date());
-    var data_thisyear = _.filter(data, {"wy": currWY});
-    
-    // If there is no data for the current year, replacement values
-    var maxThisYearVal;
-    var maxThisYearDay;
-    
-    if (maxYear === currWY) {
-        var maxThisYear = {};
-        
-        if (site.type === "Rain" & param == "level") {
-            maxThisYear = _.maxBy(data_thisyear, "oldval");
-            maxThisYearVal = maxThisYear.oldval.toFixed(2);
-            
-            totalThisYearVal = mostRecent.plotval.toFixed(2)
-            totalThisYearDay = prettyDate(mostRecent.day)
-        } else {
-            var maxThisYear = _.maxBy(data_thisyear, "plotval");
-            maxThisYearVal = maxThisYear.plotval.toFixed(2);
-        }
-        
-        maxThisYearDay = prettyDate(maxThisYear.day);
-        
-    } else {
-        maxThisYearVal = "No Data";
-        maxThisYearDay = "--";
-        
-        totalThisYearVal = "No Data"
-        totalThisYearDay = "--"
-        
-    }
-    
+    // Cells 1, 2, and 3 have conditional markup; cell 4 is always just the 
+    //   count of years.
     var cellone_markup = ""
     var celltwo_markup = ""
+    var cellthree_markup = ""
     
     if (param == "temp") {
         cellone_markup = getLatestTempHTML(data, wy)
         celltwo_markup = getTempExtremeDayHTML(data, wy)
+        cellthree_markup = getOverallExtremeTempsHTML(data)
     } else if (param == "level") {
         if (site.type === "Rain") {
             cellone_markup = getYTDRainHTML(data, wy)
             celltwo_markup = getWettestDayHTML(data, wy)
+            cellthree_markup = getExtremeRainYearsHTML(data)
         } else  {
             cellone_markup = getLatestLevelHTML(data, wy)
             celltwo_markup = getLevelExtremeDayHTML(data, wy)
+            cellthree_markup = getOverallExtremesHTML(data)
         }
-    }
-    
-    //console.log(maxThisYearVal);
-    //console.log(maxThisYearDay);
-    
-    // Tailor the context of the stats to the type of station we're looking at
-    var recentContext1 = "Most Recent";
-    var recentContext2 = "";
-    
-    var max_currentyearContext1 = "Max This Year";
-    
-    var max_overallContext1 = "Highest Recorded";
-    var max_overallDate = prettyDate(maxMeasure.day)
-    
-    if (site.type == "Rain" & param == "level") {
-        recentContext1 = "Inches This Year";
-        recentContext2 = "As Of ";
-        
-        max_currentyearContext1 = "Wettest Day This Year";
-        
-        max_overallContext1 = "Wettest Year";
-        max_overallDate = yearOnlyFormat(maxMeasure.day);
     }
     
     // Using the calculated stats & context, update the text
     d3.select(".quick-stats.recent").html(cellone_markup);
     
-    d3.select(".quick-stats.count").html("<small>Years Measured</small><br />" +
-        yearCount);
-    
     d3.select(".quick-stats.max-currentyear").html(celltwo_markup);
         
-    d3.select(".quick-stats.max-overall").html("<small>" + max_overallContext1 + "</small><br />" +
-        maxMeasure.plotval.toFixed(2) +
-        "<br /><small>" + max_overallDate + "</small>");
+    d3.select(".quick-stats.max-overall").html(cellthree_markup);
 
+    d3.select(".quick-stats.count").html("<small>Years Measured</small><br />" +
+        yearCount);
 }
 
 // Remove data from the stats row, and display a "Loading" alert

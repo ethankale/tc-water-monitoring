@@ -131,7 +131,7 @@ function selectSite(data, g_id, called_by) {
     // Update the download and more information links
     d3.select("#downloadCSV").property("href", url.split("#")[0].split("index")[0] + "/data/g_id-" + g_id + ".csv");
     
-    if (site.URL == "") {
+    if (site.URL) {
         d3.select("#siteInfoSpan").style("visibility", "hidden")
     } else {
         d3.select("#siteInfoSpan").style("visibility", "visible")

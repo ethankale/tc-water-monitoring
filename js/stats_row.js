@@ -139,15 +139,22 @@ function getExtremeRainYearsHTML(data) {
       .filter(function(y) { return y.days >= 365} )
       .value()
     
-    var max_row = _.maxBy(wateryear, "rain");
-    var min_row = _.minBy(wateryear, "rain");
-    
-    var max_rain = max_row.rain.toFixed(2);
-    var min_rain = min_row.rain.toFixed(2);
-    
-    var markup = "<small>Total Rainfall Max / Min </small><br />" +
-        max_rain + " / " + min_rain +
-        "<br /><small>" + max_row.wy + " / " + min_row.wy + "</small>"
+    var markup = "";
+    if (wateryear.length > 0) {
+        var max_row = _.maxBy(wateryear, "rain");
+        var min_row = _.minBy(wateryear, "rain");
+        
+        var max_rain = max_row.rain.toFixed(2);
+        var min_rain = min_row.rain.toFixed(2);
+        
+        markup = "<small>Total Rainfall Max / Min </small><br />" +
+            max_rain + " / " + min_rain +
+            "<br /><small>" + max_row.wy + " / " + min_row.wy + "</small>"
+    } else {
+        markup = "<small>Total Rainfall Max / Min </small><br />" +
+            "No Data" +
+            "<br /><small>No Complete Water Years</small>"
+    }
     
     return markup;
 }

@@ -56,6 +56,19 @@ function qalevel(d) {
     return level;
 }
 
+// Helper function for plotting rainfall
+//  This function assumes the data have already been filtered to one site/gid
+function getCumRainfallForDay(data, day) {
+    var the_wy = _.filter(data, {"day":day})[0].wy
+    
+    var cumRain = _.chain(data)
+        .filter({"wy":the_wy})
+        .filter(function(d) { return d.day <= day;})
+        .sumBy("val")
+        .value()
+    return cumRain;
+}
+
 var circleColor = d3.scaleOrdinal()
     .domain(["Normal","Warning", "Estimate", "Provisional"])
     .range(["#cccccc", "#8e0152", "#de77ae", "#4d9221"])
@@ -314,7 +327,6 @@ function updatePlot(g_id, param) {
                 cumulative = p.plotval;
             });
         });
-        //site.cumCalculated = "Y";
     };
     
     // Set up the y range; important that it be inside the function for resizing
@@ -486,8 +498,15 @@ function updatePlot(g_id, param) {
             d1 = data[i];
         if ( (typeof(d0) != "undefined") && (typeof(d1) != "undefined")  && (x(x0) >= margin.left)) {
             var d = x0 - d0.day > d1.day - x0 ? d1 : d0;
-            hover.text(formatMouseNumber(d.plotval) + " | " + formatMouseDate(d.day));
-            focus.attr("transform", "translate(" + x(d.day) + "," + y(d.plotval) + ")");
+            var yval = 0;
+            if (type == "Rain" & param == "level") {
+                yval = getCumRainfallForDay(data, d.day);
+            } else {
+                yval = d.plotval;
+            }
+            //hover.text(formatMouseNumber(d.plotval) + " | " + formatMouseDate(d.day));
+            hover.text(formatMouseNumber(yval) + " | " + formatMouseDate(d.day));
+            focus.attr("transform", "translate(" + x(d.day) + "," + y(yval) + ")");
         };
     }
     

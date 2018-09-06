@@ -25,6 +25,13 @@ var arcmapBase = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/servic
         attribution: 'Tiles &copy; <a href="https://services.arcgisonline.com/ArcGIS/' +
         'rest/services/World_Topo_Map/MapServer">ArcGIS</a>',
 }).addTo(sitemap);
+//});
+//var topoBaseMap = L.tileLayer('https://tile.opentopomap.org/{z}/{x}/{y}.png', {
+//    attribution: 'Map Data: © <a href="https://openstreetmap.org/copyright">' +
+//        'OpenStreetMap</a> Contributors, SRTM | Map display: © ' +
+//        '<a href="http://opentopomap.org/">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+//}).addTo(sitemap);
+
 
 // Custom icons to differentiate between well, rain, and discharge monitoring.
 var SiteIcon = L.Icon.extend({

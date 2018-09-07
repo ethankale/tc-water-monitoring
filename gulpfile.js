@@ -6,18 +6,7 @@ var sourcemaps  = require('gulp-sourcemaps');
 var pump        = require('pump');
 var exec        = require('child_process').exec;
 
-gulp.task('custom_libraries', function(cb) {
-    // Make a custom Lodash build first
-    exec("lodash include=filter,clone,max,chain,groupBy,keys,sortBy,sumBy,maxBy,minBy,uniqBy -o bin-js/lodash/lodash.custom.js",
-        (error, stdout, stderr) => {
-            console.log(`stdout: ${stdout}`);
-            console.log(`stderr: ${stderr}`);
-            cb(error);
-    });
-});
-
-
-gulp.task('build', ['custom_libraries'], function(cb) {
+gulp.task('build', function(cb) {
 
     
     pump([ 

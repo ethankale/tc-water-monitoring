@@ -1,0 +1,19 @@
+{
+  "name": "thurston-county-water-dashboard",
+  "version": "0.1.0",
+  "license": "MIT",
+  "scripts": {
+    "prepublish": "lodash include=filter,clone,max,chain,groupBy,keys,map,sortBy,sumBy,maxBy,minBy,uniqBy -o bin-js/lodash/lodash.custom.js"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.0",
+    "gulp-concat": "latest",
+    "gulp-eslint": "^5.0.0",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-uglify": "latest",
+    "pump": "latest"
+  },
+  "dependencies": {
+    "d3": "^5.7.0"
+  }
+}

@@ -2,3 +2,11 @@
     height: 420px;
     z-index: 1;
 }
+
+.ct-line {
+    stroke-width: 2px;
+}
+
+.ct-point {
+    stroke-width: 4px;
+}

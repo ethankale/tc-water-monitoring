@@ -7,6 +7,40 @@ The project as a whole uses Bulma, but that's pure html/css, no js.
 Created October 19, 2018 by Nat Kale.
 
 */
+
+/***********************************************
+
+Generic Functions
+
+***********************************************/
+
+function getWaterYear(dt) {
+    // dt is a moment.js date object.
+    // Returns an integer.
+    var mon = dt.month();       // Months are 0-indexed.
+    var year = dt.year();
+    return (mon > 8 ? year+1 : year);
+}
+
+function getDateAxisTicks(dt) {
+    // dt is a moment.js object.
+    // Returns an array of 12 moment.js objects, the first of the month for each year.
+    var mon = dt.month();
+    var firstOfWY = moment();
+    if (mon > 8) {
+        firstOfWY = moment({year:dt.year(), month:9, day:1})
+    } else {
+        firstOfWY = moment({year:dt.year()-1, month:9, day:1})
+    }
+    var ticks = [];
+    var i = 0;
+    while (i < 12) {
+        ticks.push(moment(firstOfWY).add(i, 'months'));
+        i += 2;
+    }
+    return ticks;
+}
+
 /***********************************************
 
 Mapping Functions
@@ -253,6 +287,8 @@ function loadData(gid) {
                 d.val = +d.val;
                 d.temp_c = +d.temp_c;
                 d.dt = moment(d.day , 'YYYY-MM-DD HH:mm:ss', true);
+                d.wy = getWaterYear(d.dt);
+                d.graph_dt = d.dt.clone().add(getWaterYear(moment())-d.wy, 'year');
             })
             //updateMapSites(sites);
             console.log("Graphing data loaded. " + graph_data.length + " data points found.");
@@ -270,7 +306,8 @@ function loadData(gid) {
 }
 
 function createDischargeDisplay(site, data) {
-    var chart_data = _.map(data, function(d) { return {'x': d.dt, 'y':d.val} } );
+    //var chart_data = _.map(data, function(d) { return {'x': d.dt, 'y':d.val} } );
+    var chart_data = _.map(data, function(d) { return {'x': d.graph_dt, 'y':d.val} } );
     var data = {
       // A labels array that can contain any sort of values
       // Our series array that contains series objects or in this case series data arrays
@@ -284,9 +321,10 @@ function createDischargeDisplay(site, data) {
     var options = {
       axisX: {
         type: Chartist.FixedScaleAxis,
-        divisor: 5,
+        divisor: 6,
+        ticks: getDateAxisTicks(moment()),
         labelInterpolationFnc: function(value) {
-          return moment(value).format('MMM D, YYYY');
+          return moment(value).format('MMM');
         }
       }
     }

@@ -499,6 +499,7 @@ function updatePlot(g_id, param) {
         if ( (typeof(d0) != "undefined") && (typeof(d1) != "undefined")  && (x(x0) >= margin.left)) {
             var d = x0 - d0.day > d1.day - x0 ? d1 : d0;
             var yval = 0;
+            
             if (type == "Rain" & param == "level") {
                 yval = getCumRainfallForDay(data, d.day);
             } else {

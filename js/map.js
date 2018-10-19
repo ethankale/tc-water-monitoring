@@ -1,9 +1,21 @@
 
-// Build the map from the list of sites.
-// Include this after selectsite.js and before plot.js
+/* The javascript that drives the Thurston County Water Dashboard.
 
+Relies on leaflet, PapaParse, lodash, Chartist, and moment.js.
+The project as a whole uses Bulma, but that's pure html/css, no js.
 
-//var displayDateFormat = d3.timeFormat("%Y-%m-%d");
+Created October 19, 2018 by Nat Kale.
+
+*/
+/***********************************************
+
+Mapping Functions
+
+***********************************************/
+
+// List of sites, from CSV file
+var sites = {};
+var graph_data = {};
 
 var sitemap = L.map("gaugemap", {
     center: [47.04, -122.9],
@@ -24,7 +36,7 @@ var lakeMarkers = L.layerGroup();
 var arcmapBase = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/' +
     'World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Tiles &copy; <a href="https://services.arcgisonline.com/ArcGIS/' +
-        'rest/services/World_Light_Gray_Base/MapServer">ArcGIS</a>',
+        'rest/services/Canvas/World_Light_Gray_Base/MapServer">ArcGIS</a>',
 }).addTo(sitemap);
 
 // Custom icons to differentiate between well, rain, and discharge monitoring.
@@ -115,7 +127,7 @@ legend.onAdd = function (sitemap) {
 
 legend.addTo(sitemap)
 
-var sites = {};
+
 Papa.parse("./data/station_list.csv", {
     download: true,
     header: true,
@@ -131,45 +143,6 @@ Papa.parse("./data/station_list.csv", {
 })
 
 
-
-/*
-// Load the data from the CSV file into memory
-function loadSites() {
-    
-    d3.csv("./data/station_list.csv", function(d) {
-      d.id = +d.G_ID;
-      d.LAT = +d.LAT;
-      d.LON = +d.LON;
-      d.Elevation = +d.Elevation;
-      
-      return d;
-    }, function(error, data) {
-      
-      // Create the list of sites in the selectbox
-      var select = d3.select("#selected-station")
-        .selectAll("option")
-        .data(data)
-        .enter()
-        .append("option")
-          .attr("value", function(d) { return d.G_ID})
-          .text(function(d) {return d.SITE_CODE + ": " + d.SITE_NAME + " (" + (d.type == "Flow" ? "Stream" : d.type) + ")"});
-      
-      sitelist = data;
-      
-      // Make the select box better
-      $('#selected-station').select2({
-          theme: "bootstrap",
-          width: "100%"
-      });
-      
-      $('#selected-station').on('select2:select', function(e) {
-          selectChange();
-      });
-      
-      updateMapSites(sitelist);
-    });
-};
-*/
 // Add the monitoring sites to the leaflet map
 function updateMapSites(data) {
     
@@ -247,15 +220,77 @@ function toggleModal() {
 
 // The user clicked on a marker in the Leaflet map
 function onMarkerClick(e) {
-    console.log("GID is " + e.target.g_id);
+    //console.log("GID is " + e.target.g_id);
     toggleModal();
+    loadData(e.target.g_id);
 }
 
+// Close the modal if you click the close button or background
 var e_close = document.getElementById("close-modal");
 e_close.addEventListener("click", toggleModal, false);
+var e_back = document.getElementsByClassName("modal-background")[0];
+e_back.addEventListener("click", toggleModal, false);
 
+/***********************************************
 
+Modal Functions
 
+***********************************************/
 
+function loadData(gid) {
+    //console.log("GID is " + gid)
+    var site = _.filter(sites, {"G_ID" : gid})[0];
+    
+    var el_title = document.getElementById("gauge-name");
+    el_title.innerHTML = "Loading...";
+    
+    Papa.parse("./data/g_id-" + gid + ".csv", {
+        download: true,
+        header: true,
+        complete: function(results) {
+            graph_data = results.data;
+            graph_data.forEach(function(d) {
+                d.val = +d.val;
+                d.temp_c = +d.temp_c;
+                d.dt = moment(d.day , 'YYYY-MM-DD HH:mm:ss', true);
+            })
+            //updateMapSites(sites);
+            console.log("Graphing data loaded. " + graph_data.length + " data points found.");
+            
+            var el_title = document.getElementById("gauge-name");
+            var el_code = document.getElementById("gauge-code");
+            el_title.innerHTML = site.SITE_NAME + " (" + site.SITE_CODE + ")";
+            el_code.innerHTML = site.SITE_CODE;
+            
+            if (site.type = "Flow") {
+                createDischargeDisplay(site, graph_data);
+            };
+        }
+    })
+}
+
+function createDischargeDisplay(site, data) {
+    var chart_data = _.map(data, function(d) { return {'x': d.dt, 'y':d.val} } );
+    var data = {
+      // A labels array that can contain any sort of values
+      // Our series array that contains series objects or in this case series data arrays
+      series: [
+        {
+          name: 'Discharge',
+          data: chart_data
+        }
+      ]
+    };
+    var options = {
+      axisX: {
+        type: Chartist.FixedScaleAxis,
+        divisor: 5,
+        labelInterpolationFnc: function(value) {
+          return moment(value).format('MMM D, YYYY');
+        }
+      }
+    }
+    new Chartist.Line('#daily-chart', data, options);
+}
 
 

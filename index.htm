@@ -11,85 +11,47 @@
 
 <link rel="canonical" href="http://www.thurstoncountywa.gov/sw/Pages/monitoring-dashboard.aspx">
 
-<link rel="stylesheet" href="./bin-js/bootstrap/css/bootstrap.min.css" /><!--v3.3.7-->
-<link rel="stylesheet" href="./bin-js/select2/select2.min.css" />
-<link rel="stylesheet" href="./bin-js/select2/select2-bootstrap.min.css" />
-<link rel="stylesheet" href="./bin-js/leaflet/leaflet.css" /><!--v1.0.2-->
-<link rel="stylesheet" href="./css/graphs.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/leaflet.css" />
+<link rel="stylesheet" href="./css/map.css" />
 
 </head>
 
-<body onLoad="resize();">
+<body>
 
-    <div class="container">
-        <div class='col-md-12'>
-          <!--<h1 class='visible-md-block visible-lg-block'>Thurston Rainfall &amp; Water Level Dashboard</h1>
-          <h1 class='visible-xs-block visible-sm-block'>Rainfall &amp; Water Levels</h1>-->
-          <div class='col-lg-8 col-md-7 col-sm-12 col-xs-12'>
-            Site <span id="siteInfoSpan">(<a id="siteInfoLink" target="blank" href="http://www.google.com">more information</a>)</span>
-            <!--<select class="form-control input-lg" id="selected-station" aria-label="Choose Site"></select> -->
-            <select class="form-control" id="selected-station" aria-label="Choose Site"></select> 
-          </div>
-          
-          <div id="yearSelect" class='col-lg-2 col-md-2 col-sm-6 col-xs-6'>
-            Year
-            <select class="form-control" id="selected-wy" aria-label="Choose Year"></select>
-          </div>
-          
-          <div id="paramSelect" class='col-lg-2 col-md-3 col-sm-6 col-xs-6'>
-            Parameter
-            <select class="form-control" id="selected-param" aria-label="Choose Parameter"></select>
-          </div>
-          
-          <div id="toggle_row" class="row col-xs-12">
-            <p class="toggle_link col-xs-12"><a id="toggle_stats_link" target="blank" href="#">Statistics</a></p>
-          </div>
-          
-          <!--<div class="row quick-stats col-md-12 col-xs-4"> -->
-          <div id="quick_stats_row" class="row quick-stats col-xs-12">
-            <h3 class="quick-stats recent text-center col-md-3 col-xs-6">
-              <small>--</small><br />
-              Loading...<br />
-              <small>--</small>
-            </h3>
-            
-            <h3 class="quick-stats max-currentyear text-center col-md-3 col-xs-6">
-            </h3>
-            
-            <h3 class="quick-stats max-overall text-center col-md-3 col-xs-6">
-            </h3>
-            
-            <h3 class="quick-stats  count text-center col-md-3 col-xs-6">
-            </h3>
-          
-          </div>
-          
-          <!--<div class="row col-md-12"> -->
-            <div class="main-container col-md-6 col-xs-12" id="chartContainer">
-              <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="chartSVG"></svg>
-            </div>
-            
-            <div class="main-container col-md-6 col-xs-12" id="mapContainer">
-              <div id="mapid"></div>
-            </div>
-            
-        </div>
-        
-        <div class='col-xs-12'>
-          <hr />
-          <p class="text-center"><a id="downloadCSV" href="#">Download Daily Data (csv)</a> | 
-            <a href="http://www.thurstoncountywa.gov/sw/Pages/monitoring-researchers.aspx">For Researchers</a>
-          </p>
-        </div>
-        
+
+
+  <section class="section">
+  
+  <div id="gaugemap"></div>
+    
+    <div class="modal" id="graph-modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p id="gauge-name" class="modal-card-title">Gauge Name</p>
+          <button class="delete" id="close-modal" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <p>Graphs!</p>
+        </section>
+        <footer class="modal-card-foot">
+          <p>Details, maybe?</p>
+        </footer>
+      </div>
     </div>
     
+  </section>
+  
+
+  
     <!-- Include these after the SVG tag -->
-    <script src="./js/all.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.6.1/iframeResizer.contentWindow.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.6.1/papaparse.min.js"></script>
+    <script src="./js/map.js"></script>
+    <!--<script src="./js/all.js"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.6.1/iframeResizer.contentWindow.min.js"></script>-->
     
 </body>
-
-
 
 </html>

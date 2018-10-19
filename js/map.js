@@ -2,9 +2,10 @@
 // Build the map from the list of sites.
 // Include this after selectsite.js and before plot.js
 
-var displayDateFormat = d3.timeFormat("%Y-%m-%d");
 
-var sitemap = L.map("mapid", {
+//var displayDateFormat = d3.timeFormat("%Y-%m-%d");
+
+var sitemap = L.map("gaugemap", {
     center: [47.04, -122.9],
     zoom: 10,
     scrollWheelZoom: true,
@@ -20,18 +21,11 @@ var wellMarkers = L.layerGroup();
 var lakeMarkers = L.layerGroup();
 
 // Basemap
-var arcmapBase = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/' +
-    'World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+var arcmapBase = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/' +
+    'World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Tiles &copy; <a href="https://services.arcgisonline.com/ArcGIS/' +
-        'rest/services/World_Topo_Map/MapServer">ArcGIS</a>',
+        'rest/services/World_Light_Gray_Base/MapServer">ArcGIS</a>',
 }).addTo(sitemap);
-//});
-//var topoBaseMap = L.tileLayer('https://tile.opentopomap.org/{z}/{x}/{y}.png', {
-//    attribution: 'Map Data: © <a href="https://openstreetmap.org/copyright">' +
-//        'OpenStreetMap</a> Contributors, SRTM | Map display: © ' +
-//        '<a href="http://opentopomap.org/">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
-//}).addTo(sitemap);
-
 
 // Custom icons to differentiate between well, rain, and discharge monitoring.
 var SiteIcon = L.Icon.extend({
@@ -121,6 +115,24 @@ legend.onAdd = function (sitemap) {
 
 legend.addTo(sitemap)
 
+var sites = {};
+Papa.parse("./data/station_list.csv", {
+    download: true,
+    header: true,
+    complete: function(results) {
+        sites = results.data;
+        sites.forEach(function(s) {
+            s.LAT = +s.LAT;
+            s.LON = +s.LON;
+        })
+        updateMapSites(sites);
+        //console.log("Site load complete.");
+    }
+})
+
+
+
+/*
 // Load the data from the CSV file into memory
 function loadSites() {
     
@@ -157,7 +169,7 @@ function loadSites() {
       updateMapSites(sitelist);
     });
 };
-
+*/
 // Add the monitoring sites to the leaflet map
 function updateMapSites(data) {
     
@@ -222,17 +234,25 @@ function updateMapSites(data) {
     L.control.layers(null, overlayMaps).addTo(sitemap);
     
     // Load up data when we launch the page
-    var getvars = window.location.href.split("#")[1];
-    var g_id = typeof getvars === "undefined" ? sitelist[0].G_ID : getvars.split("=")[1].replace(/\D/g,'');
+    //var getvars = window.location.href.split("#")[1];
+    //var g_id = typeof getvars === "undefined" ? sitelist[0].G_ID : getvars.split("=")[1].replace(/\D/g,'');
     
-    selectSite(sitelist, g_id);
+    //selectSite(sitelist, g_id);
 };
+
+function toggleModal() {
+    var e = document.getElementById("graph-modal");
+    e.classList.toggle("is-active");
+}
 
 // The user clicked on a marker in the Leaflet map
 function onMarkerClick(e) {
-    selectSite(sitelist, e.target.g_id);
+    console.log("GID is " + e.target.g_id);
+    toggleModal();
 }
 
+var e_close = document.getElementById("close-modal");
+e_close.addEventListener("click", toggleModal, false);
 
 
 

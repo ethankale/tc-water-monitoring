@@ -22,9 +22,9 @@ function getWaterYear(dt) {
     return (mon > 8 ? year+1 : year);
 }
 
-function getDateAxisTicks(dt) {
+function getWYDateAxisTicks(dt) {
     // dt is a moment.js object.
-    // Returns an array of 12 moment.js objects, the first of the month for each year.
+    // Returns an array of 6 moment.js objects, the first of the month for each year.
     var mon = dt.month();
     var firstOfWY = moment();
     if (mon > 8) {
@@ -39,6 +39,12 @@ function getDateAxisTicks(dt) {
         i += 2;
     }
     return ticks;
+}
+
+function getLongDateAxisTicks(data) {
+    var minDT = _.minBy(data, 'dt').dt
+    var maxDT = _.maxBy(data, 'dt').dt
+    return maxDT.diff(minDT, 'years');
 }
 
 /***********************************************
@@ -278,6 +284,13 @@ function loadData(gid) {
     var el_title = document.getElementById("gauge-name");
     el_title.innerHTML = "Loading...";
     
+    // Probably would be good to get a gif of a spinner for this.
+    var el_chart_long = document.getElementById("daily-long-chart");
+    var el_chart_wy = document.getElementById("daily-wateryear-chart");
+    el_chart_long.innerHTML = ""
+    el_chart_wy.innerHTML = "";
+    
+    
     Papa.parse("./data/g_id-" + gid + ".csv", {
         download: true,
         header: true,
@@ -298,37 +311,61 @@ function loadData(gid) {
             el_title.innerHTML = site.SITE_NAME + " (" + site.SITE_CODE + ")";
             el_code.innerHTML = site.SITE_CODE;
             
-            if (site.type = "Flow") {
+            
+            if (site.type == "Flow") {
                 createDischargeDisplay(site, graph_data);
             };
         }
     })
 }
 
+var wy_series = [];
 function createDischargeDisplay(site, data) {
-    //var chart_data = _.map(data, function(d) { return {'x': d.dt, 'y':d.val} } );
-    var chart_data = _.map(data, function(d) { return {'x': d.graph_dt, 'y':d.val} } );
-    var data = {
+    wy_series = _.reduce(data, function(result, value, key) {
+          var i = _.findIndex(result, {"name": value.wy})
+          if (i == -1) {
+              result.push({"name": value.wy, "data":[]});
+              i = _.findIndex(result, {"name": value.wy});
+          }
+          result[i].data.push({x:value.graph_dt, y:value.val});
+          return result;
+      }, []);
+      
+    var wateryear_data = {
+      series: wy_series
+    };
+    var chart_long_data = _.map(data, function(d) { return {'x': d.dt, 'y':d.val} } );
+    var long_data = {
       // A labels array that can contain any sort of values
       // Our series array that contains series objects or in this case series data arrays
       series: [
         {
           name: 'Discharge',
-          data: chart_data
+          data: chart_long_data
         }
       ]
     };
-    var options = {
+    var options_wateryear = {
       axisX: {
         type: Chartist.FixedScaleAxis,
-        divisor: 6,
-        ticks: getDateAxisTicks(moment()),
+        ticks: getWYDateAxisTicks(moment()),
         labelInterpolationFnc: function(value) {
           return moment(value).format('MMM');
         }
       }
     }
-    new Chartist.Line('#daily-chart', data, options);
+    var options_long = {
+      axisX: {
+        type: Chartist.FixedScaleAxis,
+        divisor: 4,
+        //divisor: getLongDateAxisTicks(data),
+        labelInterpolationFnc: function(value) {
+          return moment(value).format('MMM YYYY ');
+        }
+      }
+    }
+    new Chartist.Line('#daily-long-chart', long_data, options_long);
+    new Chartist.Line('#daily-wateryear-chart', wateryear_data, options_wateryear)
 }
 
 

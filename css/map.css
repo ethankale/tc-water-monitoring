@@ -10,3 +10,15 @@
 .ct-point {
     stroke-width: 5px;
 }
+
+#daily-long-chart .ct-line {
+    stroke: #525252;
+}
+
+#daily-long-chart .ct-point {
+    stroke: #525252;
+}
+
+#daily-long-chart .ct-bar {
+    stroke-width: 1px;
+}

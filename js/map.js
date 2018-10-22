@@ -312,16 +312,20 @@ function loadData(gid) {
             el_code.innerHTML = site.SITE_CODE;
             
             
-            if (site.type == "Flow") {
+            if (site.type == "Flow" || site.type == "Lake") {
                 createDischargeDisplay(site, graph_data);
+                
+            } else if (site.type == "Well") {
+                createGroundwaterDisplay(site, graph_data);
+            } else if (site.type == "Rain") {
+                createRainDisplay(site, graph_data);
             };
         }
     })
 }
 
-var wy_series = [];
 function createDischargeDisplay(site, data) {
-    wy_series = _.reduce(data, function(result, value, key) {
+    var wy_series = _.reduce(data, function(result, value, key) {
           var i = _.findIndex(result, {"name": value.wy})
           if (i == -1) {
               result.push({"name": value.wy, "data":[]});
@@ -364,8 +368,142 @@ function createDischargeDisplay(site, data) {
         }
       }
     }
-    new Chartist.Line('#daily-long-chart', long_data, options_long);
-    new Chartist.Line('#daily-wateryear-chart', wateryear_data, options_wateryear)
+    var chart_long = new Chartist.Line('#daily-long-chart', long_data, options_long);
+    var chart_wy = new Chartist.Line('#daily-wateryear-chart', wateryear_data, options_wateryear);
+    
+    chart_wy.on('draw', function(context) {
+        //console.log(Chartist.getMultiValue(context.value));
+        if(context.type === 'line' || context.type === 'point') {
+            if(context.series.name == getWaterYear(moment())) {
+                context.element.attr({style: 'stroke: #525252'});
+            } else {
+                context.element.attr({style: 'stroke: #cccccc'});
+            }
+        }
+    });
 }
 
 
+function createGroundwaterDisplay(site, data) {
+    var wy_series = _.reduce(data, function(result, value, key) {
+          var i = _.findIndex(result, {"name": value.wy})
+          if (i == -1) {
+              result.push({"name": value.wy, "data":[]});
+              i = _.findIndex(result, {"name": value.wy});
+          }
+          result[i].data.push({x:value.graph_dt, y:value.val});
+          return result;
+      }, []);
+      
+    var wateryear_data = {
+      series: wy_series
+    };
+    var chart_long_data = _.map(data, function(d) { return {'x': d.dt, 'y':d.val} } );
+    var long_data = {
+      // A labels array that can contain any sort of values
+      // Our series array that contains series objects or in this case series data arrays
+      series: [
+        {
+          name: 'Discharge',
+          data: chart_long_data
+        }
+      ]
+    };
+    var options_wateryear = {
+      axisX: {
+        type: Chartist.FixedScaleAxis,
+        ticks: getWYDateAxisTicks(moment()),
+        labelInterpolationFnc: function(value) {
+          return moment(value).format('MMM');
+        }
+      }
+    }
+    var options_long = {
+      axisX: {
+        type: Chartist.FixedScaleAxis,
+        divisor: 4,
+        //divisor: getLongDateAxisTicks(data),
+        labelInterpolationFnc: function(value) {
+          return moment(value).format('MMM YYYY ');
+        }
+      }
+    }
+    var chart_long = new Chartist.Line('#daily-long-chart', long_data, options_long);
+    var chart_wy = new Chartist.Line('#daily-wateryear-chart', wateryear_data, options_wateryear);
+    
+    chart_wy.on('draw', function(context) {
+        //console.log(Chartist.getMultiValue(context.value));
+        if(context.type === 'line' || context.type === 'point') {
+            if(context.series.name == getWaterYear(moment())) {
+                context.element.attr({style: 'stroke: #525252'});
+            } else {
+                context.element.attr({style: 'stroke: #cccccc'});
+            }
+        }
+    });
+}
+
+
+var wy_series = [];
+
+function createRainDisplay(site, data) {
+    wy_series = _.reduce(data, function(result, value, key) {
+          var i = _.findIndex(result, {"name": value.wy})
+          if (i == -1) {
+              result.push({"name": value.wy, "data":[]});
+              i = _.findIndex(result, {"name": value.wy});
+          }
+          var wyLen = result[i].data.length;
+          var lastVal = wyLen > 0 ? result[i].data[wyLen-1].y : 0;
+          result[i].data.push({x:value.graph_dt, y:(value.val+lastVal)});
+          return result;
+      }, []);
+      
+    var wateryear_data = {
+      series: wy_series
+    };
+    var chart_long_data = _.map(data, function(d) { return {'x': d.dt, 'y':d.val} } );
+    var long_data = {
+      // A labels array that can contain any sort of values
+      // Our series array that contains series objects or in this case series data arrays
+      series: [
+        {
+          name: 'Discharge',
+          data: chart_long_data
+        }
+      ]
+    };
+    var options_wateryear = {
+      axisX: {
+        type: Chartist.FixedScaleAxis,
+        ticks: getWYDateAxisTicks(moment()),
+        labelInterpolationFnc: function(value) {
+          return moment(value).format('MMM');
+        }
+      }, 
+      showPoint: false,
+    }
+    var options_long = {
+      axisX: {
+        type: Chartist.FixedScaleAxis,
+        divisor: 4,
+        //divisor: getLongDateAxisTicks(data),
+        labelInterpolationFnc: function(value) {
+          return moment(value).format('MMM YYYY ');
+        }
+      }
+    }
+    var chart_long = new Chartist.Bar('#daily-long-chart', long_data, options_long);
+    var chart_wy = new Chartist.Line('#daily-wateryear-chart', wateryear_data, options_wateryear);
+    
+    chart_wy.on('draw', function(context) {
+        //console.log(Chartist.getMultiValue(context.value));
+        if(context.type === 'line' || context.type === 'point' || context.type === 'bar') {
+            if(context.series.name == getWaterYear(moment())) {
+                context.element.attr({style: 'stroke: #525252'});
+            } else {
+                context.element.attr({style: 'stroke: #cccccc'});
+            }
+        }
+    });
+}

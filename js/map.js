@@ -514,7 +514,7 @@ function createRainDisplay(site, data) {
     
     chart_wy.on('draw', function(context) {
         //console.log(Chartist.getMultiValue(context.value));
-        if(context.type === 'line' || context.type === 'point' || context.type === 'bar') {
+        if(context.type === 'line' || context.type === 'point') {
             if(context.series.name == getWaterYear(moment())) {
                 context.element.attr({style: 'stroke: ' + highlightColor});
             } else {

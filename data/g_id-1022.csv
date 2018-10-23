@@ -159,3 +159,5 @@ G_ID,day,val,provisional,estimate,warning,temp_c
 1022,2018-06-01 00:00:00,154.18,0,False,False,
 1022,2018-07-02 00:00:00,153.56,0,False,False,
 1022,2018-07-31 00:00:00,152.99,0,False,False,
+1022,2018-08-31 00:00:00,152.64,0,False,False,
+1022,2018-10-01 00:00:00,152.58,0,False,False,

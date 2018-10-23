@@ -378,11 +378,11 @@ function createDischargeDisplay(site, data) {
     chart_wy.on('draw', function(context) {
         //console.log(Chartist.getMultiValue(context.value));
         if(context.type === 'line' || context.type === 'point') {
-            if(context.series.name == getWaterYear(moment())) {
-                context.element.attr({style: 'stroke: ' + highlightColor});
-            } else {
-                context.element.attr({style: 'stroke: ' + backgroundColor});
-            }
+            //if(context.series.name == getWaterYear(moment())) {
+            //    context.element.attr({style: 'stroke: ' + highlightColor});
+            //} else {
+            //    context.element.attr({style: 'stroke: ' + backgroundColor});
+            //}
         }
     });
     
@@ -514,32 +514,54 @@ function createRainDisplay(site, data) {
     
     chart_wy.on('draw', function(context) {
         //console.log(Chartist.getMultiValue(context.value));
-        if(context.type === 'line' || context.type === 'point') {
-            if(context.series.name == getWaterYear(moment())) {
-                context.element.attr({style: 'stroke: ' + highlightColor});
-            } else {
-                context.element.attr({style: 'stroke: ' + backgroundColor});
-            }
-        }
+        //if(context.type === 'line' || context.type === 'point') {
+        //    if(context.series.name == getWaterYear(moment())) {
+        //        context.element.attr({style: 'stroke: ' + highlightColor});
+        //    } else {
+        //        context.element.attr({style: 'stroke: ' + backgroundColor});
+        //    }
+        //}
     });
     addMouseInteraction(chart_long, 'ct-bar');
 }
 
+// When you mouseover a point (not a line) in the long data chart,
+//   the point will light up, data will display above the graph, and
+//   the point will get larger.  Same for bars.
 function addMouseInteraction(chart_long, el_type) {
     // el_type should be either 'ct-point' or 'ct-bar'
     chart_long.on('created', function(context) {
         var el_point = document.getElementById('daily-long-chart').getElementsByClassName(el_type);
         var el_datadisplay = document.getElementById('mouseover-data');
+        
         for(i=0; i<el_point.length; i++) {
             el_point[i].addEventListener('mouseover', function() {
+                // Update the text
                 var pointval = this.getAttribute('ct:value').split(',');
-                //console.log(moment(Number(pointval[0])).format('Y-MM-DD') + " - " + pointval[1]);
-                el_datadisplay.innerHTML = pointval[1] + " on " + moment(Number(pointval[0])).format('Y-MM-DD');
+                var sel_dt = moment(Number(pointval[0]))
+                el_datadisplay.innerHTML = pointval[1] + " on " + sel_dt.format('Y-MM-DD');
+                
+                // Update the display
                 if (el_type == 'ct-point') {
                     this.setAttribute('style', 'stroke: #cb181d; stroke-width: 10px;');
                 } else if (el_type == 'ct-bar') {
                     this.setAttribute('style', 'stroke: #cb181d; stroke-width: 5px;');
                 }
+                
+                // Select the water year in the other chart
+                var sel_wy = getWaterYear(sel_dt)
+                
+                // Reorder the water year series so the selected water year is on top
+                var el_wy_series_container = document.querySelectorAll('#daily-wateryear-chart svg g')[1]
+                var el_wy_series_all = document.querySelectorAll('#daily-wateryear-chart svg [*|series-name]')
+                var el_wy_series_sel = document.querySelector('#daily-wateryear-chart svg [*|series-name="' + sel_wy + '"]')
+                
+                for(j=0; j<el_wy_series_all.length; j++) {
+                    el_wy_series_all[j].classList.remove('selected');
+                }
+                
+                el_wy_series_sel.classList.toggle('selected');
+                el_wy_series_container.appendChild(el_wy_series_sel);
             });
             
             el_point[i].addEventListener('mouseout', function() {

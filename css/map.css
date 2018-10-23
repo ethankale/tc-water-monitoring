@@ -23,3 +23,11 @@
     stroke-width: 1px;
     stroke: #525252;
 }
+
+#daily-wateryear-chart g.ct-series .ct-point, g.ct-series .ct-line {
+    stroke: #cccccc;
+}
+
+#daily-wateryear-chart g.selected .ct-point, g.selected .ct-line {
+    stroke: #525252;
+}

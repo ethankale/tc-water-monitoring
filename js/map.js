@@ -282,13 +282,17 @@ function loadData(gid) {
     var site = _.filter(sites, {"G_ID" : gid})[0];
     
     var el_title = document.getElementById("gauge-name");
+    var el_code = document.getElementById("gauge-code");
     el_title.innerHTML = "Loading...";
+    el_code.innerHTML = "..."
     
     // Probably would be good to get a gif of a spinner for this.
     var el_chart_long = document.getElementById("daily-long-chart");
     var el_chart_wy = document.getElementById("daily-wateryear-chart");
+    var el_footer = document.getElementById("chart-footer");
     el_chart_long.innerHTML = ""
     el_chart_wy.innerHTML = "";
+    el_footer.innerHTML = "";
     
     
     Papa.parse("./data/g_id-" + gid + ".csv", {
@@ -306,15 +310,12 @@ function loadData(gid) {
             //updateMapSites(sites);
             console.log("Graphing data loaded. " + graph_data.length + " data points found.");
             
-            var el_title = document.getElementById("gauge-name");
-            var el_code = document.getElementById("gauge-code");
             el_title.innerHTML = site.SITE_NAME + " (" + site.SITE_CODE + ")";
             el_code.innerHTML = site.SITE_CODE;
-            
+            el_footer.innerHTML = "<a href='" + "./data/g_id-" + gid + ".csv'>Download CSV</a>"
             
             if (site.type == "Flow" || site.type == "Lake") {
                 createDischargeDisplay(site, graph_data);
-                
             } else if (site.type == "Well") {
                 createGroundwaterDisplay(site, graph_data);
             } else if (site.type == "Rain") {
@@ -323,6 +324,9 @@ function loadData(gid) {
         }
     })
 }
+
+var highlightColor = '#525252'
+var backgroundColor = '#cccccc'
 
 function createDischargeDisplay(site, data) {
     var wy_series = _.reduce(data, function(result, value, key) {
@@ -375,12 +379,15 @@ function createDischargeDisplay(site, data) {
         //console.log(Chartist.getMultiValue(context.value));
         if(context.type === 'line' || context.type === 'point') {
             if(context.series.name == getWaterYear(moment())) {
-                context.element.attr({style: 'stroke: #525252'});
+                context.element.attr({style: 'stroke: ' + highlightColor});
             } else {
-                context.element.attr({style: 'stroke: #cccccc'});
+                context.element.attr({style: 'stroke: ' + backgroundColor});
             }
         }
     });
+    
+    addMouseInteraction(chart_long, 'ct-point');
+    
 }
 
 
@@ -416,6 +423,10 @@ function createGroundwaterDisplay(site, data) {
         labelInterpolationFnc: function(value) {
           return moment(value).format('MMM');
         }
+      },
+      axisY: {
+          type: Chartist.AutoScaleAxis,
+          high: site.Elevation
       }
     }
     var options_long = {
@@ -426,6 +437,10 @@ function createGroundwaterDisplay(site, data) {
         labelInterpolationFnc: function(value) {
           return moment(value).format('MMM YYYY ');
         }
+      },
+      axisY: {
+          type: Chartist.AutoScaleAxis,
+          high: site.Elevation
       }
     }
     var chart_long = new Chartist.Line('#daily-long-chart', long_data, options_long);
@@ -435,19 +450,20 @@ function createGroundwaterDisplay(site, data) {
         //console.log(Chartist.getMultiValue(context.value));
         if(context.type === 'line' || context.type === 'point') {
             if(context.series.name == getWaterYear(moment())) {
-                context.element.attr({style: 'stroke: #525252'});
+                context.element.attr({style: 'stroke: ' + highlightColor});
             } else {
-                context.element.attr({style: 'stroke: #cccccc'});
+                context.element.attr({style: 'stroke: ' + backgroundColor});
             }
         }
     });
+    
+    addMouseInteraction(chart_long, 'ct-point');
+    
 }
 
 
-var wy_series = [];
-
 function createRainDisplay(site, data) {
-    wy_series = _.reduce(data, function(result, value, key) {
+    var wy_series = _.reduce(data, function(result, value, key) {
           var i = _.findIndex(result, {"name": value.wy})
           if (i == -1) {
               result.push({"name": value.wy, "data":[]});
@@ -500,10 +516,40 @@ function createRainDisplay(site, data) {
         //console.log(Chartist.getMultiValue(context.value));
         if(context.type === 'line' || context.type === 'point' || context.type === 'bar') {
             if(context.series.name == getWaterYear(moment())) {
-                context.element.attr({style: 'stroke: #525252'});
+                context.element.attr({style: 'stroke: ' + highlightColor});
             } else {
-                context.element.attr({style: 'stroke: #cccccc'});
+                context.element.attr({style: 'stroke: ' + backgroundColor});
             }
+        }
+    });
+    addMouseInteraction(chart_long, 'ct-bar');
+}
+
+function addMouseInteraction(chart_long, el_type) {
+    // el_type should be either 'ct-point' or 'ct-bar'
+    chart_long.on('created', function(context) {
+        var el_point = document.getElementById('daily-long-chart').getElementsByClassName(el_type);
+        var el_datadisplay = document.getElementById('mouseover-data');
+        for(i=0; i<el_point.length; i++) {
+            el_point[i].addEventListener('mouseover', function() {
+                var pointval = this.getAttribute('ct:value').split(',');
+                //console.log(moment(Number(pointval[0])).format('Y-MM-DD') + " - " + pointval[1]);
+                el_datadisplay.innerHTML = pointval[1] + " on " + moment(Number(pointval[0])).format('Y-MM-DD');
+                if (el_type == 'ct-point') {
+                    this.setAttribute('style', 'stroke: #cb181d; stroke-width: 10px;');
+                } else if (el_type == 'ct-bar') {
+                    this.setAttribute('style', 'stroke: #cb181d; stroke-width: 5px;');
+                }
+            });
+            
+            el_point[i].addEventListener('mouseout', function() {
+                el_datadisplay.innerHTML = "&nbsp;";
+                if (el_type == 'ct-point') {
+                    this.setAttribute('style', 'stroke: ' + highlightColor + '; stroke-width: 5px;');
+                } else if (el_type == 'ct-bar') {
+                    this.setAttribute('style', 'stroke: ' + highlightColor + '; stroke-width: 1px;');
+                }
+            });
         }
     });
 }

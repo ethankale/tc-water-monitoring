@@ -375,16 +375,16 @@ function createDischargeDisplay(site, data) {
     var chart_long = new Chartist.Line('#daily-long-chart', long_data, options_long);
     var chart_wy = new Chartist.Line('#daily-wateryear-chart', wateryear_data, options_wateryear);
     
-    chart_wy.on('draw', function(context) {
-        //console.log(Chartist.getMultiValue(context.value));
-        if(context.type === 'line' || context.type === 'point') {
-            //if(context.series.name == getWaterYear(moment())) {
-            //    context.element.attr({style: 'stroke: ' + highlightColor});
-            //} else {
-            //    context.element.attr({style: 'stroke: ' + backgroundColor});
-            //}
-        }
-    });
+    //chart_wy.on('draw', function(context) {
+    //    console.log(Chartist.getMultiValue(context.value));
+    //    if(context.type === 'line' || context.type === 'point') {
+    //        if(context.series.name == getWaterYear(moment())) {
+    //           context.element.attr({style: 'stroke: ' + highlightColor});
+    //        } else {
+    //           context.element.attr({style: 'stroke: ' + backgroundColor});
+    //        }
+    //    }
+    //});
     
     addMouseInteraction(chart_long, 'ct-point');
     
@@ -446,16 +446,16 @@ function createGroundwaterDisplay(site, data) {
     var chart_long = new Chartist.Line('#daily-long-chart', long_data, options_long);
     var chart_wy = new Chartist.Line('#daily-wateryear-chart', wateryear_data, options_wateryear);
     
-    chart_wy.on('draw', function(context) {
-        //console.log(Chartist.getMultiValue(context.value));
-        if(context.type === 'line' || context.type === 'point') {
-            if(context.series.name == getWaterYear(moment())) {
-                context.element.attr({style: 'stroke: ' + highlightColor});
-            } else {
-                context.element.attr({style: 'stroke: ' + backgroundColor});
-            }
-        }
-    });
+    //chart_wy.on('draw', function(context) {
+    //    //console.log(Chartist.getMultiValue(context.value));
+    //    if(context.type === 'line' || context.type === 'point') {
+    //        if(context.series.name == getWaterYear(moment())) {
+    //            context.element.attr({style: 'stroke: ' + highlightColor});
+    //        } else {
+    //            context.element.attr({style: 'stroke: ' + backgroundColor});
+    //        }
+    //    }
+    //});
     
     addMouseInteraction(chart_long, 'ct-point');
     
@@ -512,7 +512,7 @@ function createRainDisplay(site, data) {
     var chart_long = new Chartist.Bar('#daily-long-chart', long_data, options_long);
     var chart_wy = new Chartist.Line('#daily-wateryear-chart', wateryear_data, options_wateryear);
     
-    chart_wy.on('draw', function(context) {
+    //chart_wy.on('draw', function(context) {
         //console.log(Chartist.getMultiValue(context.value));
         //if(context.type === 'line' || context.type === 'point') {
         //    if(context.series.name == getWaterYear(moment())) {
@@ -521,7 +521,7 @@ function createRainDisplay(site, data) {
         //        context.element.attr({style: 'stroke: ' + backgroundColor});
         //    }
         //}
-    });
+    //});
     addMouseInteraction(chart_long, 'ct-bar');
 }
 

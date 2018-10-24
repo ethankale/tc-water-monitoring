@@ -314,12 +314,29 @@ function loadData(gid) {
             el_code.innerHTML = site.SITE_CODE;
             el_footer.innerHTML = "<a href='" + "./data/g_id-" + gid + ".csv'>Download CSV</a>"
             
+            var mobile_overrides = [
+            ['screen and (max-width: 768px)', {
+                axisY: {
+                    offset: 20
+                },
+                axisX: {
+                    offset: 20
+                },
+                chartPadding: {
+                    top: 10,
+                    right: 0,
+                    bottom: 0,
+                    left: 3
+                }
+            }]
+            ]
+            
             if (site.type == "Flow" || site.type == "Lake") {
-                createDischargeDisplay(site, graph_data);
+                createDischargeDisplay(site, graph_data, mobile_overrides);
             } else if (site.type == "Well") {
-                createGroundwaterDisplay(site, graph_data);
+                createGroundwaterDisplay(site, graph_data, mobile_overrides);
             } else if (site.type == "Rain") {
-                createRainDisplay(site, graph_data);
+                createRainDisplay(site, graph_data, mobile_overrides);
             };
         }
     })
@@ -328,7 +345,7 @@ function loadData(gid) {
 var highlightColor = '#525252'
 var backgroundColor = '#cccccc'
 
-function createDischargeDisplay(site, data) {
+function createDischargeDisplay(site, data, mobile_overrides) {
     var wy_series = _.reduce(data, function(result, value, key) {
           var i = _.findIndex(result, {"name": value.wy})
           if (i == -1) {
@@ -372,8 +389,9 @@ function createDischargeDisplay(site, data) {
         }
       }
     }
-    var chart_long = new Chartist.Line('#daily-long-chart', long_data, options_long);
-    var chart_wy = new Chartist.Line('#daily-wateryear-chart', wateryear_data, options_wateryear);
+
+    var chart_long = new Chartist.Line('#daily-long-chart', long_data, options_long, mobile_overrides);
+    var chart_wy = new Chartist.Line('#daily-wateryear-chart', wateryear_data, options_wateryear, mobile_overrides);
     
     //chart_wy.on('draw', function(context) {
     //    console.log(Chartist.getMultiValue(context.value));
@@ -391,7 +409,7 @@ function createDischargeDisplay(site, data) {
 }
 
 
-function createGroundwaterDisplay(site, data) {
+function createGroundwaterDisplay(site, data, mobile_overrides) {
     var wy_series = _.reduce(data, function(result, value, key) {
           var i = _.findIndex(result, {"name": value.wy})
           if (i == -1) {
@@ -443,8 +461,9 @@ function createGroundwaterDisplay(site, data) {
           high: site.Elevation
       }
     }
-    var chart_long = new Chartist.Line('#daily-long-chart', long_data, options_long);
-    var chart_wy = new Chartist.Line('#daily-wateryear-chart', wateryear_data, options_wateryear);
+    
+    var chart_long = new Chartist.Line('#daily-long-chart', long_data, options_long, mobile_overrides);
+    var chart_wy = new Chartist.Line('#daily-wateryear-chart', wateryear_data, options_wateryear, mobile_overrides);
     
     //chart_wy.on('draw', function(context) {
     //    //console.log(Chartist.getMultiValue(context.value));
@@ -462,7 +481,7 @@ function createGroundwaterDisplay(site, data) {
 }
 
 
-function createRainDisplay(site, data) {
+function createRainDisplay(site, data, mobile_overrides) {
     var wy_series = _.reduce(data, function(result, value, key) {
           var i = _.findIndex(result, {"name": value.wy})
           if (i == -1) {
@@ -509,8 +528,8 @@ function createRainDisplay(site, data) {
         }
       }
     }
-    var chart_long = new Chartist.Bar('#daily-long-chart', long_data, options_long);
-    var chart_wy = new Chartist.Line('#daily-wateryear-chart', wateryear_data, options_wateryear);
+    var chart_long = new Chartist.Bar('#daily-long-chart', long_data, options_long, mobile_overrides);
+    var chart_wy = new Chartist.Line('#daily-wateryear-chart', wateryear_data, options_wateryear, mobile_overrides);
     
     //chart_wy.on('draw', function(context) {
         //console.log(Chartist.getMultiValue(context.value));
@@ -542,11 +561,12 @@ function addMouseInteraction(chart_long, el_type) {
                 el_datadisplay.innerHTML = pointval[1] + " on " + sel_dt.format('Y-MM-DD');
                 
                 // Update the display
-                if (el_type == 'ct-point') {
-                    this.setAttribute('style', 'stroke: #cb181d; stroke-width: 10px;');
-                } else if (el_type == 'ct-bar') {
-                    this.setAttribute('style', 'stroke: #cb181d; stroke-width: 5px;');
-                }
+                //if (el_type == 'ct-point') {
+                    this.classList.add('hover');
+                    //this.setAttribute('style', 'stroke: #cb181d; stroke-width: 10px;');
+                //} else if (el_type == 'ct-bar') {
+                    //this.setAttribute('style', 'stroke: #cb181d; stroke-width: 5px;');
+                //}
                 
                 // Select the water year in the other chart
                 var sel_wy = getWaterYear(sel_dt)
@@ -556,21 +576,26 @@ function addMouseInteraction(chart_long, el_type) {
                 var el_wy_series_all = document.querySelectorAll('#daily-wateryear-chart svg [*|series-name]')
                 var el_wy_series_sel = document.querySelector('#daily-wateryear-chart svg [*|series-name="' + sel_wy + '"]')
                 
+                // Select the correct water year
                 for(j=0; j<el_wy_series_all.length; j++) {
                     el_wy_series_all[j].classList.remove('selected');
                 }
                 
                 el_wy_series_sel.classList.toggle('selected');
                 el_wy_series_container.appendChild(el_wy_series_sel);
+                
+                document.getElementById('wy-title').innerHTML = "Water Year " + sel_wy;
+                
             });
             
             el_point[i].addEventListener('mouseout', function() {
                 el_datadisplay.innerHTML = "&nbsp;";
-                if (el_type == 'ct-point') {
-                    this.setAttribute('style', 'stroke: ' + highlightColor + '; stroke-width: 5px;');
-                } else if (el_type == 'ct-bar') {
-                    this.setAttribute('style', 'stroke: ' + highlightColor + '; stroke-width: 1px;');
-                }
+                //if (el_type == 'ct-point') {
+                    this.classList.remove('hover');
+                    //this.setAttribute('style', 'stroke: ' + highlightColor + '; stroke-width: 5px;');
+                //} else if (el_type == 'ct-bar') {
+                //    this.setAttribute('style', 'stroke: ' + highlightColor + '; stroke-width: 1px;');
+                //}
             });
         }
     });

@@ -7,8 +7,16 @@
     stroke-width: 2px;
 }
 
-.ct-point {
-    stroke-width: 5px;
+@media screen and (min-width: 769px) {
+    .ct-point {
+        stroke-width: 5px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .ct-point {
+        stroke-width: 2px;
+    }
 }
 
 #daily-long-chart .ct-line {
@@ -19,9 +27,19 @@
     stroke: #525252;
 }
 
+#daily-long-chart .ct-point.hover {
+    stroke: #cb181d; 
+    stroke-width: 10px;
+}
+
 #daily-long-chart .ct-bar {
     stroke-width: 1px;
     stroke: #525252;
+}
+
+#daily-long-chart .ct-bar.hover {
+    stroke: #cb181d; 
+    stroke-width: 5px;
 }
 
 #daily-wateryear-chart g.ct-series .ct-point, g.ct-series .ct-line {
@@ -31,3 +49,4 @@
 #daily-wateryear-chart g.selected .ct-point, g.selected .ct-line {
     stroke: #525252;
 }
+

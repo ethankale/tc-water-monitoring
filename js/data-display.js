@@ -206,9 +206,14 @@ function createGroundwaterDisplay(site, data, mobile_overrides, type="Level") {
     
 }
 
-
 function createRainDisplay(site, data, mobile_overrides, type="Rainfall") {
-    var wy_series = _.reduce(data, function(result, value, key) {
+    
+    var column = "val"
+    var wy_series = []
+    if (type == "Rainfall") {
+        column = "val"
+        // Create a series of cumulative rainfall data to chart in Chartist
+        wy_series = _.reduce(data, function(result, value, key) {
           var i = _.findIndex(result, {"name": value.wy})
           if (i == -1) {
               result.push({"name": value.wy, "data":[]});
@@ -218,12 +223,25 @@ function createRainDisplay(site, data, mobile_overrides, type="Rainfall") {
           var lastVal = wyLen > 0 ? result[i].data[wyLen-1].y : 0;
           result[i].data.push({x:value.graph_dt, y:(value.val+lastVal)});
           return result;
-      }, []);
-      
+        }, []);
+    } else if (type == "Temperature") {
+        column = "temp_c"
+        // Create a simple series of temperature data, like the other chart functions
+        wy_series = _.reduce(data, function(result, value, key) {
+          var i = _.findIndex(result, {"name": value.wy})
+          if (i == -1) {
+              result.push({"name": value.wy, "data":[]});
+              i = _.findIndex(result, {"name": value.wy});
+          }
+          result[i].data.push({x:value.graph_dt, y:value[column]});
+          return result;
+        }, []);
+    }
+    
     var wateryear_data = {
       series: wy_series
     };
-    var chart_long_data = _.map(data, function(d) { return {'x': d.dt, 'y':d.val} } );
+    var chart_long_data = _.map(data, function(d) { return {'x': d.dt, 'y':d[column]} } );
     var long_data = {
       series: [
         {
@@ -252,10 +270,18 @@ function createRainDisplay(site, data, mobile_overrides, type="Rainfall") {
         }
       }
     }
-    var chart_long = new Chartist.Bar('#daily-long-chart', long_data, options_long, mobile_overrides);
+    
     var chart_wy = new Chartist.Line('#daily-wateryear-chart', wateryear_data, options_wateryear, mobile_overrides);
     
-    addMouseInteraction(chart_long, 'ct-bar');
+    var chart_long = {};
+    if (type == "Rainfall") {
+        chart_long = new Chartist.Bar('#daily-long-chart', long_data, options_long, mobile_overrides);
+        addMouseInteraction(chart_long, 'ct-bar');
+    } else if (type == "Temperature") {
+        chart_long = new Chartist.Line('#daily-long-chart', long_data, options_long, mobile_overrides);
+        addMouseInteraction(chart_long, 'ct-point');
+    }
+    
 }
 
 // When you mouseover a point (not a line) in the long data chart,
@@ -273,7 +299,7 @@ function addMouseInteraction(chart_long, el_type) {
                 // Update the text
                 var pointval = this.getAttribute('ct:value').split(',');
                 var sel_dt = moment(Number(pointval[0]))
-                el_datadisplay.innerHTML = pointval[1] + " on " + sel_dt.format('Y-MM-DD');
+                el_datadisplay.innerHTML = Number.parseFloat(pointval[1]).toPrecision(3) + " on " + sel_dt.format('Y-MM-DD');
                 
                 this.classList.add('hover');
                 

@@ -314,7 +314,7 @@ function loadData(gid) {
             graph_data = results.data;
             graph_data.forEach(function(d) {
                 d.val = +d.val;
-                d.temp_c = +d.temp_c;
+                d.temp_c = d.temp_c == "" ? null : ((+d.temp_c * (5/9) + 32));
                 d.dt = moment(d.day , 'YYYY-MM-DD HH:mm:ss', true);
                 d.wy = getWaterYear(d.dt);
                 d.graph_dt = d.dt.clone().add(getWaterYear(moment())-d.wy, 'year');

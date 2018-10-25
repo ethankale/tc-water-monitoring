@@ -131,13 +131,22 @@ function createDischargeDisplay(site, data, mobile_overrides, type="Stage") {
 
 function createGroundwaterDisplay(site, data, mobile_overrides, type="Level") {
     
+    // Parameter-specific vars; defaults are for param=="Level"
     var column = "val"
+    var x_max = site.Elevation
+    
     if (type == "Level") {
         column = "val"
+        x_max = site.Elevation
     } else if (type == "Temperature") {
         column = "temp_c"
+        x_max = String(_.maxBy(graph_data, "temp_c").temp_c)
     }
     
+    console.log(x_max);
+    
+    
+    // Reorganize the data into a format that Chartist can take
     var wy_series = _.reduce(data, function(result, value, key) {
           var i = _.findIndex(result, {"name": value.wy})
           if (i == -1) {
@@ -146,8 +155,8 @@ function createGroundwaterDisplay(site, data, mobile_overrides, type="Level") {
           }
           result[i].data.push({x:value.graph_dt, y:value[column]});
           return result;
-      }, []);
-      
+    }, []);
+    
     var wateryear_data = {
       series: wy_series
     };
@@ -160,6 +169,8 @@ function createGroundwaterDisplay(site, data, mobile_overrides, type="Level") {
         }
       ]
     };
+    
+    // Chartist display options
     var options_wateryear = {
       axisX: {
         type: Chartist.FixedScaleAxis,
@@ -170,8 +181,7 @@ function createGroundwaterDisplay(site, data, mobile_overrides, type="Level") {
       },
       axisY: {
           type: Chartist.AutoScaleAxis,
-          // Will have to redo this; doesn't work with more than two params
-          high: type == "Level" ? site.Elevation : _.maxBy(graph_data, "temp_c").temp_c
+          high: x_max
       }
     }
     var options_long = {
@@ -185,7 +195,7 @@ function createGroundwaterDisplay(site, data, mobile_overrides, type="Level") {
       },
       axisY: {
           type: Chartist.AutoScaleAxis,
-          high: site.Elevation
+          high: x_max
       }
     }
     

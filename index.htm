@@ -11,6 +11,9 @@
 
 <link rel="canonical" href="http://www.thurstoncountywa.gov/sw/Pages/monitoring-dashboard.aspx">
 
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" 
+    integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" 
+    crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/leaflet.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.11.0/chartist.min.css" />
@@ -19,8 +22,6 @@
 </head>
 
 <body>
-
-
 
   <section class="section">
   
@@ -49,10 +50,56 @@
                 </div>
               </div>
           </div>
+          <div class="tabs is-centered">
+            <ul>
+              <li class="is-active"><a id="summary-tab">
+                <span class="icon is-small"><i class="fas fa-table"></i></span>
+                <span>Summary</span>
+              </a></li>
+              <li><a id="graph-tab">
+                <span class="icon is-small"><i class="fas fa-chart-line"></i></span>
+                <span>Graphs</span>
+              </a></li>
+            </ul>
+          </div>
+
+          <div id="chart-container" class="is-hidden">
+              <div class="ct-chart ct-double-octave" id="daily-long-chart"></div>
+              <p id="wy-title">&nbsp;</p>
+              <div class="ct-chart ct-major-twelfth" id="daily-wateryear-chart"></div>
+          </div>
           
-          <div class="ct-chart ct-double-octave" id="daily-long-chart"></div>
-          <p id="wy-title">&nbsp;</p>
-          <div class="ct-chart ct-major-twelfth" id="daily-wateryear-chart"></div>
+          <div id="summary-container" class="tile is-ancestor is-vertical has-text-centered">
+            <div class="tile">
+              <div class="tile is-parent">
+                <div id="tile1" class="tile is-child notification is-info">
+                  <p class="title summary-info">Tile 1</p>
+                  <p class="summary-details">Some info about this tile.</p>
+                </div>
+              </div>
+              <div class="tile is-parent">
+                <div id="tile2" class="tile is-child notification is-info">
+                  <p class="title summary-info">Tile 2</p>
+                  <p class="summary-details">Some info about this tile.</p>
+                </div>
+              </div>
+            </div>
+            <div class="tile">
+              <div class="tile is-parent">
+                <div id="tile3" class="tile is-child notification is-info">
+                  <p class="title summary-info">Tile 3</p>
+                  <p class="summary-details">Some info about this tile.</p>
+                </div>
+              </div>
+              <div class="tile is-parent">
+                <div id="tile4" class="tile is-child notification is-info">
+                  <p class="title summary-info">Tile 4</p>
+                  <p class="summary-details">Some info about this tile.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
         </section>
         <footer class="modal-card-foot">
           <p id="chart-footer"></p>
@@ -71,7 +118,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.11.0/chartist.min.js"></script>
     <script src="./js/map.js"></script>
-    <script src="./js/data-display.js"></script>
+    <script src="./js/data-graph.js"></script>
     <!--<script src="./js/all.js"></script>
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.6.1/iframeResizer.contentWindow.min.js"></script>-->
     

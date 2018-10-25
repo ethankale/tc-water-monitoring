@@ -1,9 +1,22 @@
 
+
+
+/*****************************
+Globals
+*****************************/
+
+// For event listeners section
+var tabs = ["summary-tab", "graph-tab"]
+
+// For graphing section
+var highlightColor = '#525252'
+var backgroundColor = '#cccccc'
+
 /*****************************
 Bind event listeners
 *****************************/
 
-// Add a listener for select change
+// Add a listener for parameter select change
 document.getElementById("param-select").addEventListener('change', function() {
     //console.log(this.options[this.selectedIndex]);
     var gid = document.getElementById("gid").innerHTML
@@ -23,6 +36,30 @@ document.getElementById("param-select").addEventListener('change', function() {
     };
 });
 
+// Add listeners for the tabs
+for (var i=0; i<tabs.length; i++) {
+    document.getElementById(tabs[i]).addEventListener('click', function() {
+        if (!this.parentElement.classList.contains('is-active')) {
+            switchTab(this);
+        }
+    });
+}
+
+function switchTab(clicked_element) {
+    document.getElementById("summary-container").classList.toggle('is-hidden');
+    document.getElementById("chart-container").classList.toggle('is-hidden');
+    for (var i=0; i<tabs.length; i++) {
+        var t = document.getElementById(tabs[i]);
+        t.parentElement.classList.toggle('is-active');
+        // You have to update the graphs when you switch to then, because
+        //   if they were originally drawn in a hidden container, their dimensions
+        //   will be all wrong.
+        if (tabs[i] == "graph-tab") {
+            var charts = document.querySelectorAll('#chart-container .ct-chart')
+            charts.forEach( function(e) { e.__chartist__.update(); });
+        };
+    };
+}
 
 /*****************************
 Generic functions
@@ -52,14 +89,6 @@ function getLongDateAxisTicks(data) {
     var maxDT = _.maxBy(data, 'dt').dt
     return maxDT.diff(minDT, 'years');
 }
-
-
-/*****************************
-Globals
-*****************************/
-
-var highlightColor = '#525252'
-var backgroundColor = '#cccccc'
 
 /*****************************
 Display Functions

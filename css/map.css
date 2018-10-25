@@ -7,6 +7,12 @@
     stroke-width: 2px;
 }
 
+@media screen and (max-width: 768px) {
+    .ct-line {
+        stroke-width: 1px;
+    }
+}
+
 @media screen and (min-width: 769px) {
     .ct-point {
         stroke-width: 5px;

@@ -35,7 +35,21 @@
           <button class="delete" id="close-modal" aria-label="close"></button>
         </header>
         <section class="modal-card-body">
-          <p id="mouseover-data">&nbsp;</p>
+          <p id="gid" class="is-hidden"></p>
+          <div class="level">
+              <div class="level-right">
+                <p id="mouseover-data">&nbsp;</p>
+              </div>
+              <div class="field level-right">
+                <!--<label class="label">Subject</label>-->
+                <div class="control">
+                  <div class="select">
+                    <select id="param-select"><option>Stage</option><option>Temperature</level></select>
+                  </div>
+                </div>
+              </div>
+          </div>
+          
           <div class="ct-chart ct-double-octave" id="daily-long-chart"></div>
           <p id="wy-title">&nbsp;</p>
           <div class="ct-chart ct-major-twelfth" id="daily-wateryear-chart"></div>
@@ -57,6 +71,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.11.0/chartist.min.js"></script>
     <script src="./js/map.js"></script>
+    <script src="./js/data-display.js"></script>
     <!--<script src="./js/all.js"></script>
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.6.1/iframeResizer.contentWindow.min.js"></script>-->
     

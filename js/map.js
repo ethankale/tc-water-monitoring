@@ -22,31 +22,6 @@ function getWaterYear(dt) {
     return (mon > 8 ? year+1 : year);
 }
 
-function getWYDateAxisTicks(dt) {
-    // dt is a moment.js object.
-    // Returns an array of 6 moment.js objects, the first of the month for each year.
-    var mon = dt.month();
-    var firstOfWY = moment();
-    if (mon > 8) {
-        firstOfWY = moment({year:dt.year(), month:9, day:1})
-    } else {
-        firstOfWY = moment({year:dt.year()-1, month:9, day:1})
-    }
-    var ticks = [];
-    var i = 0;
-    while (i < 12) {
-        ticks.push(moment(firstOfWY).add(i, 'months'));
-        i += 2;
-    }
-    return ticks;
-}
-
-function getLongDateAxisTicks(data) {
-    var minDT = _.minBy(data, 'dt').dt
-    var maxDT = _.maxBy(data, 'dt').dt
-    return maxDT.diff(minDT, 'years');
-}
-
 /***********************************************
 
 Mapping Functions
@@ -58,7 +33,7 @@ var sites = {};
 var graph_data = {};
 
 var sitemap = L.map("gaugemap", {
-    center: [47.04, -122.9],
+    center: [46.97, -122.9],
     zoom: 10,
     scrollWheelZoom: true,
     dragging: true
@@ -262,6 +237,7 @@ function toggleModal() {
 function onMarkerClick(e) {
     //console.log("GID is " + e.target.g_id);
     toggleModal();
+    document.getElementById("gid").innerHTML = e.target.g_id;
     loadData(e.target.g_id);
 }
 
@@ -277,6 +253,24 @@ Modal Functions
 
 ***********************************************/
 
+var mobile_overrides = [
+['screen and (max-width: 768px)', {
+    axisY: {
+        offset: 20
+    },
+    axisX: {
+        offset: 20
+    },
+    chartPadding: {
+        top: 10,
+        right: 0,
+        bottom: 0,
+        left: 3
+    }
+}]
+]
+
+
 function loadData(gid) {
     //console.log("GID is " + gid)
     var site = _.filter(sites, {"G_ID" : gid})[0];
@@ -287,6 +281,7 @@ function loadData(gid) {
     el_code.innerHTML = "..."
     
     // Probably would be good to get a gif of a spinner for this.
+    // Bulma has a built in loading class?
     var el_chart_long = document.getElementById("daily-long-chart");
     var el_chart_wy = document.getElementById("daily-wateryear-chart");
     var el_footer = document.getElementById("chart-footer");
@@ -294,7 +289,24 @@ function loadData(gid) {
     el_chart_wy.innerHTML = "";
     el_footer.innerHTML = "";
     
+    // Find the right parameter to display
+    var param_select = document.getElementById('param-select');
+    var param_options = "";
+    if ((site.type == "Flow") || (site.type == "Lake")) {
+        param_options = "<option>Stage</option><option>Temperature</level>"
+    } else if (site.type == "Well") {
+        param_options = "<option>Level</option><option>Temperature</level>"
+    } else if (site.type == "Rain") {
+        param_options = "<option>Rainfall</option><option>Temperature</level>"
+    }
     
+    if (param_select.innerHTML != param_options) {
+        param_select.innerHTML = param_options;
+    }
+    
+    var param = param_select.options[param_select.selectedIndex].innerHTML;
+    
+    // Load data from CSV
     Papa.parse("./data/g_id-" + gid + ".csv", {
         download: true,
         header: true,
@@ -314,289 +326,16 @@ function loadData(gid) {
             el_code.innerHTML = site.SITE_CODE;
             el_footer.innerHTML = "<a href='" + "./data/g_id-" + gid + ".csv'>Download CSV</a>"
             
-            var mobile_overrides = [
-            ['screen and (max-width: 768px)', {
-                axisY: {
-                    offset: 20
-                },
-                axisX: {
-                    offset: 20
-                },
-                chartPadding: {
-                    top: 10,
-                    right: 0,
-                    bottom: 0,
-                    left: 3
-                }
-            }]
-            ]
+
             
             if (site.type == "Flow" || site.type == "Lake") {
-                createDischargeDisplay(site, graph_data, mobile_overrides);
+                createDischargeDisplay(site, graph_data, mobile_overrides, param);
             } else if (site.type == "Well") {
-                createGroundwaterDisplay(site, graph_data, mobile_overrides);
+                createGroundwaterDisplay(site, graph_data, mobile_overrides, param);
             } else if (site.type == "Rain") {
-                createRainDisplay(site, graph_data, mobile_overrides);
+                createRainDisplay(site, graph_data, mobile_overrides, param);
             };
         }
     })
 }
 
-var highlightColor = '#525252'
-var backgroundColor = '#cccccc'
-
-function createDischargeDisplay(site, data, mobile_overrides) {
-    var wy_series = _.reduce(data, function(result, value, key) {
-          var i = _.findIndex(result, {"name": value.wy})
-          if (i == -1) {
-              result.push({"name": value.wy, "data":[]});
-              i = _.findIndex(result, {"name": value.wy});
-          }
-          result[i].data.push({x:value.graph_dt, y:value.val});
-          return result;
-      }, []);
-      
-    var wateryear_data = {
-      series: wy_series
-    };
-    var chart_long_data = _.map(data, function(d) { return {'x': d.dt, 'y':d.val} } );
-    var long_data = {
-      // A labels array that can contain any sort of values
-      // Our series array that contains series objects or in this case series data arrays
-      series: [
-        {
-          name: 'Discharge',
-          data: chart_long_data
-        }
-      ]
-    };
-    var options_wateryear = {
-      axisX: {
-        type: Chartist.FixedScaleAxis,
-        ticks: getWYDateAxisTicks(moment()),
-        labelInterpolationFnc: function(value) {
-          return moment(value).format('MMM');
-        }
-      }
-    }
-    var options_long = {
-      axisX: {
-        type: Chartist.FixedScaleAxis,
-        divisor: 4,
-        //divisor: getLongDateAxisTicks(data),
-        labelInterpolationFnc: function(value) {
-          return moment(value).format('MMM YYYY ');
-        }
-      }
-    }
-
-    var chart_long = new Chartist.Line('#daily-long-chart', long_data, options_long, mobile_overrides);
-    var chart_wy = new Chartist.Line('#daily-wateryear-chart', wateryear_data, options_wateryear, mobile_overrides);
-    
-    //chart_wy.on('draw', function(context) {
-    //    console.log(Chartist.getMultiValue(context.value));
-    //    if(context.type === 'line' || context.type === 'point') {
-    //        if(context.series.name == getWaterYear(moment())) {
-    //           context.element.attr({style: 'stroke: ' + highlightColor});
-    //        } else {
-    //           context.element.attr({style: 'stroke: ' + backgroundColor});
-    //        }
-    //    }
-    //});
-    
-    addMouseInteraction(chart_long, 'ct-point');
-    
-}
-
-
-function createGroundwaterDisplay(site, data, mobile_overrides) {
-    var wy_series = _.reduce(data, function(result, value, key) {
-          var i = _.findIndex(result, {"name": value.wy})
-          if (i == -1) {
-              result.push({"name": value.wy, "data":[]});
-              i = _.findIndex(result, {"name": value.wy});
-          }
-          result[i].data.push({x:value.graph_dt, y:value.val});
-          return result;
-      }, []);
-      
-    var wateryear_data = {
-      series: wy_series
-    };
-    var chart_long_data = _.map(data, function(d) { return {'x': d.dt, 'y':d.val} } );
-    var long_data = {
-      // A labels array that can contain any sort of values
-      // Our series array that contains series objects or in this case series data arrays
-      series: [
-        {
-          name: 'Discharge',
-          data: chart_long_data
-        }
-      ]
-    };
-    var options_wateryear = {
-      axisX: {
-        type: Chartist.FixedScaleAxis,
-        ticks: getWYDateAxisTicks(moment()),
-        labelInterpolationFnc: function(value) {
-          return moment(value).format('MMM');
-        }
-      },
-      axisY: {
-          type: Chartist.AutoScaleAxis,
-          high: site.Elevation
-      }
-    }
-    var options_long = {
-      axisX: {
-        type: Chartist.FixedScaleAxis,
-        divisor: 4,
-        //divisor: getLongDateAxisTicks(data),
-        labelInterpolationFnc: function(value) {
-          return moment(value).format('MMM YYYY ');
-        }
-      },
-      axisY: {
-          type: Chartist.AutoScaleAxis,
-          high: site.Elevation
-      }
-    }
-    
-    var chart_long = new Chartist.Line('#daily-long-chart', long_data, options_long, mobile_overrides);
-    var chart_wy = new Chartist.Line('#daily-wateryear-chart', wateryear_data, options_wateryear, mobile_overrides);
-    
-    //chart_wy.on('draw', function(context) {
-    //    //console.log(Chartist.getMultiValue(context.value));
-    //    if(context.type === 'line' || context.type === 'point') {
-    //        if(context.series.name == getWaterYear(moment())) {
-    //            context.element.attr({style: 'stroke: ' + highlightColor});
-    //        } else {
-    //            context.element.attr({style: 'stroke: ' + backgroundColor});
-    //        }
-    //    }
-    //});
-    
-    addMouseInteraction(chart_long, 'ct-point');
-    
-}
-
-
-function createRainDisplay(site, data, mobile_overrides) {
-    var wy_series = _.reduce(data, function(result, value, key) {
-          var i = _.findIndex(result, {"name": value.wy})
-          if (i == -1) {
-              result.push({"name": value.wy, "data":[]});
-              i = _.findIndex(result, {"name": value.wy});
-          }
-          var wyLen = result[i].data.length;
-          var lastVal = wyLen > 0 ? result[i].data[wyLen-1].y : 0;
-          result[i].data.push({x:value.graph_dt, y:(value.val+lastVal)});
-          return result;
-      }, []);
-      
-    var wateryear_data = {
-      series: wy_series
-    };
-    var chart_long_data = _.map(data, function(d) { return {'x': d.dt, 'y':d.val} } );
-    var long_data = {
-      // A labels array that can contain any sort of values
-      // Our series array that contains series objects or in this case series data arrays
-      series: [
-        {
-          name: 'Discharge',
-          data: chart_long_data
-        }
-      ]
-    };
-    var options_wateryear = {
-      axisX: {
-        type: Chartist.FixedScaleAxis,
-        ticks: getWYDateAxisTicks(moment()),
-        labelInterpolationFnc: function(value) {
-          return moment(value).format('MMM');
-        }
-      }, 
-      showPoint: false,
-    }
-    var options_long = {
-      axisX: {
-        type: Chartist.FixedScaleAxis,
-        divisor: 4,
-        //divisor: getLongDateAxisTicks(data),
-        labelInterpolationFnc: function(value) {
-          return moment(value).format('MMM YYYY ');
-        }
-      }
-    }
-    var chart_long = new Chartist.Bar('#daily-long-chart', long_data, options_long, mobile_overrides);
-    var chart_wy = new Chartist.Line('#daily-wateryear-chart', wateryear_data, options_wateryear, mobile_overrides);
-    
-    //chart_wy.on('draw', function(context) {
-        //console.log(Chartist.getMultiValue(context.value));
-        //if(context.type === 'line' || context.type === 'point') {
-        //    if(context.series.name == getWaterYear(moment())) {
-        //        context.element.attr({style: 'stroke: ' + highlightColor});
-        //    } else {
-        //        context.element.attr({style: 'stroke: ' + backgroundColor});
-        //    }
-        //}
-    //});
-    addMouseInteraction(chart_long, 'ct-bar');
-}
-
-// When you mouseover a point (not a line) in the long data chart,
-//   the point will light up, data will display above the graph, and
-//   the point will get larger.  Same for bars.
-function addMouseInteraction(chart_long, el_type) {
-    // el_type should be either 'ct-point' or 'ct-bar'
-    chart_long.on('created', function(context) {
-        var el_point = document.getElementById('daily-long-chart').getElementsByClassName(el_type);
-        var el_datadisplay = document.getElementById('mouseover-data');
-        
-        for(i=0; i<el_point.length; i++) {
-            el_point[i].addEventListener('mouseover', function() {
-                // Update the text
-                var pointval = this.getAttribute('ct:value').split(',');
-                var sel_dt = moment(Number(pointval[0]))
-                el_datadisplay.innerHTML = pointval[1] + " on " + sel_dt.format('Y-MM-DD');
-                
-                // Update the display
-                //if (el_type == 'ct-point') {
-                    this.classList.add('hover');
-                    //this.setAttribute('style', 'stroke: #cb181d; stroke-width: 10px;');
-                //} else if (el_type == 'ct-bar') {
-                    //this.setAttribute('style', 'stroke: #cb181d; stroke-width: 5px;');
-                //}
-                
-                // Select the water year in the other chart
-                var sel_wy = getWaterYear(sel_dt)
-                
-                // Reorder the water year series so the selected water year is on top
-                var el_wy_series_container = document.querySelectorAll('#daily-wateryear-chart svg g')[1]
-                var el_wy_series_all = document.querySelectorAll('#daily-wateryear-chart svg [*|series-name]')
-                var el_wy_series_sel = document.querySelector('#daily-wateryear-chart svg [*|series-name="' + sel_wy + '"]')
-                
-                // Select the correct water year
-                for(j=0; j<el_wy_series_all.length; j++) {
-                    el_wy_series_all[j].classList.remove('selected');
-                }
-                
-                el_wy_series_sel.classList.toggle('selected');
-                el_wy_series_container.appendChild(el_wy_series_sel);
-                
-                document.getElementById('wy-title').innerHTML = "Water Year " + sel_wy;
-                
-            });
-            
-            el_point[i].addEventListener('mouseout', function() {
-                el_datadisplay.innerHTML = "&nbsp;";
-                //if (el_type == 'ct-point') {
-                    this.classList.remove('hover');
-                    //this.setAttribute('style', 'stroke: ' + highlightColor + '; stroke-width: 5px;');
-                //} else if (el_type == 'ct-bar') {
-                //    this.setAttribute('style', 'stroke: ' + highlightColor + '; stroke-width: 1px;');
-                //}
-            });
-        }
-    });
-}

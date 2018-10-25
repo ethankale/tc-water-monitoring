@@ -29,6 +29,7 @@ document.getElementById("param-select").addEventListener('change', function() {
     //console.log(site);
     if (site.type == "Flow" || site.type == "Lake") {
         createDischargeDisplay(site, graph_data, mobile_overrides, param);
+        createDischargeSummary(site, graph_data, param);
     } else if (site.type == "Well") {
         createGroundwaterDisplay(site, graph_data, mobile_overrides, param);
     } else if (site.type == "Rain") {
@@ -56,8 +57,10 @@ function switchTab(clicked_element) {
         //   will be all wrong.
         if (tabs[i] == "graph-tab") {
             var charts = document.querySelectorAll('#chart-container .ct-chart')
-            charts.forEach( function(e) { e.__chartist__.update(); });
+        } else if (tabs[i] == "summary-tab") {
+            var charts = document.querySelectorAll('#summary-container .ct-chart')
         };
+        charts.forEach( function(e) { e.__chartist__.update(); });
     };
 }
 

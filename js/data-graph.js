@@ -62,6 +62,17 @@ Generic functions
 *****************************/
 
 function createDataDisplay(site, graph_data, mobile_overrides, param) {
+    
+    // Clear the previous data
+    var el_list = document.querySelectorAll("#summary_container p")
+    
+    for (var i=0; i<el_list.length; i++) {
+        var el = el_list[i];
+        el.innerHTML = "";
+    }
+    
+    document.getElementById('sparkline').innerHTML = "";
+    
     if (site.type == "Flow" || site.type == "Lake") {
         createDischargeDisplay(site, graph_data, mobile_overrides, param);
         createDischargeSummary(site, graph_data, param);
@@ -70,6 +81,7 @@ function createDataDisplay(site, graph_data, mobile_overrides, param) {
         createGroundwaterSummary(site, graph_data, param);
     } else if (site.type == "Rain") {
         createRainDisplay(site, graph_data, mobile_overrides, param);
+        createRainSummary(site, graph_data, param);
     };
 }
 

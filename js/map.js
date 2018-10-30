@@ -247,6 +247,13 @@ e_close.addEventListener("click", toggleModal, false);
 var e_back = document.getElementsByClassName("modal-background")[0];
 e_back.addEventListener("click", toggleModal, false);
 
+// Close the instructions 
+var e_close_inst = document.getElementById("close_instructions");
+e_close_inst.addEventListener("click", function(e) {
+    var e_inst = document.getElementById("instructions");
+    e_inst.classList.toggle("is-hidden");
+});
+
 /***********************************************
 
 Modal Functions

@@ -326,16 +326,8 @@ function loadData(gid) {
             el_code.innerHTML = site.SITE_CODE;
             el_footer.innerHTML = "<a href='" + "./data/g_id-" + gid + ".csv'>Download CSV</a>"
             
-
-            
-            if (site.type == "Flow" || site.type == "Lake") {
-                createDischargeDisplay(site, graph_data, mobile_overrides, param);
-                createDischargeSummary(site, graph_data, param);
-            } else if (site.type == "Well") {
-                createGroundwaterDisplay(site, graph_data, mobile_overrides, param);
-            } else if (site.type == "Rain") {
-                createRainDisplay(site, graph_data, mobile_overrides, param);
-            };
+            // See data-graph.js
+            createDataDisplay(site, graph_data, mobile_overrides, param);
         }
     })
 }

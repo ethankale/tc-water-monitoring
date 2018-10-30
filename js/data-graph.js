@@ -27,14 +27,7 @@ document.getElementById("param-select").addEventListener('change', function() {
     document.getElementById("daily-wateryear-chart").innerHTML = "";
     
     //console.log(site);
-    if (site.type == "Flow" || site.type == "Lake") {
-        createDischargeDisplay(site, graph_data, mobile_overrides, param);
-        createDischargeSummary(site, graph_data, param);
-    } else if (site.type == "Well") {
-        createGroundwaterDisplay(site, graph_data, mobile_overrides, param);
-    } else if (site.type == "Rain") {
-        createRainDisplay(site, graph_data, mobile_overrides, param);
-    };
+    createDataDisplay(site, graph_data, mobile_overrides, param);
 });
 
 // Add listeners for the tabs
@@ -67,6 +60,18 @@ function switchTab(clicked_element) {
 /*****************************
 Generic functions
 *****************************/
+
+function createDataDisplay(site, graph_data, mobile_overrides, param) {
+    if (site.type == "Flow" || site.type == "Lake") {
+        createDischargeDisplay(site, graph_data, mobile_overrides, param);
+        createDischargeSummary(site, graph_data, param);
+    } else if (site.type == "Well") {
+        createGroundwaterDisplay(site, graph_data, mobile_overrides, param);
+        createGroundwaterSummary(site, graph_data, param);
+    } else if (site.type == "Rain") {
+        createRainDisplay(site, graph_data, mobile_overrides, param);
+    };
+}
 
 function getWYDateAxisTicks(dt) {
     // dt is a moment.js object.

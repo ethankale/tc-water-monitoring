@@ -35,8 +35,12 @@
           <p id="gauge-code" class="modal-card-title is-hidden-desktop">Gauge Code</p>
           <button class="delete" id="close-modal" aria-label="close"></button>
         </header>
+        
+        <!-- Modal -->
         <section class="modal-card-body">
           <p id="gid" class="is-hidden"></p>
+          
+          <!-- Header section -->
           <div class="level">
               <div class="level-right">
                 <p id="mouseover-data">&nbsp;</p>
@@ -50,6 +54,8 @@
                 </div>
               </div>
           </div>
+          
+          <!-- Tabs -->
           <div class="tabs is-centered">
             <ul>
               <li class="is-active"><a id="summary-tab">
@@ -62,23 +68,26 @@
               </a></li>
             </ul>
           </div>
-
+          
+          <!-- Chart -->
           <div id="chart-container" class="is-hidden">
               <div class="ct-chart ct-double-octave" id="daily-long-chart"></div>
               <p id="wy-title">&nbsp;</p>
               <div class="ct-chart ct-major-twelfth" id="daily-wateryear-chart"></div>
           </div>
           
+          <!-- Tiles -->
           <div id="summary-container" class="tile is-ancestor is-vertical has-text-centered">
             <div class="tile">
               <div class="tile is-parent">
                 <div id="tile1" class="tile is-child box is-info">
-                  <p class="title summary-info">Tile 1</p>
                   <p class="summary-details">Some info about this tile.</p>
+                  <p class="title summary-info">Tile 1</p>
                 </div>
               </div>
               <div class="tile is-parent">
                 <div id="tile2" class="tile is-child box is-info">
+                  <p class="summary-details">Some info about this tile.</p>
                   <div id="sparkline" class="summary-details ct-chart"></div>
                 </div>
               </div>
@@ -86,14 +95,14 @@
             <div class="tile">
               <div class="tile is-parent">
                 <div id="tile3" class="tile is-child box is-info">
-                  <p class="title summary-info">Tile 3</p>
                   <p class="summary-details">Some info about this tile.</p>
+                  <p class="title summary-info">Tile 3</p>
                 </div>
               </div>
               <div class="tile is-parent">
                 <div id="tile4" class="tile is-child box is-info">
-                  <p class="title summary-info">Tile 4</p>
                   <p class="summary-details">Some info about this tile.</p>
+                  <p class="title summary-info">Tile 4</p>
                 </div>
               </div>
             </div>

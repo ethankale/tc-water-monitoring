@@ -234,6 +234,9 @@ function updateMapSites(data) {
 function toggleModal() {
     var e = document.getElementById("graph-modal");
     e.classList.toggle("is-active");
+    if (!e.classList.contains('is-active')) {
+        window.history.pushState(null, null, '/');
+    }
 }
 
 function setSiteType(type) {

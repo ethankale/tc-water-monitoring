@@ -238,25 +238,25 @@ function toggleModal() {
 
 function setSiteType(type) {
     if (type == "Rain") {
-        document.getElementById("site-type-p").innerHTML = "Rain";
+        //document.getElementById("site-type-p").innerHTML = "Rain";
         document.getElementsByClassName("modal-card-head")[0].classList.add('rain')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('flow')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('well')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('lake')
     } else if (type == "Flow") {
-        document.getElementById("site-type-p").innerHTML = "Stream or River";
+        //document.getElementById("site-type-p").innerHTML = "Stream or River";
         document.getElementsByClassName("modal-card-head")[0].classList.add('flow')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('rain')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('well')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('lake')
     } else if (type == "Well") {
-        document.getElementById("site-type-p").innerHTML = "Monitoring Well";
+        //document.getElementById("site-type-p").innerHTML = "Monitoring Well";
         document.getElementsByClassName("modal-card-head")[0].classList.add('well')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('flow')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('rain')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('lake')
     } else if (type == "Lake") {
-        document.getElementById("site-type-p").innerHTML = "Lake";
+        //document.getElementById("site-type-p").innerHTML = "Lake";
         document.getElementsByClassName("modal-card-head")[0].classList.add('lake')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('flow')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('well')

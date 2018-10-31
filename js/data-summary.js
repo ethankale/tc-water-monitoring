@@ -7,9 +7,11 @@ function createDischargeSummary(site, data, type="Stage") {
     if (type == "Stage") {
         param = "val";
         digits = 2;
+        units = "'"
     } else if (type == "Temperature") {
         param = "temp_c";
         digits = 0;
+        units = "°F"
     }
     
     data = _.filter(data, function(d) { return d[param] != null })
@@ -57,7 +59,7 @@ function createDischargeSummary(site, data, type="Stage") {
     );
     
     // Update the document with the values we've derived/calculated.
-    document.querySelector("#tile1 .summary-info").innerHTML = Number(lastVal).toFixed(digits) ;
+    document.querySelector("#tile1 .summary-info").innerHTML = Number(lastVal).toFixed(digits) + units ;
     document.querySelector("#tile1 .summary-details").innerHTML = "Latest on " + maxDate.format("Y-MM-DD");
     
     document.querySelector("#tile2 .summary-details").innerHTML = "Last " + daysPast + " days of measurement";
@@ -65,7 +67,7 @@ function createDischargeSummary(site, data, type="Stage") {
     document.querySelector("#tile3 .summary-info").innerHTML = yearsMeasured;
     document.querySelector("#tile3 .summary-details").innerHTML = "Years Monitored";
     
-    document.querySelector("#tile4 .summary-info").innerHTML = Number(minVal).toFixed(digits) + "  -  " + Number(maxVal).toFixed(digits);
+    document.querySelector("#tile4 .summary-info").innerHTML = Number(minVal).toFixed(digits) + units + "  -  " + Number(maxVal).toFixed(digits) + units;
     document.querySelector("#tile4 .summary-details").innerHTML = "Minimum and Maximum";
 }
 
@@ -76,9 +78,11 @@ function createGroundwaterSummary(site, data, type="Level") {
     if (type == "Level") {
         param = "val";
         digits = 2;
+        units = "'"
     } else if (type == "Temperature") {
         param = "temp_c";
         digits = 0;
+        units = "°F"
     }
     
     data = _.filter(data, function(d) { return d[param] != null })
@@ -126,7 +130,7 @@ function createGroundwaterSummary(site, data, type="Level") {
     );
     
     // Update the document with the values we've derived/calculated.
-    document.querySelector("#tile1 .summary-info").innerHTML = Number(lastVal).toFixed(digits) ;
+    document.querySelector("#tile1 .summary-info").innerHTML = Number(lastVal).toFixed(digits) + units ;
     document.querySelector("#tile1 .summary-details").innerHTML = "Latest on " + maxDate.format("Y-MM-DD");
     
     document.querySelector("#tile2 .summary-details").innerHTML = "Last " + daysPast + " days of measurement";
@@ -134,7 +138,7 @@ function createGroundwaterSummary(site, data, type="Level") {
     document.querySelector("#tile3 .summary-info").innerHTML = yearsMeasured;
     document.querySelector("#tile3 .summary-details").innerHTML = "Years Monitored";
     
-    document.querySelector("#tile4 .summary-info").innerHTML = Number(minVal).toFixed(digits) + "  /  " + Number(maxVal).toFixed(digits);
+    document.querySelector("#tile4 .summary-info").innerHTML = Number(minVal).toFixed(digits) + units + "  /  " + Number(maxVal).toFixed(digits) + units;
     document.querySelector("#tile4 .summary-details").innerHTML = "Minimum / Maximum";
 }
 
@@ -146,9 +150,11 @@ function createRainSummary(site, data, type="Rainfall") {
     if (type == "Rainfall") {
         param = "val";
         digits = 2;
+        units = '"';
     } else if (type == "Temperature") {
         param = "temp_c";
         digits = 0;
+        units = "°F";
     }
     
     data = _.filter(data, function(d) { return d[param] != null })
@@ -202,17 +208,17 @@ function createRainSummary(site, data, type="Rainfall") {
     
     if (type == "Rainfall") {
         new Chartist.Bar('#sparkline', graphSeries, graphOptions);
-        document.querySelector("#tile4 .summary-info").innerHTML = Number(sevenDaySum).toFixed(digits) + "  /  " + Number(thirtyDaySum).toFixed(digits);
+        document.querySelector("#tile4 .summary-info").innerHTML = Number(sevenDaySum).toFixed(digits) + units + "  /  " + Number(thirtyDaySum).toFixed(digits) + units;
         document.querySelector("#tile4 .summary-details").innerHTML = "7 Days / 30 Days";
     } else if (type == "Temperature"){
         new Chartist.Line('#sparkline', graphSeries, graphOptions);
-        document.querySelector("#tile4 .summary-info").innerHTML = Number(minVal).toFixed(digits) + "  /  " + Number(maxVal).toFixed(digits);
+        document.querySelector("#tile4 .summary-info").innerHTML = Number(minVal).toFixed(digits) + units + "  /  " + Number(maxVal).toFixed(digits) + units;
         document.querySelector("#tile4 .summary-details").innerHTML = "Minimum / Maximum";
     }
     
     // Update the document with the values we've derived/calculated.
-    document.querySelector("#tile1 .summary-info").innerHTML = Number(lastVal).toFixed(digits) ;
-    document.querySelector("#tile1 .summary-details").innerHTML = "Latest on " + maxDate.format("Y-MM-DD");
+    document.querySelector("#tile1 .summary-info").innerHTML = Number(lastVal).toFixed(digits) + units ;
+    document.querySelector("#tile1 .summary-details").innerHTML = "Last daily total on " + maxDate.format("Y-MM-DD");
     
     document.querySelector("#tile2 .summary-details").innerHTML = "Last " + daysPast + " days of measurement";
     

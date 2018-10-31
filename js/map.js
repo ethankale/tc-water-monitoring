@@ -153,8 +153,6 @@ Papa.parse("./data/station_list.csv", {
         const site = getSiteFromURL(sites);
         
         if (site != undefined) {
-            toggleModal();
-            document.getElementById("gid").innerHTML = site.G_ID;
             loadData(site.G_ID);
         }
         
@@ -241,8 +239,6 @@ function toggleModal() {
 // The user clicked on a marker in the Leaflet map
 function onMarkerClick(e) {
     //console.log("GID is " + e.target.g_id);
-    toggleModal();
-    document.getElementById("gid").innerHTML = e.target.g_id;
     loadData(e.target.g_id);
 }
 
@@ -285,6 +281,10 @@ var mobile_overrides = [
 
 function loadData(gid) {
     //console.log("GID is " + gid)
+    toggleModal();
+    document.getElementById("gid").innerHTML = gid;
+    window.history.pushState(null, null, '?site=' + gid);
+    
     var site = _.filter(sites, {"G_ID" : gid})[0];
     
     var el_title = document.getElementById("gauge-name");

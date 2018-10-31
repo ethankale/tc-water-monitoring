@@ -1,5 +1,6 @@
 
-/* The javascript that drives the Thurston County Water Dashboard.
+/* 
+Some of the javascript that drives the Thurston County Water Dashboard.
 
 Relies on leaflet, PapaParse, lodash, Chartist, and moment.js.
 The project as a whole uses Bulma, but that's pure html/css, no js.
@@ -9,9 +10,7 @@ Created October 19, 2018 by Nat Kale.
 */
 
 /***********************************************
-
 Generic Functions
-
 ***********************************************/
 
 function getWaterYear(dt) {
@@ -23,9 +22,7 @@ function getWaterYear(dt) {
 }
 
 /***********************************************
-
 Mapping Functions
-
 ***********************************************/
 
 // List of sites, from CSV file
@@ -153,6 +150,14 @@ Papa.parse("./data/station_list.csv", {
             s.LON = +s.LON;
         })
         updateMapSites(sites);
+        const site = getSiteFromURL(sites);
+        
+        if (site != undefined) {
+            toggleModal();
+            document.getElementById("gid").innerHTML = site.G_ID;
+            loadData(site.G_ID);
+        }
+        
         //console.log("Site load complete.");
     }
 })

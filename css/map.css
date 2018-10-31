@@ -56,3 +56,19 @@
     stroke: #525252;
 }
 
+.rain {
+    background-color: #a6dba0;
+}
+
+.flow {
+    background-color: #fdb863;
+}
+
+.well {
+    background-color: #c2a5cf;
+}
+
+.lake {
+    background-color: #9999ff;
+}
+

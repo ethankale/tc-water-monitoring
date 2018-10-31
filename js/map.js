@@ -236,6 +236,34 @@ function toggleModal() {
     e.classList.toggle("is-active");
 }
 
+function setSiteType(type) {
+    if (type == "Rain") {
+        document.getElementById("site-type-p").innerHTML = "Rain";
+        document.getElementsByClassName("modal-card-head")[0].classList.add('rain')
+        document.getElementsByClassName("modal-card-head")[0].classList.remove('flow')
+        document.getElementsByClassName("modal-card-head")[0].classList.remove('well')
+        document.getElementsByClassName("modal-card-head")[0].classList.remove('lake')
+    } else if (type == "Flow") {
+        document.getElementById("site-type-p").innerHTML = "Stream or River";
+        document.getElementsByClassName("modal-card-head")[0].classList.add('flow')
+        document.getElementsByClassName("modal-card-head")[0].classList.remove('rain')
+        document.getElementsByClassName("modal-card-head")[0].classList.remove('well')
+        document.getElementsByClassName("modal-card-head")[0].classList.remove('lake')
+    } else if (type == "Well") {
+        document.getElementById("site-type-p").innerHTML = "Monitoring Well";
+        document.getElementsByClassName("modal-card-head")[0].classList.add('well')
+        document.getElementsByClassName("modal-card-head")[0].classList.remove('flow')
+        document.getElementsByClassName("modal-card-head")[0].classList.remove('rain')
+        document.getElementsByClassName("modal-card-head")[0].classList.remove('lake')
+    } else if (type == "Lake") {
+        document.getElementById("site-type-p").innerHTML = "Lake";
+        document.getElementsByClassName("modal-card-head")[0].classList.add('lake')
+        document.getElementsByClassName("modal-card-head")[0].classList.remove('flow')
+        document.getElementsByClassName("modal-card-head")[0].classList.remove('well')
+        document.getElementsByClassName("modal-card-head")[0].classList.remove('rain')
+    }
+}
+
 // The user clicked on a marker in the Leaflet map
 function onMarkerClick(e) {
     //console.log("GID is " + e.target.g_id);
@@ -286,6 +314,8 @@ function loadData(gid) {
     window.history.pushState(null, null, '?site=' + gid);
     
     var site = _.filter(sites, {"G_ID" : gid})[0];
+    
+    setSiteType(site.type);
     
     var el_title = document.getElementById("gauge-name");
     var el_code = document.getElementById("gauge-code");

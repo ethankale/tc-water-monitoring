@@ -279,11 +279,25 @@ e_close.addEventListener("click", toggleModal, false);
 var e_back = document.getElementsByClassName("modal-background")[0];
 e_back.addEventListener("click", toggleModal, false);
 
-// Close the instructions 
+// Close the instructions; keep hidden on load if local storage says so
+var helpstatus = window.localStorage.getItem("tcwdb_helpstatus")
+var e_inst = document.getElementById("instructions");
+
+if (helpstatus == "off") {
+    e_inst.classList.add("is-hidden");
+}
+
 var e_close_inst = document.getElementById("close_instructions");
 e_close_inst.addEventListener("click", function(e) {
-    var e_inst = document.getElementById("instructions");
     e_inst.classList.toggle("is-hidden");
+    
+    if (helpstatus == "off") {
+        window.localStorage.setItem("tcwdb_helpstatus", "on")
+    } else {
+        window.localStorage.setItem("tcwdb_helpstatus", "off")
+    }
+    
+    
 });
 
 /***********************************************

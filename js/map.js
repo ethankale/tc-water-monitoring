@@ -208,8 +208,6 @@ function updateMapSites(data) {
     inactiveMarkers.addTo(sitemap);
     
     // Add a layer control
-
-    
     var overlayMaps = {
         "Stream/River": streamMarkers,
         "Rain": rainMarkers,
@@ -223,12 +221,6 @@ function updateMapSites(data) {
     };
     
     L.control.layers(null, overlayMaps).addTo(sitemap);
-    
-    // Load up data when we launch the page
-    //var getvars = window.location.href.split("#")[1];
-    //var g_id = typeof getvars === "undefined" ? sitelist[0].G_ID : getvars.split("=")[1].replace(/\D/g,'');
-    
-    //selectSite(sitelist, g_id);
 };
 
 function toggleModal() {
@@ -241,25 +233,25 @@ function toggleModal() {
 
 function setSiteType(type) {
     if (type == "Rain") {
-        //document.getElementById("site-type-p").innerHTML = "Rain";
+        document.getElementById("site-type-p").innerHTML = "Rain";
         document.getElementsByClassName("modal-card-head")[0].classList.add('rain')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('flow')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('well')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('lake')
     } else if (type == "Flow") {
-        //document.getElementById("site-type-p").innerHTML = "Stream or River";
+        document.getElementById("site-type-p").innerHTML = "Stream or River";
         document.getElementsByClassName("modal-card-head")[0].classList.add('flow')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('rain')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('well')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('lake')
     } else if (type == "Well") {
-        //document.getElementById("site-type-p").innerHTML = "Monitoring Well";
+        document.getElementById("site-type-p").innerHTML = "Monitoring Well";
         document.getElementsByClassName("modal-card-head")[0].classList.add('well')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('flow')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('rain')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('lake')
     } else if (type == "Lake") {
-        //document.getElementById("site-type-p").innerHTML = "Lake";
+        document.getElementById("site-type-p").innerHTML = "Lake";
         document.getElementsByClassName("modal-card-head")[0].classList.add('lake')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('flow')
         document.getElementsByClassName("modal-card-head")[0].classList.remove('well')
@@ -285,6 +277,8 @@ var e_inst = document.getElementById("instructions");
 
 if (helpstatus == "off") {
     e_inst.classList.add("is-hidden");
+} else {
+    e_inst.classList.remove("is-hidden");
 }
 
 var e_close_inst = document.getElementById("close_instructions");

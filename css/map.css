@@ -53,7 +53,7 @@
 }
 
 #daily-wateryear-chart g.selected .ct-point, g.selected .ct-line {
-    stroke: #525252;
+    stroke: #225ea8;
 }
 
 .rain {

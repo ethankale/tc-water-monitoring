@@ -68,7 +68,7 @@ function createDischargeSummary(site, data, type="Stage") {
     document.querySelector("#tile3 .summary-details").innerHTML = "Years Monitored";
     
     document.querySelector("#tile4 .summary-info").innerHTML = Number(minVal).toFixed(digits) + units + "  -  " + Number(maxVal).toFixed(digits) + units;
-    document.querySelector("#tile4 .summary-details").innerHTML = "Minimum and Maximum";
+    document.querySelector("#tile4 .summary-details").innerHTML = "Minimum and Maximum All Time";
 }
 
 
@@ -139,7 +139,7 @@ function createGroundwaterSummary(site, data, type="Level") {
     document.querySelector("#tile3 .summary-details").innerHTML = "Years Monitored";
     
     document.querySelector("#tile4 .summary-info").innerHTML = Number(minVal).toFixed(digits) + units + "  /  " + Number(maxVal).toFixed(digits) + units;
-    document.querySelector("#tile4 .summary-details").innerHTML = "Minimum / Maximum";
+    document.querySelector("#tile4 .summary-details").innerHTML = "Minimum / Maximum All Time";
 }
 
 
@@ -213,7 +213,7 @@ function createRainSummary(site, data, type="Rainfall") {
     } else if (type == "Temperature"){
         new Chartist.Line('#sparkline', graphSeries, graphOptions);
         document.querySelector("#tile4 .summary-info").innerHTML = Number(minVal).toFixed(digits) + units + "  /  " + Number(maxVal).toFixed(digits) + units;
-        document.querySelector("#tile4 .summary-details").innerHTML = "Minimum / Maximum";
+        document.querySelector("#tile4 .summary-details").innerHTML = "Minimum / Maximum All Time";
     }
     
     // Update the document with the values we've derived/calculated.

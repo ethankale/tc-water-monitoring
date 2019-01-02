@@ -45,10 +45,10 @@ var wellMarkers = L.layerGroup();
 var lakeMarkers = L.layerGroup();
 
 // Basemap
-var arcmapBase = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/' +
-    'World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+var arcmapBase = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/' +
+    'NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Tiles &copy; <a href="https://services.arcgisonline.com/ArcGIS/' +
-        'rest/services/Canvas/World_Light_Gray_Base/MapServer">ArcGIS</a>',
+        'rest/services/NatGeo_World_Map/MapServer">ArcGIS</a>',
 }).addTo(sitemap);
 
 // Custom icons to differentiate between well, rain, and discharge monitoring.
@@ -330,8 +330,10 @@ function loadData(gid) {
     
     var el_title = document.getElementById("gauge-name");
     var el_code = document.getElementById("gauge-code");
+    var el_last_date = document.getElementById("last_date");
     el_title.innerHTML = "Loading...";
     el_code.innerHTML = "..."
+    el_last_date.innerHTML = "&nbsp;"
     
     // Probably would be good to get a gif of a spinner for this.
     // Bulma has a built in loading class?
@@ -372,11 +374,14 @@ function loadData(gid) {
                 d.wy = getWaterYear(d.dt);
                 d.graph_dt = d.dt.clone().add(getWaterYear(moment())-d.wy, 'year');
             })
-            //updateMapSites(sites);
-            console.log("Graphing data loaded. " + graph_data.length + " data points found.");
             
+            //updateMapSites(sites);
+            //console.log("Graphing data loaded. " + graph_data.length + " data points found.");
+            
+            // Update the popup elements that don't change
             el_title.innerHTML = site.SITE_NAME + " (" + site.SITE_CODE + ")";
             el_code.innerHTML = site.SITE_CODE;
+            el_last_date.innerHTML = "Last Measured " + _.maxBy(graph_data, "dt").dt.format("Y-MM-DD");
             el_footer.innerHTML = "<a href='" + "./data/g_id-" + gid + ".csv'>Download CSV</a>"
             
             // See data-graph.js

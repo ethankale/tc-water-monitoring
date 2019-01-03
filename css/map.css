@@ -1,3 +1,11 @@
+#tc_heading, #top_nav {
+    background: #1F3F6B;
+}
+
+#tc_heading, #top_nav a {
+    color: #ffffff;
+}
+
 #gaugemap {
     height: 400px;
     z-index: 1;

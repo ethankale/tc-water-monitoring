@@ -290,8 +290,6 @@ e_close_inst.addEventListener("click", function(e) {
     } else {
         window.localStorage.setItem("tcwdb_helpstatus", "off")
     }
-    
-    
 });
 
 /***********************************************

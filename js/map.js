@@ -46,9 +46,9 @@ var lakeMarkers = L.layerGroup();
 
 // Basemap
 var arcmapBase = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/' +
-    'NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
+    'World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Tiles &copy; <a href="https://services.arcgisonline.com/ArcGIS/' +
-        'rest/services/NatGeo_World_Map/MapServer">ArcGIS</a>',
+        'rest/services/World_Topo_Map/MapServer">ArcGIS</a>',
 }).addTo(sitemap);
 
 // Custom icons to differentiate between well, rain, and discharge monitoring.

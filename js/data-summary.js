@@ -209,7 +209,7 @@ function createRainSummary(site, data, type="Rainfall") {
     if (type == "Rainfall") {
         new Chartist.Bar('#sparkline', graphSeries, graphOptions);
         document.querySelector("#tile4 .summary-info").innerHTML = Number(sevenDaySum).toFixed(digits) + units + "  /  " + Number(thirtyDaySum).toFixed(digits) + units;
-        document.querySelector("#tile4 .summary-details").innerHTML = "7 Days / 30 Days";
+        document.querySelector("#tile4 .summary-details").innerHTML = "7 Days / 30 Days to " + maxDate.format("Y-MM-DD");
     } else if (type == "Temperature"){
         new Chartist.Line('#sparkline', graphSeries, graphOptions);
         document.querySelector("#tile4 .summary-info").innerHTML = Number(minVal).toFixed(digits) + units + "  /  " + Number(maxVal).toFixed(digits) + units;

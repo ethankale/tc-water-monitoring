@@ -226,7 +226,8 @@ function toggleModal() {
     var e = document.getElementById("graph-modal");
     e.classList.toggle("is-active");
     if (!e.classList.contains('is-active')) {
-        window.history.pushState(null, null, '/');
+        var url = window.location.href.split("?")[0]
+        window.history.pushState(null, null, url);
     }
 }
 

@@ -6,6 +6,10 @@
     color: #ffffff;
 }
 
+#legend_question {
+    cursor: help;
+}
+
 #gaugemap {
     height: 400px;
     z-index: 1;

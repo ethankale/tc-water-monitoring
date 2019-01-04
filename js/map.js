@@ -128,7 +128,7 @@ legend.onAdd = function (sitemap) {
         filenames = ["green_circle.png", "purple_triangle.png", "blue_diamond.png", "orange_square.png"],
         labels = ["Rain", "Well", "Lake", "Stream/<br />River"];
     
-    div.innerHTML += '<strong>Gauges</strong><br />Inactive in gray<br />';
+    div.innerHTML += '<strong>Gauges </strong> <i id="legend_question" class="far fa-question-circle"></i><br />Inactive in gray<br />';
     for (var i=0; i<filenames.length; i++) {
         div.innerHTML += '<img src="./img/marker/' + filenames[i] + '"></img>' +
         '  ' + labels[i] + '<br />';
@@ -138,7 +138,6 @@ legend.onAdd = function (sitemap) {
 };
 
 legend.addTo(sitemap)
-
 
 Papa.parse("./data/station_list.csv", {
     download: true,
@@ -271,26 +270,7 @@ e_close.addEventListener("click", toggleModal, false);
 var e_back = document.getElementsByClassName("modal-background")[0];
 e_back.addEventListener("click", toggleModal, false);
 
-// Close the instructions; keep hidden on load if local storage says so
-var helpstatus = window.localStorage.getItem("tcwdb_helpstatus")
-var e_inst = document.getElementById("instructions");
 
-if (helpstatus == "off") {
-    e_inst.classList.add("is-hidden");
-} else {
-    e_inst.classList.remove("is-hidden");
-}
-
-var e_close_inst = document.getElementById("close_instructions");
-e_close_inst.addEventListener("click", function(e) {
-    e_inst.classList.toggle("is-hidden");
-    
-    if (helpstatus == "off") {
-        window.localStorage.setItem("tcwdb_helpstatus", "on")
-    } else {
-        window.localStorage.setItem("tcwdb_helpstatus", "off")
-    }
-});
 
 /***********************************************
 

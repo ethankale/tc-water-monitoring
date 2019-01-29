@@ -58,6 +58,11 @@
     stroke-width: 10px;
 }
 
+#daily-long-chart .ct-point.provisional {
+    stroke: #7fc97f; 
+}
+
+
 #daily-long-chart .ct-bar {
     stroke-width: 1px;
     stroke: #525252;

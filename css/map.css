@@ -117,3 +117,19 @@
 #site-type-p {
     text-align: right;
 }
+
+#chart-legend {
+    text-align: center;
+}
+
+#legend-provisional {
+    color: #1b9e77;
+}
+#legend-estimate {
+    color: #7570b3;
+}
+#legend-warning {
+    color: #d95f02; 
+}
+
+

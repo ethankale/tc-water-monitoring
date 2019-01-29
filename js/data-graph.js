@@ -177,10 +177,6 @@ function createDischargeDisplay(site, data, mobile_overrides, type="Stage") {
             if(d.e != "False") { context.element.addClass("estimate");}
             if(d.p != "0") { context.element.addClass("provisional");}
             if(d.w != "False") { context.element.addClass("warning");}
-            
-            //console.log(context.element);
-            //console.log()
-            //test = context;
         }
     });
     
@@ -194,8 +190,6 @@ function createDischargeDisplay(site, data, mobile_overrides, type="Stage") {
             if(d.w != "False") { context.element.addClass("warning");}
         }
     });
-    
-    //test = wy_series;
     
     addMouseInteraction(chart_long, 'ct-point');
 }
@@ -214,9 +208,6 @@ function createGroundwaterDisplay(site, data, mobile_overrides, type="Level") {
         column = "temp_c"
         x_max = String(_.maxBy(graph_data, "temp_c").temp_c)
     }
-    
-    console.log(x_max);
-    
     
     // Reorganize the data into a format that Chartist can take
     var wy_series = _.reduce(data, function(result, value, key) {
@@ -294,7 +285,6 @@ function createGroundwaterDisplay(site, data, mobile_overrides, type="Level") {
             if(d.w != "False") { context.element.addClass("warning");}
         }
     });
-    
     
     addMouseInteraction(chart_long, 'ct-point');
     
@@ -415,12 +405,24 @@ function addMouseInteraction(chart_long, el_type) {
                 
                 document.getElementById('wy-title').innerHTML = "Water Year " + sel_wy;
                 
+                // Highlight estimate, provisional, warning if warranted.
+                if (this.classList.contains("provisional")) {
+                    document.getElementById("legend-provisional").classList.remove("is-hidden");
+                } else if(this.classList.contains("warning")) {
+                    document.getElementById("legend-warning").classList.remove("is-hidden");
+                } else if(this.classList.contains("estimate")) {
+                    document.getElementById("legend-estimate").classList.remove("is-hidden");
+                } else {
+                    document.getElementById("legend-estimate").classList.add("is-hidden");
+                    document.getElementById("legend-warning").classList.add("is-hidden");
+                    document.getElementById("legend-provisional").classList.add("is-hidden");
+                }
+                
             });
             
             el_point[i].addEventListener('mouseout', function() {
                 el_datadisplay.innerHTML = "&nbsp;";
                 this.classList.remove('hover');
-
             });
         }
     });

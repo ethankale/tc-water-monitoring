@@ -126,11 +126,12 @@ function createDischargeDisplay(site, data, mobile_overrides, type="Stage") {
     
     var wy_series = _.reduce(data, function(result, value, key) {
         var i = _.findIndex(result, {"name": value.wy})
+        // Every time we encounter a new water year, create a new array
         if (i == -1) {
             result.push({"name": value.wy, "data":[]});
             i = _.findIndex(result, {"name": value.wy});
         }
-        result[i].data.push({x:value.graph_dt, y:value[column]});
+        result[i].data.push({x:value.graph_dt, y:value[column], e:value.estimate, p:value.provisional, w:value.warning});
         return result;
     }, []);
     
@@ -178,12 +179,23 @@ function createDischargeDisplay(site, data, mobile_overrides, type="Stage") {
             if(d.w != "False") { context.element.addClass("warning");}
             
             //console.log(context.element);
-            console.log()
-            test = context;
+            //console.log()
+            //test = context;
         }
     });
     
     var chart_wy = new Chartist.Line('#daily-wateryear-chart', wateryear_data, options_wateryear, mobile_overrides);
+    
+    chart_wy.on('draw', function(context) {
+        if(context.type === 'point') {
+            var d = _.find(wy_series, {'name': context.series.name}).data[context.index]
+            if(d.e != "False") { context.element.addClass("estimate");}
+            if(d.p != "0") { context.element.addClass("provisional");}
+            if(d.w != "False") { context.element.addClass("warning");}
+        }
+    });
+    
+    //test = wy_series;
     
     addMouseInteraction(chart_long, 'ct-point');
 }
@@ -209,18 +221,19 @@ function createGroundwaterDisplay(site, data, mobile_overrides, type="Level") {
     // Reorganize the data into a format that Chartist can take
     var wy_series = _.reduce(data, function(result, value, key) {
           var i = _.findIndex(result, {"name": value.wy})
+          // Every time we encounter a new water year, create a new array
           if (i == -1) {
               result.push({"name": value.wy, "data":[]});
               i = _.findIndex(result, {"name": value.wy});
           }
-          result[i].data.push({x:value.graph_dt, y:value[column]});
+          result[i].data.push({x:value.graph_dt, y:value[column], e:value.estimate, p:value.provisional, w:value.warning});
           return result;
     }, []);
     
     var wateryear_data = {
       series: wy_series
     };
-    var chart_long_data = _.map(data, function(d) { return {'x': d.dt, 'y':d[column]} } );
+    var chart_long_data = _.map(data, function(d) { return {'x': d.dt, 'y':d[column], 'e':d.estimate, 'p':d.provisional, 'w':d.warning} } );
     var long_data = {
       series: [
         {
@@ -260,7 +273,28 @@ function createGroundwaterDisplay(site, data, mobile_overrides, type="Level") {
     }
     
     var chart_long = new Chartist.Line('#daily-long-chart', long_data, options_long, mobile_overrides);
+    chart_long.on('draw', function(context) {
+        if(context.type === 'point'){
+            var d = chart_long_data[context.index];
+            if(d.e != "False") { context.element.addClass("estimate");}
+            if(d.p != "0") { context.element.addClass("provisional");}
+            if(d.w != "False") { context.element.addClass("warning");}
+            
+            //console.log(context.element);
+            //console.log()
+            //test = context;
+        }
+    });
     var chart_wy = new Chartist.Line('#daily-wateryear-chart', wateryear_data, options_wateryear, mobile_overrides);
+    chart_wy.on('draw', function(context) {
+        if(context.type === 'point') {
+            var d = _.find(wy_series, {'name': context.series.name}).data[context.index]
+            if(d.e != "False") { context.element.addClass("estimate");}
+            if(d.p != "0") { context.element.addClass("provisional");}
+            if(d.w != "False") { context.element.addClass("warning");}
+        }
+    });
+    
     
     addMouseInteraction(chart_long, 'ct-point');
     

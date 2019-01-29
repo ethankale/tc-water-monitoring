@@ -59,9 +59,16 @@
 }
 
 #daily-long-chart .ct-point.provisional {
-    stroke: #7fc97f; 
+    stroke: #1b9e77; 
 }
 
+#daily-long-chart .ct-point.estimate {
+    stroke: #7570b3; 
+}
+
+#daily-long-chart .ct-point.warning {
+    stroke: #d95f02; 
+}
 
 #daily-long-chart .ct-bar {
     stroke-width: 1px;
@@ -79,6 +86,16 @@
 
 #daily-wateryear-chart g.selected .ct-point, g.selected .ct-line {
     stroke: #225ea8;
+}
+
+#daily-wateryear-chart g.selected .ct-point.provisional {
+    stroke: #1b9e77;
+}
+#daily-wateryear-chart g.selected .ct-point.estimate {
+    stroke: #7570b3;
+}
+#daily-wateryear-chart g.selected .ct-point.warning {
+    stroke: #d95f02;
 }
 
 .rain {

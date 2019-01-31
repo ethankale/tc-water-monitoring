@@ -270,10 +270,6 @@ function createGroundwaterDisplay(site, data, mobile_overrides, type="Level") {
             if(d.e != "False") { context.element.addClass("estimate");}
             if(d.p != "0") { context.element.addClass("provisional");}
             if(d.w != "False") { context.element.addClass("warning");}
-            
-            //console.log(context.element);
-            //console.log()
-            //test = context;
         }
     });
     var chart_wy = new Chartist.Line('#daily-wateryear-chart', wateryear_data, options_wateryear, mobile_overrides);
@@ -305,7 +301,7 @@ function createRainDisplay(site, data, mobile_overrides, type="Rainfall") {
           }
           var wyLen = result[i].data.length;
           var lastVal = wyLen > 0 ? result[i].data[wyLen-1].y : 0;
-          result[i].data.push({x:value.graph_dt, y:(value.val+lastVal)});
+          result[i].data.push({x:value.graph_dt, y:(value.val+lastVal), e:value.estimate, p:value.provisional, w:value.warning});
           return result;
         }, []);
     } else if (type == "Temperature") {
@@ -317,7 +313,7 @@ function createRainDisplay(site, data, mobile_overrides, type="Rainfall") {
               result.push({"name": value.wy, "data":[]});
               i = _.findIndex(result, {"name": value.wy});
           }
-          result[i].data.push({x:value.graph_dt, y:value[column]});
+          result[i].data.push({x:value.graph_dt, y:value[column], e:value.estimate, p:value.provisional, w:value.warning});
           return result;
         }, []);
     }
@@ -325,7 +321,12 @@ function createRainDisplay(site, data, mobile_overrides, type="Rainfall") {
     var wateryear_data = {
       series: wy_series
     };
-    var chart_long_data = _.map(data, function(d) { return {'x': d.dt, 'y':d[column]} } );
+    test = wateryear_data
+    
+    var chart_long_data = _.map(data, function(d) { return {'x': d.dt, 'y':d[column], 'e':d.estimate, 'p':d.provisional, 'w':d.warning} } );
+    
+    //var chart_long_data_points = _.filter(chart_long_data, function(d) { return(d.e != 'False' | d.p != '0' | d.w != 'False') });
+    
     var long_data = {
       series: [
         {
@@ -360,6 +361,14 @@ function createRainDisplay(site, data, mobile_overrides, type="Rainfall") {
     var chart_long = {};
     if (type == "Rainfall") {
         chart_long = new Chartist.Bar('#daily-long-chart', long_data, options_long, mobile_overrides);
+        chart_long.on('draw', function(context) {
+            if(context.type === 'bar'){
+                var d = chart_long_data[context.index];
+                if(d.e != "False") { context.element.addClass("estimate");}
+                if(d.p != "0") { context.element.addClass("provisional");}
+                if(d.w != "False") { context.element.addClass("warning");}
+            }
+        });
         addMouseInteraction(chart_long, 'ct-bar');
     } else if (type == "Temperature") {
         chart_long = new Chartist.Line('#daily-long-chart', long_data, options_long, mobile_overrides);
@@ -408,15 +417,21 @@ function addMouseInteraction(chart_long, el_type) {
                 // Highlight estimate, provisional, warning if warranted.
                 if (this.classList.contains("provisional")) {
                     document.getElementById("legend-provisional").classList.remove("is-hidden");
-                } else if(this.classList.contains("warning")) {
+                } else {
+                    document.getElementById("legend-provisional").classList.add("is-hidden");
+                };
+                
+                if(this.classList.contains("warning")) {
                     document.getElementById("legend-warning").classList.remove("is-hidden");
-                } else if(this.classList.contains("estimate")) {
+                } else {
+                    document.getElementById("legend-warning").classList.add("is-hidden");
+                };
+                
+                if(this.classList.contains("estimate")) {
                     document.getElementById("legend-estimate").classList.remove("is-hidden");
                 } else {
                     document.getElementById("legend-estimate").classList.add("is-hidden");
-                    document.getElementById("legend-warning").classList.add("is-hidden");
-                    document.getElementById("legend-provisional").classList.add("is-hidden");
-                }
+                };
                 
             });
             

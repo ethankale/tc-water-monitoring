@@ -58,15 +58,15 @@
     stroke-width: 10px;
 }
 
-#daily-long-chart .ct-point.provisional {
+#daily-long-chart .ct-point.provisional, #daily-long-chart .ct-bar.provisional {
     stroke: #1b9e77; 
 }
 
-#daily-long-chart .ct-point.estimate {
+#daily-long-chart .ct-point.estimate, #daily-long-chart .ct-bar.estimate {
     stroke: #7570b3; 
 }
 
-#daily-long-chart .ct-point.warning {
+#daily-long-chart .ct-point.warning, #daily-long-chart .ct-bar.warning {
     stroke: #d95f02; 
 }
 

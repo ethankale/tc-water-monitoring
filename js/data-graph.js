@@ -372,6 +372,14 @@ function createRainDisplay(site, data, mobile_overrides, type="Rainfall") {
         addMouseInteraction(chart_long, 'ct-bar');
     } else if (type == "Temperature") {
         chart_long = new Chartist.Line('#daily-long-chart', long_data, options_long, mobile_overrides);
+        chart_long.on('draw', function(context) {
+            if(context.type === 'point'){
+                var d = chart_long_data[context.index];
+                if(d.e != "False") { context.element.addClass("estimate");}
+                if(d.p != "0") { context.element.addClass("provisional");}
+                if(d.w != "False") { context.element.addClass("warning");}
+            }
+        });
         addMouseInteraction(chart_long, 'ct-point');
     }
     
